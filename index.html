@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>CHUN.EN 掃臉快診（測試版）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
+<style>
+  :root{
+    --bg:#0e0d0b; --panel:#181613; --panel2:#201d18; --line:#33302a;
+    --ink:#ede8de; --muted:#a39a8b; --faint:#6f695e;
+    --gold:#c9a96b; --gold-dim:#8f7a4e;
+    --good:#8fc79a; --warn:#d9a556;
+    --serif:"Noto Serif TC",serif; --sans:"Noto Sans TC",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000;font-family:var(--sans);color:var(--ink);line-height:1.75;min-height:100vh}
+  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden}
+  header{padding:18px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between}
+  header .brand{font-family:var(--serif);letter-spacing:.18em;font-size:15px;color:var(--gold)}
+  header .beta{font-size:10px;letter-spacing:.14em;color:var(--faint);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+  main{flex:1;display:flex;flex-direction:column;padding:0 24px 40px}
+  .view{display:none;flex-direction:column;flex:1}
+  .view.on{display:flex}
+
+  /* intro */
+  #v-intro .hero{padding:44px 0 8px;text-align:left}
+  #v-intro h1{font-family:var(--serif);font-weight:600;font-size:29px;line-height:1.4;margin-bottom:14px}
+  #v-intro h1 em{font-style:normal;color:var(--gold)}
+  #v-intro .lede{color:var(--muted);font-size:14.5px;margin-bottom:8px}
+  .points{margin:26px 0 8px;display:flex;flex-direction:column;gap:12px}
+  .pt{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--muted)}
+  .pt .d{width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:9px;flex:none}
+  .pt b{color:var(--ink);font-weight:500}
+  .spacer{flex:1}
+  .btn{display:block;width:100%;border:none;cursor:pointer;font-family:var(--sans);font-size:16px;font-weight:500;letter-spacing:.06em;padding:15px 0;border-radius:8px;text-align:center;transition:opacity .15s}
+  .btn:active{opacity:.8}
+  .btn.gold{background:var(--gold);color:#171308}
+  .btn.ghost{background:none;color:var(--muted);border:1px solid var(--line);margin-top:10px}
+  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .devrow{display:flex;gap:10px;margin-top:10px}
+  .devrow .btn{font-size:12.5px;padding:10px 0;color:var(--faint)}
+  .privacy{margin-top:18px;font-size:11.5px;color:var(--faint);line-height:1.7}
+
+  /* scan */
+  #v-scan{padding-top:20px}
+  .stage{position:relative;width:100%;aspect-ratio:3/4;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .stage video,.stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .stage video{transform:scaleX(-1)}
+  .stage canvas.mirror{transform:scaleX(-1)}
+  .guide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+  .guide .oval{width:62%;aspect-ratio:3/4;border:1.5px dashed color-mix(in srgb,var(--gold) 70%,transparent);border-radius:50%}
+  .scanmsg{margin-top:16px;text-align:center;font-size:14px;color:var(--muted);min-height:44px}
+  .scanmsg b{color:var(--gold);font-weight:500}
+  .prog{height:3px;background:var(--line);border-radius:2px;margin-top:14px;overflow:hidden}
+  .prog i{display:block;height:100%;width:0%;background:var(--gold);transition:width .2s}
+
+  /* results */
+  #v-result{padding-top:24px}
+  .photo-wrap{position:relative;width:130px;height:130px;border-radius:50%;overflow:hidden;margin:0 auto 6px;border:2px solid var(--gold-dim)}
+  .photo-wrap canvas{width:100%;height:100%;object-fit:cover}
+  .rt{font-family:var(--serif);text-align:center;font-size:21px;font-weight:600;margin-top:14px}
+  .rsub{text-align:center;color:var(--faint);font-size:12px;margin-bottom:22px}
+  .sec{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:14px}
+  .sec h2{font-family:var(--serif);font-size:15.5px;font-weight:600;color:var(--gold);margin-bottom:12px;letter-spacing:.06em}
+  .sec .desc{font-size:13px;color:var(--muted);margin-top:10px}
+  .bars{display:flex;flex-direction:column;gap:9px}
+  .bar{display:grid;grid-template-columns:76px 1fr 44px;gap:10px;align-items:center;font-size:12.5px;color:var(--muted)}
+  .bar .track{height:8px;background:var(--panel2);border-radius:4px;overflow:hidden}
+  .bar .fill{display:block;height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:4px;width:0}
+  .bar .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cell{background:var(--panel2);border-radius:8px;padding:12px 14px}
+  .cell .k{font-size:11px;color:var(--faint);letter-spacing:.08em}
+  .cell .v{font-family:var(--serif);font-size:19px;color:var(--ink);margin-top:2px}
+  .cell .v small{font-size:12px;color:var(--muted)}
+  .swatch{display:flex;align-items:center;gap:14px}
+  .swatch .chip{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);flex:none}
+  .swatch .v{font-family:var(--serif);font-size:17px}
+  .locked{position:relative;overflow:hidden}
+  .locked .mask{position:absolute;inset:0;backdrop-filter:blur(7px);background:color-mix(in srgb,var(--bg) 55%,transparent);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:10px}
+  .locked .mask .lk{color:var(--gold);font-size:13px;letter-spacing:.1em}
+  .locked .mask .hint{color:var(--muted);font-size:11.5px}
+  .cta{margin-top:10px}
+  .cta .note{text-align:center;font-size:12px;color:var(--muted);margin-bottom:10px}
+  .disclaim{margin-top:20px;font-size:11px;color:var(--faint);line-height:1.7;border-top:1px solid var(--line);padding-top:14px}
+  .again{margin-top:12px;text-align:center}
+  .again button{background:none;border:none;color:var(--faint);font-size:12.5px;cursor:pointer;text-decoration:underline;font-family:var(--sans)}
+
+  .err{color:var(--warn)}
+  input[type=file]{display:none}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="frame">
+  <header><span class="brand">CHUN.EN</span><span class="beta">掃臉快診 · 內部測試</span></header>
+  <main>
+
+    <!-- 入口 -->
+    <section class="view on" id="v-intro">
+      <div class="hero">
+        <h1>30 秒，先看懂<br>你的<em>臉部比例</em>與<em>色彩方向</em></h1>
+        <p class="lede">用鏡頭或一張正面照片，量出臉部比例、對稱度與膚色傾向，作為造型判讀的起點。</p>
+      </div>
+      <div class="points">
+        <div class="pt"><span class="d"></span><span><b>照片不會離開你的裝置。</b>分析在瀏覽器本地完成，不上傳、不儲存。</span></div>
+        <div class="pt"><span class="d"></span><span><b>光線充足、正面對鏡頭</b>，結果會更準確。</span></div>
+        <div class="pt"><span class="d"></span><span>快掃是簡易參考，<b>完整判讀以顧問訪談為準</b>。</span></div>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn gold" id="btn-cam">開啟鏡頭掃描</button>
+      <button class="btn ghost" id="btn-upload">上傳照片分析</button>
+      <div class="devrow" id="devrow" hidden>
+        <button class="btn ghost" data-sample="sample1.jpg">範例照片 A（測試用）</button>
+        <button class="btn ghost" data-sample="sample2.jpg">範例照片 B（測試用）</button>
+      </div>
+      <input type="file" id="file" accept="image/*">
+      <p class="privacy">測試版說明：本頁為內部原型，未接任何後端與名單系統。臉部特徵點模型（MediaPipe FaceLandmarker）於首次使用時自裝置端載入，約需數秒。</p>
+    </section>
+
+    <!-- 掃描 -->
+    <section class="view" id="v-scan">
+      <div class="stage">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="overlay" class="mirror"></canvas>
+        <div class="guide"><div class="oval"></div></div>
+      </div>
+      <p class="scanmsg" id="scanmsg">正在啟動相機⋯</p>
+      <div class="prog"><i id="prog"></i></div>
+      <div class="spacer"></div>
+      <button class="btn ghost" id="btn-cancel">返回</button>
+    </section>
+
+    <!-- 分析中 -->
+    <section class="view" id="v-busy">
+      <div class="spacer"></div>
+      <p style="text-align:center;font-family:var(--serif);font-size:19px">正在測量臉部比例與膚色<span id="dots">⋯</span></p>
+      <p style="text-align:center;color:var(--faint);font-size:12.5px;margin-top:8px">首次使用需要幾秒鐘下載分析引擎</p>
+      <div class="spacer"></div>
+    </section>
+
+    <!-- 結果 -->
+    <section class="view" id="v-result">
+      <div class="photo-wrap"><canvas id="thumb" width="260" height="260"></canvas></div>
+      <p class="rt" id="headline">你的臉部基礎資料</p>
+      <p class="rsub">裝置端快掃結果 · 僅供參考</p>
+
+      <div class="sec">
+        <h2>臉部縱向比例（可見三庭）</h2>
+        <div class="bars" id="ratio-bars"></div>
+        <p class="desc" id="ratio-desc"></p>
+      </div>
+
+      <div class="sec">
+        <h2>輪廓與五官間距</h2>
+        <div class="kv">
+          <div class="cell"><div class="k">臉型輪廓（近似）</div><div class="v" id="shape">—</div></div>
+          <div class="cell"><div class="k">左右對稱度</div><div class="v" id="sym">—</div></div>
+          <div class="cell"><div class="k">臉寬 : 臉長</div><div class="v" id="wl">—</div></div>
+          <div class="cell"><div class="k">眼距（相對眼寬）</div><div class="v" id="eyed">—</div></div>
+        </div>
+        <p class="desc" id="shape-desc"></p>
+      </div>
+
+      <div class="sec">
+        <h2>膚色傾向（參考）</h2>
+        <div class="swatch">
+          <div class="chip" id="chip"></div>
+          <div><div class="v" id="tone">—</div><div class="desc" id="tone-desc" style="margin-top:2px"></div></div>
+        </div>
+        <p class="desc">環境光會影響色彩判定，建議在自然光下拍攝。完整的個人色彩定位在訪談快診中以標準色布進行。</p>
+      </div>
+
+      <div class="sec locked">
+        <h2>命定髮型方向</h2>
+        <p class="desc">根據你的輪廓線條與比例分布，適合的髮型長度、層次與瀏海方向是⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</p>
+        <p class="desc">妝容重點：⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</p>
+        <div class="mask"><span class="lk">◆ 完整判讀</span><span class="hint">由顧問在訪談快診中為你解讀</span></div>
+      </div>
+
+      <div class="cta">
+        <p class="note">快掃只是起點。完整的角色定位與造型策略，交給訪談快診。</p>
+        <button class="btn gold" id="btn-cta">了解訪談快診（測試按鈕）</button>
+      </div>
+
+      <div class="again"><button id="btn-again">重新測一次</button></div>
+
+      <p class="disclaim">本快掃於數秒內完成簡易幾何測量，結果受拍攝角度與光線影響，僅供參考，不構成任何容貌評價。完整報告由顧問進行更深入的判讀，兩者結果可能不同，以顧問判讀為準。照片僅於你的裝置上處理，離開此頁即消失。</p>
+    </section>
+
+  </main>
+</div>
+
+<script type="module">
+import { FaceLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+
+const $ = id => document.getElementById(id);
+const views = ["v-intro","v-scan","v-busy","v-result"];
+const show = v => views.forEach(x => $(x).classList.toggle("on", x===v));
+
+let landmarker = null, mode = null; // "IMAGE" | "VIDEO"
+let stream = null, rafId = null;
+
+async function getLandmarker(runningMode){
+  if (landmarker && mode === runningMode) return landmarker;
+  if (landmarker) { landmarker.close(); landmarker = null; }
+  const fileset = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+  landmarker = await FaceLandmarker.createFromOptions(fileset, {
+    baseOptions: {
+      modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+      delegate: "GPU"
+    },
+    runningMode, numFaces: 1
+  });
+  mode = runningMode;
+  return landmarker;
+}
+
+/* ---------- 幾何計算 ---------- */
+const P = (lm, i, w, h) => ({ x: lm[i].x * w, y: lm[i].y * h });
+const dist = (a,b) => Math.hypot(a.x-b.x, a.y-b.y);
+
+function analyze(lm, w, h){
+  // 縱向：額頂(10) 眉心(9) 鼻底(2) 下巴(152)
+  const top = P(lm,10,w,h), brow = P(lm,9,w,h), nose = P(lm,2,w,h), chin = P(lm,152,w,h);
+  const s1 = brow.y - top.y, s2 = nose.y - brow.y, s3 = chin.y - nose.y;
+  const tot = s1 + s2 + s3;
+  const seg = [s1,s2,s3].map(v => v / tot * 100);
+
+  // 寬長比
+  const cheekR = P(lm,234,w,h), cheekL = P(lm,454,w,h);
+  const faceW = dist(cheekR, cheekL);
+  const faceL = dist(top, chin) / 0.82; // 補回髮際線以上的近似
+  const wl = faceW / faceL;
+
+  // 下顎寬 vs 顴骨寬
+  const jawR = P(lm,172,w,h), jawL = P(lm,397,w,h);
+  const jawRatio = dist(jawR, jawL) / faceW;
+
+  // 眼距
+  const eyeOutR = P(lm,33,w,h), eyeInR = P(lm,133,w,h);
+  const eyeInL = P(lm,362,w,h), eyeOutL = P(lm,263,w,h);
+  const eyeWidth = (dist(eyeOutR,eyeInR) + dist(eyeInL,eyeOutL)) / 2;
+  const interocular = dist(eyeInR, eyeInL);
+  const eyeRatio = interocular / eyeWidth;
+
+  // 對稱度：成對點到中軸距離差
+  const midX = (P(lm,168,w,h).x + nose.x + chin.x) / 3;
+  const pairs = [[33,263],[133,362],[61,291],[234,454],[172,397],[70,300]];
+  let devSum = 0;
+  for (const [r,l] of pairs){
+    const dr = Math.abs(P(lm,r,w,h).x - midX), dl = Math.abs(P(lm,l,w,h).x - midX);
+    devSum += Math.abs(dr - dl) / ((dr + dl) / 2);
+  }
+  const sym = Math.max(0, Math.min(100, 100 - (devSum / pairs.length) * 100));
+
+  // 臉型（粗判）
+  let shape, shapeDesc;
+  if (wl >= 0.92) {
+    shape = jawRatio >= 0.86 ? "圓潤方圓" : "圓潤";
+    shapeDesc = "輪廓線條柔和連續，給人親和、沒有距離感的第一印象，是很好發揮「信任感」的底子。";
+  } else if (wl >= 0.80) {
+    shape = jawRatio >= 0.86 ? "方圓" : "鵝蛋偏圓";
+    shapeDesc = "比例均衡、可塑性高，多數風格都能駕馭，造型的發揮空間比一般人更大。";
+  } else {
+    shape = jawRatio >= 0.86 ? "修長帶線條" : "修長";
+    shapeDesc = "縱向比例舒展，天生帶有俐落與專業感，適合把這份「線條感」翻譯成個人風格。";
+  }
+
+  return { seg, wl, jawRatio, eyeRatio, sym, shape, shapeDesc,
+           anchors: { top, brow, nose, chin, cheekR, cheekL } };
+}
+
+function sampleCheekColor(lm, canvas){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  let r=0,g=0,b=0,n=0;
+  for (const i of [205, 425]) {
+    const cx = lm[i].x * w, cy = lm[i].y * h;
+    const d = ctx.getImageData(Math.max(0,cx-6), Math.max(0,cy-6), 12, 12).data;
+    for (let k=0;k<d.length;k+=4){ r+=d[k]; g+=d[k+1]; b+=d[k+2]; n++; }
+  }
+  r/=n; g/=n; b/=n;
+  // 簡化 Lab：以 (r-b) 與亮度粗略分暖冷
+  const warmth = (r - b) / Math.max(1,(r + g + b) / 3);
+  let tone, desc;
+  if (warmth > 0.42)      { tone = "偏暖";     desc = "適合先從暖調的金棕、奶茶、珊瑚系開始嘗試。"; }
+  else if (warmth > 0.30) { tone = "中性偏暖"; desc = "暖冷兩邊都能走，暖調略佔優勢。"; }
+  else if (warmth > 0.18) { tone = "中性偏冷"; desc = "暖冷兩邊都能走，冷調略佔優勢。"; }
+  else                    { tone = "偏冷";     desc = "適合先從冷調的霧灰、玫瑰、莓果系開始嘗試。"; }
+  return { tone, desc, rgb: `rgb(${r|0},${g|0},${b|0})` };
+}
+
+/* ---------- 結果渲染 ---------- */
+function renderResult(res, color, srcCanvas, lm){
+  // 縮圖＋特徵點
+  const t = $("thumb"), tc = t.getContext("2d");
+  const { cheekR, cheekL, top, chin } = res.anchors;
+  const cx = (cheekR.x + cheekL.x)/2, cy = (top.y + chin.y)/2;
+  const half = Math.max(dist(cheekR,cheekL), chin.y-top.y) * 0.75;
+  tc.drawImage(srcCanvas, cx-half, cy-half, half*2, half*2, 0, 0, 260, 260);
+  tc.fillStyle = "rgba(201,169,107,.9)";
+  for (const p of lm){
+    const px = (p.x*srcCanvas.width - (cx-half)) / (half*2) * 260;
+    const py = (p.y*srcCanvas.height - (cy-half)) / (half*2) * 260;
+    if (px>=0 && px<=260 && py>=0 && py<=260) tc.fillRect(px, py, 1.4, 1.4);
+  }
+
+  // 三庭
+  const names = ["額頂-眉心","眉心-鼻底","鼻底-下巴"];
+  $("ratio-bars").innerHTML = res.seg.map((v,i)=>`
+    <div class="bar"><span>${names[i]}</span>
+      <span class="track"><span class="fill" style="width:${v}%"></span></span>
+      <span class="val">${v.toFixed(0)}%</span></div>`).join("");
+  const spread = Math.max(...res.seg) - Math.min(...res.seg);
+  $("ratio-desc").textContent = spread < 8
+    ? "三段比例相當均衡，這代表視覺焦點好安排，瀏海與髮長的選擇彈性都很大。"
+    : res.seg[2] > Math.max(res.seg[0], res.seg[1])
+      ? "下半臉比例較舒展，重心安排得當會很顯氣場，髮型可以把視覺重點往中上段帶。"
+      : "中上段比例較明顯，適合用瀏海與髮際線的安排來調整視覺重心。";
+
+  $("shape").textContent = res.shape;
+  $("shape-desc").textContent = res.shapeDesc;
+  $("sym").innerHTML = `${res.sym.toFixed(0)}<small> / 100</small>`;
+  $("wl").textContent = `1 : ${(1/res.wl).toFixed(2)}`;
+  $("eyed").textContent = res.eyeRatio < 0.95 ? "偏近" : res.eyeRatio > 1.1 ? "偏開" : "標準";
+  $("chip").style.background = color.rgb;
+  $("tone").textContent = color.tone;
+  $("tone-desc").textContent = color.desc;
+  $("headline").textContent = `${res.shape}輪廓 · ${color.tone}膚色`;
+  show("v-result");
+}
+
+/* ---------- 靜態照片流程 ---------- */
+async function analyzeImage(src){
+  show("v-busy");
+  try{
+    const img = new Image();
+    img.src = src;
+    await img.decode();
+    const c = document.createElement("canvas");
+    const scale = Math.min(1, 1200 / img.width);
+    c.width = img.width * scale; c.height = img.height * scale;
+    c.getContext("2d", { willReadFrequently: true }).drawImage(img, 0, 0, c.width, c.height);
+    const lmk = await getLandmarker("IMAGE");
+    const out = lmk.detect(c);
+    if (!out.faceLandmarks || !out.faceLandmarks.length){
+      alert("沒有偵測到清晰的臉部，請換一張正面照片再試一次。");
+      show("v-intro"); return;
+    }
+    const lm = out.faceLandmarks[0];
+    const res = analyze(lm, c.width, c.height);
+    const color = sampleCheekColor(lm, c);
+    renderResult(res, color, c, lm);
+  }catch(e){
+    console.error(e);
+    alert("分析時發生問題：" + e.message);
+    show("v-intro");
+  }
+}
+
+/* ---------- 相機流程 ---------- */
+async function startCamera(){
+  show("v-scan");
+  $("scanmsg").textContent = "正在啟動相機⋯";
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 960 } } });
+  }catch(e){
+    $("scanmsg").innerHTML = '<span class="err">無法啟動相機。</span>請在瀏覽器允許相機權限，或改用「上傳照片」。';
+    return;
+  }
+  const video = $("video");
+  video.srcObject = stream;
+  await new Promise(r => video.onloadedmetadata = r);
+  const lmk = await getLandmarker("VIDEO");
+
+  const overlay = $("overlay");
+  overlay.width = video.videoWidth; overlay.height = video.videoHeight;
+  const octx = overlay.getContext("2d");
+  const probe = document.createElement("canvas");
+  probe.width = 160; probe.height = 120;
+  const pctx = probe.getContext("2d", { willReadFrequently: true });
+
+  let goodFrames = 0;
+  const NEED = 24; // ~0.8 秒穩定即拍
+
+  const loop = () => {
+    if (!stream) return;
+    const now = performance.now();
+    const out = lmk.detectForVideo(video, now);
+    octx.clearRect(0,0,overlay.width,overlay.height);
+
+    // 亮度
+    pctx.drawImage(video, 0, 0, 160, 120);
+    const d = pctx.getImageData(0,0,160,120).data;
+    let luma = 0;
+    for (let i=0;i<d.length;i+=16) luma += d[i]*.299 + d[i+1]*.587 + d[i+2]*.114;
+    luma /= d.length/16;
+
+    let msg = "";
+    if (luma < 55) msg = "光線不足，請面向光源或調亮環境";
+    else if (luma > 225) msg = "光線過強，請避開直射光";
+
+    if (out.faceLandmarks && out.faceLandmarks.length){
+      const lm = out.faceLandmarks[0];
+      const w = dist(P(lm,234,overlay.width,overlay.height), P(lm,454,overlay.width,overlay.height));
+      octx.fillStyle = "rgba(201,169,107,.85)";
+      for (const p of lm) octx.fillRect(p.x*overlay.width, p.y*overlay.height, 1.5, 1.5);
+      if (w < overlay.width * 0.30) msg = msg || "請再靠近一點，把整張臉放進虛線框";
+      if (!msg){ goodFrames++; msg = "保持不動，即將自動拍攝"; }
+      else goodFrames = 0;
+    } else {
+      goodFrames = 0;
+      msg = msg || "請正對鏡頭，把整張臉放進虛線框";
+    }
+
+    $("scanmsg").innerHTML = goodFrames ? `<b>${msg}</b>` : msg;
+    $("prog").style.width = Math.min(100, goodFrames/NEED*100) + "%";
+
+    if (goodFrames >= NEED){
+      const c = document.createElement("canvas");
+      c.width = video.videoWidth; c.height = video.videoHeight;
+      c.getContext("2d", { willReadFrequently: true }).drawImage(video, 0, 0);
+      stopCamera();
+      analyzeImage(c.toDataURL("image/jpeg", 0.92));
+      return;
+    }
+    rafId = requestAnimationFrame(loop);
+  };
+  rafId = requestAnimationFrame(loop);
+}
+
+function stopCamera(){
+  if (rafId) cancelAnimationFrame(rafId), rafId = null;
+  if (stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
+}
+
+/* ---------- 綁定 ---------- */
+$("btn-cam").onclick = startCamera;
+$("btn-cancel").onclick = () => { stopCamera(); show("v-intro"); };
+$("btn-upload").onclick = () => $("file").click();
+$("file").onchange = e => {
+  const f = e.target.files[0];
+  if (f) analyzeImage(URL.createObjectURL(f));
+  e.target.value = "";
+};
+// 範例照片按鈕只在本機開發時顯示（照片不隨公開版部署）
+if (["localhost","127.0.0.1"].includes(location.hostname)) $("devrow").hidden = false;
+document.querySelectorAll("[data-sample]").forEach(b =>
+  b.onclick = () => analyzeImage(b.dataset.sample));
+$("btn-again").onclick = () => show("v-intro");
+$("btn-cta").onclick = () => alert("測試版：正式版此按鈕會導向 6,800 訪談快診的介紹與預約（P029 全額折抵）。");
+
+setInterval(() => { const d=$("dots"); if(d) d.textContent = "⋯".repeat(1 + Math.floor(Date.now()/500) % 3); }, 500);
+</script>
+</body>
+</html>
