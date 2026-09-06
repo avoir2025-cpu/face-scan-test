@@ -171,18 +171,18 @@
           <div class="chip" id="chip"></div>
           <div><div class="v" id="tone">—</div><div class="desc" id="tone-desc" style="margin-top:2px"></div></div>
         </div>
-        <p class="desc">環境光會影響色彩判定，建議在自然光下拍攝。完整的個人色彩定位在訪談快診中以標準色布進行。</p>
+        <p class="desc">這只是相機取樣的粗略方向，不是色彩鑑定；環境光會影響判定，建議在自然光下拍攝。</p>
       </div>
 
       <div class="sec locked">
-        <h2>命定髮型方向</h2>
-        <p class="desc">根據你的輪廓線條與比例分布，適合的髮型長度、層次與瀏海方向是⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</p>
-        <p class="desc">妝容重點：⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</p>
-        <div class="mask"><span class="lk">◆ 完整判讀</span><span class="hint">由顧問在訪談快診中為你解讀</span></div>
+        <h2>你的角色定位方向</h2>
+        <p class="desc">把這組輪廓與比例，放進你的職業、階段與面對的對象來看，你的影像應該傳達的角色是⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</p>
+        <p class="desc">第一印象的落點：⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</p>
+        <div class="mask"><span class="lk">◆ 角色定位判讀</span><span class="hint">由顧問在訪談快診中為你解讀</span></div>
       </div>
 
       <div class="cta">
-        <p class="note">快掃只是起點。完整的角色定位與造型策略，交給訪談快診。</p>
+        <p class="note">臉部資料只是素材。你的職業、階段與要面對的人，才決定影像該長什麼樣——這是訪談快診做的事。</p>
         <button class="btn gold" id="btn-cta">了解訪談快診（測試按鈕）</button>
       </div>
 
@@ -385,14 +385,17 @@ async function startCamera(){
   probe.width = 160; probe.height = 120;
   const pctx = probe.getContext("2d", { willReadFrequently: true });
 
-  let goodFrames = 0;
-  const NEED = 24; // ~0.8 秒穩定即拍
+  const HOLD_MS = 3000;   // 臉對好後要穩定維持 3 秒才拍
+  const WARMUP_MS = 1500; // 相機剛開的前 1.5 秒不計時，讓人先把臉放進框
+  const startedAt = performance.now();
+  let goodSince = null;
 
   const loop = () => {
     if (!stream) return;
     const now = performance.now();
     const out = lmk.detectForVideo(video, now);
     octx.clearRect(0,0,overlay.width,overlay.height);
+    const warming = now - startedAt < WARMUP_MS;
 
     // 亮度
     pctx.drawImage(video, 0, 0, 160, 120);
@@ -411,17 +414,33 @@ async function startCamera(){
       octx.fillStyle = "rgba(201,169,107,.85)";
       for (const p of lm) octx.fillRect(p.x*overlay.width, p.y*overlay.height, 1.5, 1.5);
       if (w < overlay.width * 0.30) msg = msg || "請再靠近一點，把整張臉放進虛線框";
-      if (!msg){ goodFrames++; msg = "保持不動，即將自動拍攝"; }
-      else goodFrames = 0;
+      if (warming) { msg = "請把整張臉放進虛線框"; goodSince = null; }
+      else if (!msg){ if (goodSince === null) goodSince = now; }
+      else goodSince = null;
     } else {
-      goodFrames = 0;
+      goodSince = null;
       msg = msg || "請正對鏡頭，把整張臉放進虛線框";
     }
 
-    $("scanmsg").innerHTML = goodFrames ? `<b>${msg}</b>` : msg;
-    $("prog").style.width = Math.min(100, goodFrames/NEED*100) + "%";
+    const held = goodSince === null ? 0 : now - goodSince;
+    if (goodSince !== null){
+      const left = Math.ceil((HOLD_MS - held) / 1000);
+      msg = `保持不動，${left} 秒後自動拍攝`;
+      // 畫面中央倒數數字
+      octx.save();
+      octx.translate(overlay.width, 0); octx.scale(-1, 1); // 抵銷鏡像，數字才不會反
+      octx.font = `600 ${Math.round(overlay.width * 0.22)}px "Noto Serif TC", serif`;
+      octx.textAlign = "center"; octx.textBaseline = "middle";
+      octx.fillStyle = "rgba(201,169,107,.92)";
+      octx.shadowColor = "rgba(0,0,0,.6)"; octx.shadowBlur = 12;
+      octx.fillText(String(left), overlay.width / 2, overlay.height * 0.5);
+      octx.restore();
+    }
 
-    if (goodFrames >= NEED){
+    $("scanmsg").innerHTML = goodSince !== null ? `<b>${msg}</b>` : msg;
+    $("prog").style.width = Math.min(100, held / HOLD_MS * 100) + "%";
+
+    if (held >= HOLD_MS){
       const c = document.createElement("canvas");
       c.width = video.videoWidth; c.height = video.videoHeight;
       c.getContext("2d", { willReadFrequently: true }).drawImage(video, 0, 0);
