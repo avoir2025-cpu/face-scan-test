@@ -19,21 +19,21 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Face Brief 臉部摘要｜30 秒看懂你的臉部比例">
 <meta name="twitter:image" content="https://face.chunen.tw/og-v4.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230e0d0b'/%3E%3Cellipse cx='32' cy='33' rx='15' ry='20' fill='none' stroke='%23c9a96b' stroke-width='2.5' stroke-dasharray='3 4'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23eef4fa'/%3E%3Cellipse cx='32' cy='33' rx='15' ry='20' fill='none' stroke='%232ea8ff' stroke-width='2.5' stroke-dasharray='3 4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
 <style>
   :root{
-    --bg:#0e0d0b; --panel:#181613; --panel2:#201d18; --line:#33302a;
-    --ink:#ede8de; --muted:#a39a8b; --faint:#6f695e;
-    --gold:#c9a96b; --gold-dim:#8f7a4e;
+    --bg:#eef4fa; --panel:#ffffff; --panel2:#f3f7fb; --line:#d5e0ec;
+    --ink:#0f1f3a; --muted:#5b6b85; --faint:#8a97ab;
+    --gold:#2ea8ff; --gold-dim:#1b7fd1;
     --good:#8fc79a; --warn:#d9a556;
-    --serif:"Noto Serif TC",serif; --sans:"Noto Sans TC",system-ui,sans-serif;
+    --serif:"Outfit","Noto Sans TC",system-ui,sans-serif; --sans:"Noto Sans TC",system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   [hidden]{display:none!important} /* 蓋過 .consent/.devrow 自己的 display，hidden 屬性才會真的藏 */
-  body{background:#000;font-family:var(--sans);color:var(--ink);line-height:1.75;min-height:100vh}
-  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden}
+  body{background:#e3ecf5;font-family:var(--sans);color:var(--ink);line-height:1.75;min-height:100vh}
+  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:var(--bg);box-shadow:0 0 40px rgba(15,31,58,.08);display:flex;flex-direction:column;position:relative;overflow:hidden}
   header{padding:18px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between}
   header .brand{font-family:var(--serif);letter-spacing:.18em;font-size:15px;color:var(--gold)}
   header .beta{font-size:10px;letter-spacing:.14em;color:var(--faint);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
@@ -53,7 +53,7 @@
   .spacer{flex:1}
   .btn{display:block;width:100%;border:none;cursor:pointer;font-family:var(--sans);font-size:16px;font-weight:500;letter-spacing:.06em;padding:15px 0;border-radius:8px;text-align:center;transition:opacity .15s}
   .btn:active{opacity:.8}
-  .btn.gold{background:var(--gold);color:#171308}
+  .btn.gold{background:var(--gold);color:#fff}
   .btn.ghost{background:none;color:var(--muted);border:1px solid var(--line);margin-top:10px}
   .btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   .devrow{display:flex;gap:10px;margin-top:10px}
@@ -62,7 +62,7 @@
 
   /* scan */
   #v-scan{padding-top:20px}
-  .stage{position:relative;width:100%;aspect-ratio:3/4;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .stage{position:relative;width:100%;aspect-ratio:3/4;background:#0f1f3a;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
   .stage video,.stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .stage video{transform:scaleX(-1)}
   .stage canvas.mirror{transform:scaleX(-1)}
@@ -96,7 +96,7 @@
   .swatch .chip{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);flex:none}
   .swatch .v{font-family:var(--serif);font-size:17px}
   .locked{position:relative;overflow:hidden}
-  .locked .mask{position:absolute;inset:0;backdrop-filter:blur(7px);background:color-mix(in srgb,var(--bg) 55%,transparent);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:10px}
+  .locked .mask{position:absolute;inset:0;backdrop-filter:blur(7px);background:color-mix(in srgb,#fff 60%,transparent);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:10px}
   .locked .mask .lk{color:var(--gold);font-size:13px;letter-spacing:.1em}
   .locked .mask .hint{color:var(--muted);font-size:11.5px}
   .cta{margin-top:10px}
@@ -110,11 +110,11 @@
   a.btn{text-decoration:none}
   /* Cookie 同意條：與官網 consent.js 同一把 key，同意後才載 GA4 */
   .consent{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;padding:0 12px 12px}
-  .consent .box{width:100%;max-width:456px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+  .consent .box{width:100%;max-width:456px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 30px rgba(15,31,58,.18)}
   .consent p{font-size:12.5px;color:var(--muted);line-height:1.6}
   .consent .row{display:flex;gap:8px}
   .consent button{flex:1;font-family:var(--sans);font-size:13px;padding:9px 0;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:none;color:var(--muted)}
-  .consent button.ok{background:var(--gold);color:#171308;border-color:var(--gold);font-weight:500}
+  .consent button.ok{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:500}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -401,7 +401,7 @@ function renderResult(res, color, srcCanvas, lm){
   const cx = (cheekR.x + cheekL.x)/2, cy = (top.y + chin.y)/2;
   const half = Math.max(dist(cheekR,cheekL), chin.y-top.y) * 0.75;
   tc.drawImage(srcCanvas, cx-half, cy-half, half*2, half*2, 0, 0, 260, 260);
-  tc.fillStyle = "rgba(201,169,107,.9)";
+  tc.fillStyle = "rgba(46,168,255,.9)";
   for (const p of lm){
     const px = (p.x*srcCanvas.width - (cx-half)) / (half*2) * 260;
     const py = (p.y*srcCanvas.height - (cy-half)) / (half*2) * 260;
@@ -511,7 +511,7 @@ async function startCamera(){
     if (out.faceLandmarks && out.faceLandmarks.length){
       const lm = out.faceLandmarks[0];
       const w = dist(P(lm,234,overlay.width,overlay.height), P(lm,454,overlay.width,overlay.height));
-      octx.fillStyle = "rgba(201,169,107,.85)";
+      octx.fillStyle = "rgba(255,255,255,.85)";
       for (const p of lm) octx.fillRect(p.x*overlay.width, p.y*overlay.height, 1.5, 1.5);
       if (w < overlay.width * 0.30) msg = msg || "請再靠近一點，把整張臉放進虛線框";
       if (warming) { msg = "請把整張臉放進虛線框"; goodSince = null; }
@@ -529,9 +529,9 @@ async function startCamera(){
       // 畫面中央倒數數字
       octx.save();
       octx.translate(overlay.width, 0); octx.scale(-1, 1); // 抵銷鏡像，數字才不會反
-      octx.font = `600 ${Math.round(overlay.width * 0.22)}px "Noto Serif TC", serif`;
+      octx.font = `600 ${Math.round(overlay.width * 0.22)}px "Outfit", "Noto Sans TC", sans-serif`;
       octx.textAlign = "center"; octx.textBaseline = "middle";
-      octx.fillStyle = "rgba(201,169,107,.92)";
+      octx.fillStyle = "rgba(255,255,255,.95)";
       octx.shadowColor = "rgba(0,0,0,.6)"; octx.shadowBlur = 12;
       octx.fillText(String(left), overlay.width / 2, overlay.height * 0.5);
       octx.restore();
