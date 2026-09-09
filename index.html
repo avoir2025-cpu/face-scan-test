@@ -268,45 +268,52 @@
       </div>
 
       <div class="card hi" id="scan-card">
-        <p class="eyebrow">下一步</p>
+        <p class="eyebrow">還不確定從哪裡開始？</p>
         <h2 style="color:var(--ink);font-size:20px">免費視覺定位快診</h2>
-        <p class="small">比例只是起點。把你的職業、場合與想呈現的樣子一起放進來，我們幫你整理視覺定位的方向。</p>
+        <p class="small">先整理你的工作角色、出席場合與想調整的重點，釐清目前的形象需求，再決定下一步。</p>
         <a class="btn primary scan-link" href="https://chunen.tw/scan/?src=face_direct" data-svc="scan" style="margin-top:14px">開始免費快診</a>
       </div>
 
       <div class="card" id="need-card">
-        <p class="eyebrow">或者</p>
-        <h2 style="color:var(--ink);font-size:18px">直接告訴我們你想調整的部分</h2>
+        <p class="eyebrow">形象服務</p>
+        <h2 style="color:var(--ink);font-size:18px">你想學會化妝，還是調整整體形象？</h2>
+        <p class="small muted">從日常妝容、場合造型，到穿搭與形象拍攝，選擇你現在需要的協助。</p>
         <div class="opts" id="needs">
-          <button class="opt" data-need="makeup">妝髮與髮型</button>
-          <button class="opt" data-need="style">穿搭與風格</button>
-          <button class="opt" data-need="brand">工作形象與拍攝</button>
-          <button class="opt" data-need="explore">先看看就好</button>
+          <button class="opt" data-need="makeup_lesson">彩妝教學</button>
+          <button class="opt" data-need="makeup_hair">妝髮造型</button>
+          <button class="opt" data-need="wardrobe_style">穿搭改造</button>
+          <button class="opt" data-need="image_portrait">形象與拍攝</button>
         </div>
 
-        <div class="svc" data-need="makeup">
-          <p class="small">從輪廓、髮況與場合出發，一起討論適合的妝髮方向；想學會自己完成也可以。</p>
-          <button class="btn primary" data-line="makeup">和我們聊妝髮需求</button>
-          <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom">看 B.room 服務內容</a>
+        <div class="svc" data-need="makeup_lesson">
+          <p class="small"><b style="font-weight:500">想學會日常化妝，或調整一直不順手的眉型、眼妝？</b></p>
+          <p class="small muted">一對一從你的五官與化妝習慣出發，練習選色、上妝與細節調整，把適合自己的妝，變成日常能力。</p>
+          <button class="btn primary" data-line="makeup_lesson">詢問彩妝教學</button>
+          <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom">查看 B.room 服務介紹</a>
         </div>
-        <div class="svc" data-need="style">
-          <p class="small">臉部比例只是其中一面。穿搭還要看身形、場合與衣櫥現況，才能整理成真正穿得到的選擇。</p>
-          <button class="btn primary" data-line="style">和我們聊穿搭需求</button>
-          <a class="ln" href="https://chunen.tw/a-voir.html" data-svc="avoir">看 À Voir 服務內容</a>
+        <div class="svc" data-need="makeup_hair">
+          <p class="small"><b style="font-weight:500">有重要活動、聚會或拍攝，想安排專業妝髮？</b></p>
+          <p class="small muted">依照你的臉部輪廓、髮況與出席場合，規劃妝容與髮型，讓當天的造型更精緻，也與整體穿著協調。</p>
+          <button class="btn primary" data-line="makeup_hair">詢問妝髮服務</button>
+          <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom">查看妝髮服務介紹</a>
         </div>
-        <div class="svc" data-need="brand">
-          <p class="small">先決定希望被怎麼理解，再規劃怎麼呈現。從專業角色、面對的對象與影像用途，決定服裝、妝髮與拍攝方向。</p>
-          <button class="btn primary" data-line="brand">和我們聊形象與拍攝</button>
-          <p class="xs center" style="margin-top:10px"><a href="https://chunen.tw/c-photos.html" data-svc="cphotos" style="color:var(--accent-dim)">C.photos 單次拍攝</a>　·　<a href="https://chunen.tw/signature.html" data-svc="signature" style="color:var(--accent-dim)">商業視覺整合企劃</a></p>
+        <div class="svc" data-need="wardrobe_style">
+          <p class="small"><b style="font-weight:500">衣服不少，卻總是搭不出想要的樣子？</b></p>
+          <p class="small muted">從身形、工作場合與現有衣櫥出發，整理服裝選擇與搭配方式，讓穿搭更貼近你的角色，也保留自己的風格。</p>
+          <button class="btn primary" data-line="wardrobe_style">詢問穿搭服務</button>
+          <a class="ln" href="https://chunen.tw/a-voir.html" data-svc="avoir">查看穿搭與形象服務</a>
         </div>
-        <div class="svc" data-need="explore">
-          <p class="small">先留下這次的觀察。想看配色靈感，或之後要換造型時再回來比較。</p>
-          <button class="btn ghost" id="btn-palette-from-need">看四季配色參考</button>
+        <div class="svc" data-need="image_portrait">
+          <p class="small"><b style="font-weight:500">準備更新工作形象，或需要一組形象照？</b></p>
+          <p class="small muted">先確認你的專業角色、面對的對象與照片用途，再規劃服裝、妝髮與拍攝方向，讓官網、社群與工作簡報中的你，呈現一致的專業感。</p>
+          <button class="btn primary" data-line="image_portrait">詢問形象與拍攝</button>
+          <p class="xs center" style="margin-top:10px"><a href="https://chunen.tw/c-photos.html" data-svc="cphotos" style="color:var(--accent-dim)">查看形象拍攝服務</a>　·　<a href="https://chunen.tw/signature.html" data-svc="signature" style="color:var(--accent-dim)">查看整合形象企劃</a></p>
         </div>
+        <p class="xs center" style="margin-top:16px">還想先看看？<button class="link" id="btn-palette-from-need" style="font-size:12px;margin-left:4px">先看四季配色參考</button></p>
       </div>
 
       <p class="center" style="margin-top:6px"><button class="link" id="btn-again">換張照片再分析</button></p>
-      <p class="xs" style="margin-top:22px;border-top:1px solid var(--line);padding-top:14px">結果僅描述本次照片中的比例與位置，可能受角度、光線、表情與遮擋影響；不構成外貌評價，也不是個人色彩或職業角色判定。</p>
+      <p class="xs" style="margin-top:22px;border-top:1px solid var(--line);padding-top:14px">這份結果僅供觀察本次照片中的臉部比例與位置，會受拍攝角度、光線、表情與遮擋影響。結果不評判外貌，也不判定個人色彩或職業角色。</p>
     </section>
 
     <!-- 四季配色參考 -->
@@ -319,11 +326,12 @@
         <p class="xs">以下為配色靈感，不代表系統已判定你的季型。</p>
         <div id="pal-body" style="margin-top:12px"></div>
         <div class="card" style="margin-top:14px">
-          <p class="small muted">這些色票是配色示意，不是指定商品色號。是否適合自己，需要結合實際試色、妝感偏好與使用場合比較。</p>
-          <p class="small" style="margin-top:8px"><b style="font-weight:500">想把喜歡的配色，變成自己會用的妝容？</b></p>
-          <p class="small muted">從選色、上色範圍到濃淡層次，透過一對一彩妝教學，整理成日常用得上的方法。</p>
-          <button class="btn primary" data-line="teach" style="margin-top:12px">詢問一對一彩妝教學</button>
-          <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom-teach">看 B.room 服務內容</a>
+          <p class="eyebrow">一對一彩妝教學</p>
+          <h2 style="color:var(--ink);font-size:18px">喜歡這組配色，卻不知道怎麼用在自己的妝容？</h2>
+          <p class="small muted">從眼影、腮紅到唇色，練習配色與上妝方式，也學會依照自己的五官調整畫法，把配色靈感變成日常用得上的妝容。</p>
+          <button class="btn primary" data-line="makeup_lesson_palette" style="margin-top:12px">詢問彩妝教學</button>
+          <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom-teach">查看 B.room 服務介紹</a>
+          <p class="xs" style="margin-top:12px">四季配色供瀏覽與搭配參考，不代表這次照片已判定你的個人季型。這些色票是配色示意，不是指定商品色號。</p>
         </div>
         <p class="center" style="margin-top:6px"><button class="link" id="btn-pal-back">返回</button></p>
       </div>
@@ -347,17 +355,18 @@
 
 <div class="sheet" id="linebox" hidden>
   <div class="box">
-    <div class="sheet-head"><span style="font-weight:500">用 LINE 告訴我們</span><button class="close" id="lb-close" aria-label="關閉">✕</button></div>
-    <p class="small muted">你想了解：<span id="lb-need"></span></p>
-    <label class="small muted" style="display:block;margin-top:10px">使用場合或預計時間（選填）</label>
-    <textarea id="lb-note" placeholder="例如：下個月有一場演講，想整理妝髮與穿搭。"></textarea>
+    <div class="sheet-head"><span style="font-weight:500">透過 LINE 詢問服務</span><button class="close" id="lb-close" aria-label="關閉">✕</button></div>
+    <p class="small muted">你選擇的服務：<span id="lb-need"></span></p>
+    <p class="xs">確認下方訊息，複製後到 LINE 貼上並送出。</p>
+    <label class="small muted" id="lb-label" style="display:block;margin-top:10px">補充（選填）</label>
+    <textarea id="lb-note" placeholder=""></textarea>
     <div class="msgbox" id="lb-preview"></div>
     <div class="row2">
-      <button class="btn ghost" id="lb-copy">複製文字</button>
+      <button class="btn ghost" id="lb-copy">複製訊息</button>
       <a class="btn primary" style="margin-top:10px" id="lb-go" href="https://lin.ee/7DXWsNcz" target="_blank" rel="noopener">開啟 LINE</a>
     </div>
     <p class="xs" id="lb-status" style="margin-top:8px;min-height:1.2em"></p>
-    <p class="xs">複製後到 LINE 貼上送出即可。這一步只帶你主動寫的內容，不會傳送照片或臉部數據。</p>
+    <p class="xs">下方訊息只包含你選擇的服務、進入頁面的來源與填寫的補充，不含照片或臉部分析數據。完成貼上並送出後，我們才會收到你的詢問。</p>
   </div>
 </div>
 
@@ -785,13 +794,23 @@ function showPalette(from){
 }
 
 /* ---------- 需求選擇與 LINE ---------- */
-const NEED_ZH = { makeup:"妝髮與髮型", style:"穿搭與整體風格", brand:"工作形象與品牌拍攝", teach:"一對一彩妝教學" };
+/* 服務識別碼 → 畫面名稱／選填欄／訊息模板（文案依 09/09 需求分流文案 v2） */
+const SERVICES = {
+  makeup_lesson:  { zh:"彩妝教學", label:"想學的內容或目前困擾（選填）", ph:"例如：有化妝習慣，但眉型和眼妝一直不知道怎麼調整。",
+                    head:"你好，我從 CHUN.EN 臉部比例分析工具過來，想了解一對一彩妝教學。", tag:"想學的內容或目前困擾" },
+  makeup_hair:    { zh:"妝髮造型", label:"活動場合與預計日期（選填）", ph:"例如：月底有一場重要聚會，想安排妝髮。",
+                    head:"你好，我從 CHUN.EN 臉部比例分析工具過來，想詢問妝髮造型服務。", tag:"活動場合與預計日期" },
+  wardrobe_style: { zh:"穿搭改造", label:"目前想調整的部分（選填）", ph:"例如：衣服不少，但上班或見客戶時，總是不知道怎麼搭。",
+                    head:"你好，我從 CHUN.EN 臉部比例分析工具過來，想了解穿搭與整體形象規劃。", tag:"目前想調整的部分" },
+  image_portrait: { zh:"形象與拍攝", label:"照片用途或目前需求（選填）", ph:"例如：準備經營個人品牌，需要官網、社群與簡報使用的形象照。",
+                    head:"你好，我從 CHUN.EN 臉部比例分析工具過來，想了解工作形象與拍攝規劃。", tag:"照片用途或目前需求" },
+  // 從四季配色頁進入的教學詢問：同一服務、不同來源文字
+  makeup_lesson_palette: { zh:"彩妝教學", label:"想學的內容或目前困擾（選填）", ph:"例如：想學會搭配眼影、腮紅與唇色，不知道怎麼用在自己的妝容上。",
+                    head:"你好，我從 CHUN.EN 四季配色參考頁過來，想了解一對一彩妝教學。", tag:"想學的內容或目前困擾" }
+};
 function lineMessage(need, note){
-  const n = (note || "").trim();
-  if (need === "makeup") return "你好，我從 CHUN.EN 臉部比例分析過來，想了解妝髮或髮型相關服務。" + (n ? `\n\n使用場合或預計時間：${n}` : "");
-  if (need === "style")  return "你好，我從 CHUN.EN 臉部比例分析過來，想了解穿搭與整體形象規劃。" + (n ? `\n\n我目前想調整的部分：${n}` : "");
-  if (need === "teach")  return "你好，我從 CHUN.EN 四季配色參考過來，想了解一對一彩妝教學。\n\n我想學的是選色與日常妝容的搭配方式。" + (n ? `\n\n補充：${n}` : "");
-  return "你好，我從 CHUN.EN 臉部比例分析過來，想了解工作形象或品牌拍攝。" + (n ? `\n\n主要用途或目前需求：${n}` : "");
+  const s = SERVICES[need]; const n = (note || "").trim();
+  return s.head + (n ? `\n\n${s.tag}：${n}` : "");
 }
 document.querySelectorAll('.opt').forEach(b => b.onclick = () => {
   const need = b.dataset.need;
@@ -800,10 +819,12 @@ document.querySelectorAll('.opt').forEach(b => b.onclick = () => {
   track("need_selected", { need });
 });
 function openLine(need){
-  $("lb-need").textContent = NEED_ZH[need]; $("lb-note").value = ""; $("lb-status").textContent = "";
+  const s = SERVICES[need];
+  $("lb-need").textContent = s.zh; $("lb-label").textContent = s.label; $("lb-note").placeholder = s.ph;
+  $("lb-note").value = ""; $("lb-status").textContent = "";
   $("lb-preview").textContent = lineMessage(need, "");
   $("linebox").dataset.need = need; $("linebox").hidden = false;
-  track("service_view", { need });
+  track("service_view", { need: need.replace("_palette", ""), from: need.endsWith("_palette") ? "palette" : "result" });
 }
 document.querySelectorAll('[data-line]').forEach(b => b.onclick = () => openLine(b.dataset.line));
 $("lb-close").onclick = () => { $("linebox").hidden = true; };
@@ -811,8 +832,8 @@ $("linebox").addEventListener("click", e => { if (e.target === $("linebox")) $("
 $("lb-note").addEventListener("input", () => { $("lb-preview").textContent = lineMessage($("linebox").dataset.need, $("lb-note").value); });
 $("lb-copy").onclick = async () => {
   const text = lineMessage($("linebox").dataset.need, $("lb-note").value);
-  try { await navigator.clipboard.writeText(text); $("lb-status").textContent = "需求文字已複製。"; }
-  catch(e){ $("lb-status").textContent = "暫時無法自動複製，請長按上方文字複製。"; }
+  try { await navigator.clipboard.writeText(text); $("lb-status").textContent = "訊息已複製，請到 LINE 貼上並送出。"; }
+  catch(e){ $("lb-status").textContent = "無法自動複製，請選取上方訊息後手動複製。"; }
 };
 $("lb-go").addEventListener("click", () => track("line_click", { need: $("linebox").dataset.need }));
 document.querySelectorAll('[data-svc]').forEach(a => a.addEventListener("click", () => track("service_view", { target: a.dataset.svc })));
