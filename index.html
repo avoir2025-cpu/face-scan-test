@@ -61,7 +61,12 @@
   .btn.primary{background:var(--accent);color:#fff}
   .btn.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--line);margin-top:10px}
   .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  .link{background:none;border:none;color:var(--accent-dim);font-size:14px;cursor:pointer;text-decoration:underline;font-family:var(--sans);padding:0}
+  a{color:inherit;text-decoration:none}
+  .link{background:none;border:none;color:var(--muted);font-size:13.5px;cursor:pointer;text-decoration:none;font-family:var(--sans);padding:0}
+  .link::after{content:" ›";color:var(--accent-dim)}
+  .ln{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:99px;font-size:13px;color:var(--muted);background:rgba(255,255,255,.65);margin-top:10px}
+  .ln::after{content:"›";color:var(--accent-dim)}
+  .lnrow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
   .center{text-align:center}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
   .card p+p{margin-top:8px}
@@ -128,7 +133,12 @@
   .svc h3{font-family:var(--display);font-size:17px;font-weight:600;margin-bottom:8px}
   .svc .sub{display:block;margin-top:10px;text-align:center}
   .svc .btn{margin-top:14px}
-  .ln{display:block;text-align:center;font-size:13.5px;color:var(--accent-dim);margin-top:10px}
+  .svc .ln,.pal-teach .ln{display:flex;width:max-content;margin:10px auto 0}
+  .reads{display:flex;flex-direction:column;gap:14px}
+  .read{display:grid;grid-template-columns:44px 1fr;gap:12px}
+  .read .tag{font-family:var(--display);font-size:11px;letter-spacing:.12em;color:var(--accent-dim);border:1px solid rgba(46,168,255,.35);border-radius:6px;height:22px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .read b{display:block;font-weight:500;font-size:15px;margin-bottom:2px}
+  .read span{font-size:14px;color:var(--muted)}
   /* line box */
   .linebox{border:1px solid var(--accent);background:#fff;border-radius:14px;padding:18px 20px;margin-top:12px}
   .linebox textarea{width:100%;min-height:76px;margin-top:8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-family:var(--sans);font-size:14px;resize:vertical}
@@ -249,15 +259,9 @@
       <label class="toggle"><input type="checkbox" id="pts-toggle" checked> 顯示量測線</label>
 
       <div class="card">
-        <h2>這張照片的比例特徵</h2>
-        <ul class="obs" id="obs"></ul>
-        <p class="xs" style="margin-top:10px">量測的是這張照片中的相對位置，可見額頂不等於髮際線；角度與光線會影響結果。</p>
-      </div>
-
-      <div class="card">
-        <h2>造型可以從這裡開始</h2>
-        <div class="dir" id="dir"></div>
-        <p class="xs" style="margin-top:10px">這些是可以比較的方向，不是唯一答案；實際造型還要看髮況、風格與使用場合。</p>
+        <h2>比例判讀與造型建議</h2>
+        <div class="reads" id="reads"></div>
+        <p class="xs" style="margin-top:14px">依這張照片的比例給的方向；實際造型還要看髮況、風格與場合。</p>
       </div>
 
       <div class="card">
@@ -307,7 +311,7 @@
           <p class="small"><b style="font-weight:500">準備更新工作形象，或需要一組形象照？</b></p>
           <p class="small muted">先確認你的專業角色、面對的對象與照片用途，再規劃服裝、妝髮與拍攝方向，讓官網、社群與工作簡報中的你，呈現一致的專業感。</p>
           <button class="btn primary" data-line="image_portrait">詢問形象與拍攝</button>
-          <p class="xs center" style="margin-top:10px"><a href="https://chunen.tw/c-photos.html" data-svc="cphotos" style="color:var(--accent-dim)">查看形象拍攝服務</a>　·　<a href="https://chunen.tw/signature.html" data-svc="signature" style="color:var(--accent-dim)">查看整合形象企劃</a></p>
+          <div class="lnrow"><a class="ln" href="https://chunen.tw/c-photos.html" data-svc="cphotos" style="margin:10px 0 0">查看形象拍攝服務</a><a class="ln" href="https://chunen.tw/signature.html" data-svc="signature" style="margin:10px 0 0">查看整合形象企劃</a></div>
         </div>
         <p class="xs center" style="margin-top:16px">還想先看看？<button class="link" id="btn-palette-from-need" style="font-size:12px;margin-left:4px">先看四季配色參考</button></p>
       </div>
@@ -325,7 +329,7 @@
         <div class="seasons" id="seasons"></div>
         <p class="xs">以下為配色靈感，不代表系統已判定你的季型。</p>
         <div id="pal-body" style="margin-top:12px"></div>
-        <div class="card" style="margin-top:14px">
+        <div class="card pal-teach" style="margin-top:14px">
           <p class="eyebrow">一對一彩妝教學</p>
           <h2 style="color:var(--ink);font-size:18px">喜歡這組配色，卻不知道怎麼用在自己的妝容？</h2>
           <p class="small muted">從眼影、腮紅到唇色，練習配色與上妝方式，也學會依照自己的五官調整畫法，把配色靈感變成日常用得上的妝容。</p>
@@ -483,61 +487,78 @@ function measure(lm, w, h){
 
 /* ---------- 結果 ---------- */
 let lastRes = null;
-// 在客戶自己的照片上畫出量測線：三段分割、臉寬、中軸，並標百分比
+// 在客戶照片上疊 HUD：臉部與眼部輪廓線（微光）、四角框、右側三段刻度軌、細字標示
 function drawThumb(withLines){
   if (!lastSrcCanvas || !lastRes) return;
   const t = $("thumb"), tc = t.getContext("2d"), S = t.width;
-  const A = lastRes.anchors, res = lastRes;
-  const cx = (A.cheekR.x + A.cheekL.x)/2, cy = (A.top.y + A.chin.y)/2;
-  const half = Math.max(dist(A.cheekR,A.cheekL), A.chin.y-A.top.y) * 0.80;
+  const A = lastRes.anchors, res = lastRes, src = lastSrcCanvas;
+  let cx = (A.cheekR.x + A.cheekL.x)/2, cy = (A.top.y + A.chin.y)/2;
+  let half = Math.max(dist(A.cheekR,A.cheekL), A.chin.y-A.top.y) * 0.85;
+  // 裁切框不能超出照片，否則 drawImage 會把邊緣拉伸變形
+  half = Math.min(half, cx, cy, src.width - cx, src.height - cy);
   const X = x => (x - (cx-half)) / (half*2) * S, Y = y => (y - (cy-half)) / (half*2) * S;
   tc.clearRect(0,0,S,S);
-  tc.drawImage(lastSrcCanvas, cx-half, cy-half, half*2, half*2, 0, 0, S, S);
+  tc.drawImage(src, cx-half, cy-half, half*2, half*2, 0, 0, S, S);
   if (!withLines) return;
-  // 特徵點（淡）
-  tc.fillStyle = "rgba(255,255,255,.55)";
-  for (const p of lastLm){
-    const px = X(p.x*lastSrcCanvas.width), py = Y(p.y*lastSrcCanvas.height);
-    if (px>=0 && px<=S && py>=0 && py<=S) tc.fillRect(px, py, 2, 2);
-  }
-  const line = (x1,y1,x2,y2,col="rgba(255,255,255,.9)",w=2,dash=[]) => { tc.save(); tc.setLineDash(dash); tc.strokeStyle=col; tc.lineWidth=w; tc.beginPath(); tc.moveTo(x1,y1); tc.lineTo(x2,y2); tc.stroke(); tc.restore(); };
-  const node = (x,y,r=6) => { tc.save(); tc.fillStyle="#fff"; tc.strokeStyle="rgba(46,168,255,1)"; tc.lineWidth=2.5; tc.beginPath(); tc.arc(x,y,r,0,Math.PI*2); tc.fill(); tc.stroke(); tc.restore(); };
-  const label = (x,y,text,align="left") => { tc.save(); tc.font = `500 ${Math.round(S*0.034)}px "Outfit","Noto Sans TC",sans-serif`; tc.textAlign=align; tc.textBaseline="middle"; const w = tc.measureText(text).width + S*0.03; const bx = align==="left" ? x : x - w; tc.fillStyle="rgba(15,31,58,.72)"; tc.beginPath(); tc.roundRect(bx, y - S*0.026, w, S*0.052, S*0.012); tc.fill(); tc.fillStyle="#fff"; tc.fillText(text, align==="left" ? x + S*0.015 : x - S*0.015, y); tc.restore(); };
-  const xl = X(A.cheekR.x) - S*0.10, xr = X(A.cheekL.x) + S*0.10;
-  const ys = [A.top.y, A.brow.y, A.nose.y, A.chin.y].map(Y);
-  // 中軸與眼線
-  line(X(A.top.x), ys[0], X(A.chin.x), ys[3], "rgba(255,255,255,.55)", 1.5, [6,6]);
-  line(X(A.eyeOutR.x), Y(A.eyeOutR.y), X(A.eyeOutL.x), Y(A.eyeOutL.y), "rgba(255,255,255,.55)", 1.5, [6,6]);
-  // 三段分割線＋百分比
-  ys.forEach((y,i) => { line(xl, y, xr, y, "rgba(255,255,255,.9)", i===0||i===3 ? 1.5 : 2); node((i%2? xr : xl), y, 5); });
-  if (res.seg) res.seg.forEach((v,i) => label(xr + S*0.012, (ys[i]+ys[i+1])/2, `${v.toFixed(0)}%`));
-  // 臉寬線
-  const yw = Y((A.cheekR.y + A.cheekL.y)/2);
-  line(X(A.cheekR.x), yw, X(A.cheekL.x), yw, "rgba(46,168,255,.95)", 2.5);
-  node(X(A.cheekR.x), yw); node(X(A.cheekL.x), yw);
-  if (res.wl) label(xl - S*0.012, ys[3] + S*0.055, `寬長 1 : ${res.wl.toFixed(2)}`, "left");
+  const ICE = "rgba(190,232,255,", W = "rgba(255,255,255,";
+  const glow = (on) => { tc.shadowColor = on ? "rgba(120,200,255,.9)" : "transparent"; tc.shadowBlur = on ? S*0.012 : 0; };
+  const path = (conns, col, w) => {
+    tc.save(); glow(true); tc.strokeStyle = col; tc.lineWidth = w; tc.lineJoin = "round"; tc.beginPath();
+    for (const c of conns){ const a = lastLm[c.start], b = lastLm[c.end]; tc.moveTo(X(a.x*src.width), Y(a.y*src.height)); tc.lineTo(X(b.x*src.width), Y(b.y*src.height)); }
+    tc.stroke(); tc.restore();
+  };
+  const line = (x1,y1,x2,y2,col,w=1,dash=[]) => { tc.save(); tc.setLineDash(dash); tc.strokeStyle=col; tc.lineWidth=w; tc.beginPath(); tc.moveTo(x1,y1); tc.lineTo(x2,y2); tc.stroke(); tc.restore(); };
+  const dot = (x,y,r) => { tc.save(); glow(true); tc.fillStyle="#fff"; tc.beginPath(); tc.arc(x,y,r,0,Math.PI*2); tc.fill(); tc.restore(); };
+  const text = (x,y,str,size,align="left",col=W+".95)") => { tc.save(); tc.font = `500 ${Math.round(S*size)}px "Outfit","Noto Sans TC",sans-serif`; tc.textAlign=align; tc.textBaseline="middle"; tc.shadowColor="rgba(0,0,0,.55)"; tc.shadowBlur=S*0.008; tc.fillStyle=col; tc.fillText(str,x,y); tc.restore(); };
+
+  // 稀疏特徵點
+  tc.fillStyle = W+".28)";
+  lastLm.forEach((p,i) => { if (i%3) return; const px=X(p.x*src.width), py=Y(p.y*src.height); if (px>=0&&px<=S&&py>=0&&py<=S) tc.fillRect(px,py,1.5,1.5); });
+  // 輪廓線：臉部橢圓、雙眼、眉
+  path(FaceLandmarker.FACE_LANDMARKS_FACE_OVAL, ICE+".85)", S*0.0028);
+  path(FaceLandmarker.FACE_LANDMARKS_LEFT_EYE, ICE+".7)", S*0.002);
+  path(FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE, ICE+".7)", S*0.002);
+  path(FaceLandmarker.FACE_LANDMARKS_LIPS, ICE+".45)", S*0.0016);
+
+  // 四角框（臉的外接框往外推）
+  const fx0 = X(A.cheekR.x) - S*0.07, fx1 = X(A.cheekL.x) + S*0.07, fy0 = Y(A.top.y) - S*0.06, fy1 = Y(A.chin.y) + S*0.05, L = S*0.05, c = W+".85)";
+  [[fx0,fy0,1,1],[fx1,fy0,-1,1],[fx0,fy1,1,-1],[fx1,fy1,-1,-1]].forEach(([x,y,dx,dy]) => { line(x,y,x+L*dx,y,c,1.2); line(x,y,x,y+L*dy,c,1.2); });
+
+  // 右側刻度軌：三段
+  const rx = fx1 + S*0.035, ys = [A.top.y, A.brow.y, A.nose.y, A.chin.y].map(Y);
+  line(rx, ys[0], rx, ys[3], W+".7)", 1);
+  ys.forEach((y,i) => { line(rx - S*0.012, y, rx + S*0.012, y, W+".9)", 1); dot(rx, y, i===0||i===3 ? 2.2 : 3); });
+  if (res.seg) res.seg.forEach((v,i) => text(rx + S*0.03, (ys[i]+ys[i+1])/2, `${v.toFixed(0)}%`, 0.03));
+  // 眉／鼻底 的細導線（不橫跨臉，只到框邊）
+  [1,2].forEach(i => line(fx1, ys[i], rx - S*0.012, ys[i], W+".4)", 1, [3,4]));
+
+  // 臉寬：框底下一條細線＋兩端小點，數字放左下
+  const yw = fy1 + S*0.03;
+  line(X(A.cheekR.x), yw, X(A.cheekL.x), yw, ICE+".9)", 1.2); dot(X(A.cheekR.x), yw, 2.5); dot(X(A.cheekL.x), yw, 2.5);
+  if (res.wl) text(fx0, fy1 + S*0.085, `W : H  1 : ${res.wl.toFixed(2)}`, 0.028, "left", W+".85)");
+  text(fx0, fy0 - S*0.028, "FACE BRIEF", 0.024, "left", ICE+".9)");
 }
 
-/* 觀察句與造型方向：文字庫來自 09/09 審稿定稿 5.2.2／5.3.3／5.4.3 */
+/* 比例判讀 → 造型建議（每項：觀察句、建議句） */
 const VERT = {
-  similar: ["本次照片的三段長度相對接近。", "可以先依想呈現的風格，比較露額、瀏海與不同分線；不需要只為了接近某個固定比例而改變造型。"],
-  lower:   ["本次照片中，鼻底至下巴的區段較長。", "想調整視覺重心時，可以比較露出眉眼與增加下半臉附近髮量的差別，觀察哪一種更符合你想呈現的樣子。"],
-  upper:   ["本次照片中，可見額頂至眉心的區段較長。", "可以比較露額、側分與不同瀏海份量的差別。這是造型選擇，不代表一定要遮住額頭。"],
-  middle:  ["本次照片中，眉心至鼻底的區段較長。", "可以把眉眼附近的妝髮安排當作比較重點，例如分線、側邊層次與眼妝重心；不要只憑這一項數值決定瀏海或髮長。"],
-  tie:     ["本次照片的分段差異不適合再細分。", "先把分段當作觀察線索，搭配整體髮型與穿著一起比較，不需要勉強歸入某一種類型。"]
+  similar: ["上中下三段長度接近。", "比例平均，瀏海與露額都撐得住；重點放在你想強調的部位，不用修正比例。"],
+  upper:   ["額頭到眉心這一段偏長。", "瀏海或側分能收掉一部分額高；眉型畫平一點，視覺重心會往下移。"],
+  middle:  ["眉心到鼻底這一段偏長。", "眉眼周圍是重點：眼妝與側邊層次能拉開節奏，髮型別把重量壓在中段。"],
+  lower:   ["鼻底到下巴這一段偏長。", "把重心往上帶：露出眉眼、髮量集中在顴骨以上；唇色稍飽和，下半臉就不顯空。"],
+  tie:     ["三段差異不大，沒有特別突出的一段。", "先決定想強調的部位再選髮型，比例不是限制。"]
 };
 const CONTOUR = {
-  wide_full:  ["臉部寬度相對明顯，下顎與顴部的寬度差較小。", "造型可以先比較髮頂高度與兩側份量。想增加縱向延伸感時，可嘗試較有高度的髮頂或露額；喜歡較有份量的輪廓，也可以保留兩側髮量，不必一律以縮窄為目標。"],
-  wide_taper: ["臉部寬度相對明顯，下顎比顴部窄。", "可以把臉側層次與髮尾位置當作比較重點。試著觀察髮量集中在顴部附近，或延伸到下顎附近時，整體印象有什麼不同，再決定想保留哪一種線條。"],
-  mid_full:   ["寬長比落在中間區間，下顎與顴部的寬度差較小。", "可以比較露出與保留臉側髮量的差別，並搭配領口一起看。想保留輪廓份量或增加縱向線條，是兩種不同方向，不需要把其中一種當作唯一答案。"],
-  mid_taper:  ["寬長比落在中間區間，下顎比顴部窄。", "可以先比較分線、臉側層次與髮尾落點。這些選擇不必只跟著某個臉型名稱，而應一起考慮你喜歡的風格與平常整理頭髮的方式。"],
-  long_full:  ["縱向比例較明顯，下顎與顴部的寬度差較小。", "可以先比較髮頂與側邊的份量分配。想減少縱向強調時，可比較較低的髮頂與適度側邊層次；想保留修長線條，也可以露額，再從服裝領口調整整體節奏。"],
-  long_taper: ["縱向比例較明顯，下顎比顴部窄。", "可以比較下顎附近的髮量與髮尾長度。希望增加側邊份量，或保留向下延伸的線條，都是可嘗試的方向；實際長度仍需配合髮質、髮量與日常整理習慣。"]
+  wide_full:  ["橫向比例明顯，下顎與顴骨寬度接近。", "髮頂拉高、露出額頭，縱向線條就出來了；兩側髮量收在顴骨以下，不要橫向堆量。"],
+  wide_taper: ["橫向比例明顯，下顎比顴骨窄。", "髮量重心放在顴骨到下顎之間，剛好補上收窄的線條；分線偏側，避免正中分把寬度框出來。"],
+  mid_full:   ["寬長比例均衡，下顎線條完整。", "大多數髮型都撐得住。想要精緻感，臉側留一點層次修飾下顎；想要俐落感，直接露額。"],
+  mid_taper:  ["寬長比例均衡，下顎自然收窄。", "可塑性最高的比例。分線、瀏海、髮長都能試，髮尾落點避開下巴正下方，線條就乾淨。"],
+  long_full:  ["縱向比例明顯，下顎線條完整。", "髮頂壓低、側邊留份量，把視覺往橫向帶；瀏海或側分能縮短額頭的視覺長度。"],
+  long_taper: ["縱向比例明顯，下顎收窄。", "髮尾落在下顎附近、側邊留量，柔化向下延伸的線條；想保留修長感就露額，用領口平衡。"]
 };
 const EYES = {
-  near: ["兩眼間距小於參考眼寬。", "眼妝可比較內外側重點不同時的呈現，再依自己喜歡的效果選擇。"],
-  mid:  ["兩眼間距接近參考眼寬。", "眼妝仍需搭配眼型、眼皮條件與妝感偏好。"],
-  wide: ["兩眼間距大於參考眼寬。", "可以比較眉頭、內眼角附近的強弱，但不需要為了某個比例刻意改變原有特色。"]
+  near: ["兩眼間距偏近。", "眼妝重點放外眼角，眼頭留白；眉頭不要畫太近。"],
+  mid:  ["兩眼間距均衡。", "眼妝沒有限制，依想要的妝感決定內外側重點。"],
+  wide: ["兩眼間距偏開。", "眼妝重點放內眼角與眉頭，把視線往中間收。"]
 };
 function classify(res){
   let v = null;
@@ -562,12 +583,12 @@ function renderResult(res){
   lastRes = res;
   drawThumb($("pts-toggle").checked);
   const k = classify(res);
-  const obs = [], dir = [];
-  if (k.c){ obs.push(CONTOUR[k.c][0]); dir.push(["輪廓", CONTOUR[k.c][1]]); }
-  if (k.v){ obs.push(VERT[k.v][0]); dir.push(["比例", VERT[k.v][1]]); }
-  if (k.e){ obs.push(EYES[k.e][0]); dir.push(["眼妝", EYES[k.e][1]]); }
-  $("obs").innerHTML = obs.map((t,i)=>`<li><i>${i+1}</i><span>${t}</span></li>`).join("") || `<li><span>這張照片目前不足以提供穩定的比例觀察，請換一張正面照片。</span></li>`;
-  $("dir").innerHTML = dir.map(([h,t])=>`<p><b>${h}</b>　${t}</p>`).join("");
+  const rows = [];
+  if (k.c) rows.push(["輪廓", ...CONTOUR[k.c]]);
+  if (k.v) rows.push(["比例", ...VERT[k.v]]);
+  if (k.e) rows.push(["眼距", ...EYES[k.e]]);
+  $("reads").innerHTML = rows.map(([tag,o,d])=>`<div class="read"><span class="tag">${tag}</span><div><b>${o}</b><span>${d}</span></div></div>`).join("")
+    || `<p class="small muted">這張照片目前不足以提供穩定的比例觀察，請換一張正面照片。</p>`;
   // 每次重測清掉上一輪的需求選擇
   document.querySelectorAll('.opt').forEach(n => n.classList.remove('sel'));
   document.querySelectorAll('.svc').forEach(s => s.classList.remove('on'));
