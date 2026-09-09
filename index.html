@@ -139,6 +139,36 @@
   .read .tag{font-family:var(--display);font-size:11px;letter-spacing:.12em;color:var(--accent-dim);border:1px solid rgba(46,168,255,.35);border-radius:6px;height:22px;display:flex;align-items:center;justify-content:center;margin-top:2px}
   .read b{display:block;font-weight:500;font-size:15px;margin-bottom:2px}
   .read span{font-size:14px;color:var(--muted)}
+  /* 掃描動畫 */
+  #v-scanning{padding-top:20px}
+  .scanstage{position:relative;width:100%;aspect-ratio:3/4;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 10px 40px rgba(15,31,58,.25)}
+  .scanstage canvas{position:absolute;inset:0;width:100%;height:100%}
+  .scanstage .veil{position:absolute;inset:0;background:rgba(0,0,0,.25)}
+  .scanmeta{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
+  .scanmeta .st{font-size:14px;color:var(--ink)}
+  .scanmeta .pct{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums;color:var(--accent-dim)}
+  .scanbar{height:3px;background:var(--line);border-radius:2px;margin-top:10px;overflow:hidden}
+  .scanbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent-dim),#5fd3ff)}
+  /* 結果 hero */
+  .hero{position:relative;width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 10px 40px rgba(15,31,58,.25);margin-top:16px}
+  .hero canvas{position:absolute;inset:0;width:100%;height:100%}
+  .hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04) 40%,rgba(0,0,0,.74) 100%)}
+  .hero .txt{position:absolute;left:0;right:0;bottom:0;padding:0 22px 22px;text-align:center;color:#fff}
+  .hero .chip{display:inline-block;font-size:11.5px;letter-spacing:.12em;color:#8fe9ff;border:1px solid rgba(143,233,255,.6);border-radius:99px;padding:3px 12px;margin-bottom:10px;background:rgba(0,0,0,.25)}
+  .hero .name{font-family:var(--display);font-size:30px;font-weight:600;letter-spacing:.04em;line-height:1.2;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+  .hero .one{font-size:13.5px;color:rgba(255,255,255,.85);margin-top:6px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;margin:18px 0 6px}
+  .stat{text-align:center;padding:6px 0}
+  .stat+.stat{border-left:1px solid var(--line)}
+  .stat .n{font-family:var(--display);font-size:38px;font-weight:600;color:var(--accent-dim);font-variant-numeric:tabular-nums;line-height:1}
+  .stat .n small{font-size:16px;margin-left:2px}
+  .stat .k{font-size:12.5px;color:var(--muted);margin-top:6px;letter-spacing:.06em}
+  .ratios{display:flex;flex-direction:column}
+  .ratio{display:grid;grid-template-columns:1fr auto;gap:2px 14px;padding:12px 0;border-top:1px solid var(--line);align-items:center}
+  .ratio .k{font-size:13px;color:var(--muted)}
+  .ratio .v{font-family:var(--display);font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;grid-row:span 2}
+  .ratio .t{font-size:13.5px}
+  .ratio .t b{font-weight:500;color:var(--accent-dim)}
   /* line box */
   .linebox{border:1px solid var(--accent);background:#fff;border-radius:14px;padding:18px 20px;margin-top:12px}
   .linebox textarea{width:100%;min-height:76px;margin-top:8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-family:var(--sans);font-size:14px;resize:vertical}
@@ -251,12 +281,27 @@
       <div class="spacer"></div>
     </section>
 
+    <!-- 掃描動畫 -->
+    <section class="view" id="v-scanning">
+      <div class="scanstage"><canvas id="scan-photo"></canvas><div class="veil"></div><canvas id="scan-fx"></canvas></div>
+      <div class="scanmeta"><span class="st" id="scan-stage">定位臉部特徵點</span><span class="pct" id="scan-pct">0%</span></div>
+      <div class="scanbar"><i id="scan-bar"></i></div>
+    </section>
+
     <!-- 結果 -->
     <section class="view" id="v-result">
-      <p class="rt">你的臉部比例觀察</p>
-      <p class="rsub">從這張照片，初步認識比例與輪廓特徵。</p>
-      <div class="annot"><canvas id="thumb" width="900" height="900"></canvas></div>
-      <label class="toggle"><input type="checkbox" id="pts-toggle" checked> 顯示量測線</label>
+      <div class="hero"><canvas id="thumb" width="900" height="900"></canvas><div class="shade"></div>
+        <div class="txt"><span class="chip" id="hero-chip"></span><div class="name" id="hero-name"></div><div class="one" id="hero-one"></div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n"><span id="st-sym">0</span><small>%</small></div><div class="k">左右對稱度</div></div>
+        <div class="stat"><div class="n"><span id="st-bal">0</span><small>%</small></div><div class="k">三段均衡度</div></div>
+      </div>
+      <div class="card">
+        <h2>你的臉部比例</h2>
+        <p class="xs" style="margin-bottom:6px">三個實測比值，以及它們落在哪個區間</p>
+        <div class="ratios" id="ratios"></div>
+      </div>
 
       <div class="card">
         <h2>比例判讀與造型建議</h2>
@@ -482,62 +527,118 @@ function measure(lm, w, h){
   // 側轉程度：鼻尖到兩側顴骨距離差
   const noseTip = P(lm,1,w,h);
   const yaw = ok(faceW) ? Math.abs(dist(noseTip,cheekR) - dist(noseTip,cheekL)) / faceW : 0;
-  return { seg, wl, q, eyeRatio, yaw, anchors: { top, brow, nose, chin, cheekR, cheekL, jawR, jawL, eyeOutR, eyeOutL } };
+  // 對稱度：成對點到中軸的距離差
+  const pairs = [[33,263],[133,362],[61,291],[234,454],[172,397],[70,300]];
+  const midX = (P(lm,168,w,h).x + nose.x + chin.x) / 3;
+  let dev = 0;
+  for (const [r,l] of pairs){ const dr = Math.abs(P(lm,r,w,h).x - midX), dl = Math.abs(P(lm,l,w,h).x - midX); dev += Math.abs(dr-dl) / (((dr+dl)/2) || 1); }
+  const sym = Math.max(0, Math.min(100, 100 - (dev / pairs.length) * 100));
+  return { seg, wl, q, eyeRatio, yaw, sym, anchors: { top, brow, nose, chin, cheekR, cheekL, jawR, jawL, eyeOutR, eyeOutL } };
 }
 
 /* ---------- 結果 ---------- */
 let lastRes = null;
-// 在客戶照片上疊 HUD：臉部與眼部輪廓線（微光）、四角框、右側三段刻度軌、細字標示
-function drawThumb(withLines){
-  if (!lastSrcCanvas || !lastRes) return;
-  const t = $("thumb"), tc = t.getContext("2d"), S = t.width;
-  const A = lastRes.anchors, res = lastRes, src = lastSrcCanvas;
-  let cx = (A.cheekR.x + A.cheekL.x)/2, cy = (A.top.y + A.chin.y)/2;
-  let half = Math.max(dist(A.cheekR,A.cheekL), A.chin.y-A.top.y) * 0.85;
-  // 裁切框不能超出照片，否則 drawImage 會把邊緣拉伸變形
-  half = Math.min(half, cx, cy, src.width - cx, src.height - cy);
-  const X = x => (x - (cx-half)) / (half*2) * S, Y = y => (y - (cy-half)) / (half*2) * S;
-  tc.clearRect(0,0,S,S);
-  tc.drawImage(src, cx-half, cy-half, half*2, half*2, 0, 0, S, S);
-  if (!withLines) return;
-  const ICE = "rgba(190,232,255,", W = "rgba(255,255,255,";
-  const glow = (on) => { tc.shadowColor = on ? "rgba(120,200,255,.9)" : "transparent"; tc.shadowBlur = on ? S*0.012 : 0; };
-  const path = (conns, col, w) => {
-    tc.save(); glow(true); tc.strokeStyle = col; tc.lineWidth = w; tc.lineJoin = "round"; tc.beginPath();
-    for (const c of conns){ const a = lastLm[c.start], b = lastLm[c.end]; tc.moveTo(X(a.x*src.width), Y(a.y*src.height)); tc.lineTo(X(b.x*src.width), Y(b.y*src.height)); }
-    tc.stroke(); tc.restore();
-  };
-  const line = (x1,y1,x2,y2,col,w=1,dash=[]) => { tc.save(); tc.setLineDash(dash); tc.strokeStyle=col; tc.lineWidth=w; tc.beginPath(); tc.moveTo(x1,y1); tc.lineTo(x2,y2); tc.stroke(); tc.restore(); };
-  const dot = (x,y,r) => { tc.save(); glow(true); tc.fillStyle="#fff"; tc.beginPath(); tc.arc(x,y,r,0,Math.PI*2); tc.fill(); tc.restore(); };
-  const text = (x,y,str,size,align="left",col=W+".95)") => { tc.save(); tc.font = `500 ${Math.round(S*size)}px "Outfit","Noto Sans TC",sans-serif`; tc.textAlign=align; tc.textBaseline="middle"; tc.shadowColor="rgba(0,0,0,.55)"; tc.shadowBlur=S*0.008; tc.fillStyle=col; tc.fillText(str,x,y); tc.restore(); };
+const CY = "0,229,255"; // 掃描與網格用的青色
+const TYPES = {
+  wide_full:  ["圓潤親和型", "線條柔和連續，親和力是天生優勢"],
+  wide_taper: ["圓潤柔美型", "顴骨到下顎自然收窄，鏡頭前很討喜"],
+  mid_full:   ["均衡端正型", "比例端正，大多數髮型都撐得住"],
+  mid_taper:  ["均衡鵝蛋型", "可塑性最高的比例，造型空間最大"],
+  long_full:  ["修長俐落型", "縱向線條帶專業感與存在感"],
+  long_taper: ["修長秀氣型", "輪廓細緻，最適合用層次柔化線條"]
+};
+const CHIP = { wide_full:"橫向・直線下顎", wide_taper:"橫向・收窄下顎", mid_full:"均衡・直線下顎", mid_taper:"均衡・收窄下顎", long_full:"縱向・直線下顎", long_taper:"縱向・收窄下顎" };
 
-  // 稀疏特徵點
-  tc.fillStyle = W+".28)";
-  lastLm.forEach((p,i) => { if (i%3) return; const px=X(p.x*src.width), py=Y(p.y*src.height); if (px>=0&&px<=S&&py>=0&&py<=S) tc.fillRect(px,py,1.5,1.5); });
-  // 輪廓線：臉部橢圓、雙眼、眉
-  path(FaceLandmarker.FACE_LANDMARKS_FACE_OVAL, ICE+".85)", S*0.0028);
-  path(FaceLandmarker.FACE_LANDMARKS_LEFT_EYE, ICE+".7)", S*0.002);
-  path(FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE, ICE+".7)", S*0.002);
-  path(FaceLandmarker.FACE_LANDMARKS_LIPS, ICE+".45)", S*0.0016);
+function glowSprite(size){ const c=document.createElement("canvas"); c.width=c.height=size; const g=c.getContext("2d"); const r=size/2; const grd=g.createRadialGradient(r,r,0,r,r,r); grd.addColorStop(0,"rgba(255,255,255,1)"); grd.addColorStop(.35,`rgba(${CY},.9)`); grd.addColorStop(1,`rgba(${CY},0)`); g.fillStyle=grd; g.fillRect(0,0,size,size); return c; }
+function fitCover(canvas, src){ const W=canvas.width,H=canvas.height; const s=Math.max(W/src.width,H/src.height); const ox=(W-src.width*s)/2, oy=(H-src.height*s)/2; return { s, ox, oy, X:x=>x*src.width*s+ox, Y:y=>y*src.height*s+oy }; }
 
-  // 四角框（臉的外接框往外推）
-  const fx0 = X(A.cheekR.x) - S*0.07, fx1 = X(A.cheekL.x) + S*0.07, fy0 = Y(A.top.y) - S*0.06, fy1 = Y(A.chin.y) + S*0.05, L = S*0.05, c = W+".85)";
-  [[fx0,fy0,1,1],[fx1,fy0,-1,1],[fx0,fy1,1,-1],[fx1,fy1,-1,-1]].forEach(([x,y,dx,dy]) => { line(x,y,x+L*dx,y,c,1.2); line(x,y,x,y+L*dy,c,1.2); });
-
-  // 右側刻度軌：三段
-  const rx = fx1 + S*0.035, ys = [A.top.y, A.brow.y, A.nose.y, A.chin.y].map(Y);
-  line(rx, ys[0], rx, ys[3], W+".7)", 1);
-  ys.forEach((y,i) => { line(rx - S*0.012, y, rx + S*0.012, y, W+".9)", 1); dot(rx, y, i===0||i===3 ? 2.2 : 3); });
-  if (res.seg) res.seg.forEach((v,i) => text(rx + S*0.03, (ys[i]+ys[i+1])/2, `${v.toFixed(0)}%`, 0.03));
-  // 眉／鼻底 的細導線（不橫跨臉，只到框邊）
-  [1,2].forEach(i => line(fx1, ys[i], rx - S*0.012, ys[i], W+".4)", 1, [3,4]));
-
-  // 臉寬：框底下一條細線＋兩端小點，數字放左下
-  const yw = fy1 + S*0.03;
-  line(X(A.cheekR.x), yw, X(A.cheekL.x), yw, ICE+".9)", 1.2); dot(X(A.cheekR.x), yw, 2.5); dot(X(A.cheekL.x), yw, 2.5);
-  if (res.wl) text(fx0, fy1 + S*0.085, `W : H  1 : ${res.wl.toFixed(2)}`, 0.028, "left", W+".85)");
-  text(fx0, fy0 - S*0.028, "FACE BRIEF", 0.024, "left", ICE+".9)");
+// 掃描動畫：特徵點逐一長出、網格淡入、掃描線由上而下，約 4.5 秒
+const SCAN_STAGES = ["定位臉部特徵點","測量三段比例","計算輪廓寬長比","比對眼距與眼寬","整理造型建議"];
+const SCAN_DUR = 4500;
+// 以臉為中心裁 3:4 區域（夾在照片內），回傳 canvas 座標轉換
+function faceCrop(src, lm, aspect){
+  const A = lastRes.anchors;
+  const cx = (A.cheekR.x + A.cheekL.x)/2, cy = (A.top.y + A.chin.y)/2;
+  let hw = Math.max(dist(A.cheekR,A.cheekL), A.chin.y-A.top.y) * 0.78, hh = hw / aspect;
+  const k = Math.min(1, cx/hw, (src.width-cx)/hw, cy/hh, (src.height-cy)/hh);
+  hw *= k; hh *= k;
+  return { x0: cx-hw, y0: cy-hh, w: hw*2, h: hh*2 };
 }
+function makeScan(src, lm, W, H){
+  const crop = faceCrop(src, lm, W/H);
+  const X = x => (x*src.width - crop.x0) / crop.w * W, Y = y => (y*src.height - crop.y0) / crop.h * H;
+  const pts = lm.map((p,i)=>({ x:X(p.x), y:Y(p.y), birth: 200 + (i/lm.length)*2600 + Math.random()*120 }));
+  const TESS = FaceLandmarker.FACE_LANDMARKS_TESSELATION;
+  const edges = TESS.map((e,i)=>({ a:pts[e.start], b:pts[e.end], born: 600 + (i/TESS.length)*2800 }));
+  const sprite = glowSprite(64), L = W*0.012, sweeps = [[300,2100],[2400,4200]];
+  const drawPhoto = g => g.drawImage(src, crop.x0, crop.y0, crop.w, crop.h, 0, 0, W, H);
+  const draw = (g, t) => {
+    g.clearRect(0,0,W,H);
+    g.lineWidth = 1; g.strokeStyle = `rgba(${CY},1)`;
+    g.globalAlpha = .1; g.beginPath();
+    for (const e of edges){ if (e.born > t) break; if (t - e.born < 420) continue; g.moveTo(e.a.x,e.a.y); g.lineTo(e.b.x,e.b.y); }
+    g.stroke();
+    for (const e of edges){ if (e.born > t) break; const age = t - e.born; if (age >= 420) continue; g.globalAlpha = .45 - .35*(age/420); g.beginPath(); g.moveTo(e.a.x,e.a.y); g.lineTo(e.b.x,e.b.y); g.stroke(); }
+    for (const p of pts){ if (p.birth > t) continue; const age = t - p.birth; if (age < 240){ const k = age/240, sz = L*(1+(1-k)*1.6); g.globalAlpha = .35+.65*k; g.drawImage(sprite, p.x-sz/2, p.y-sz/2, sz, sz); } else { g.globalAlpha = .9; g.drawImage(sprite, p.x-L/2, p.y-L/2, L, L); } }
+    g.globalAlpha = 1;
+    for (const [s0,s1] of sweeps){ if (t < s0 || t > s1) continue; const y = (t-s0)/(s1-s0)*(H+120)-60; const grd = g.createLinearGradient(0,y-90,0,y); grd.addColorStop(0,`rgba(${CY},0)`); grd.addColorStop(1,`rgba(${CY},.22)`); g.fillStyle = grd; g.fillRect(0,y-90,W,90); g.fillStyle = `rgba(${CY},.75)`; g.fillRect(0,y,W,2); }
+  };
+  return { drawPhoto, draw };
+}
+function runScan(src, lm){
+  return new Promise(resolve => {
+    show("v-scanning");
+    const stage = document.querySelector("#v-scanning .scanstage");
+    const pc = $("scan-photo"), fx = $("scan-fx");
+    const W = Math.max(600, Math.round(stage.clientWidth * 2)), H = Math.round(W * 4/3);
+    pc.width = fx.width = W; pc.height = fx.height = H;
+    const sc = makeScan(src, lm, W, H);
+    sc.drawPhoto(pc.getContext("2d"));
+    const g = fx.getContext("2d");
+    let stageIdx = -1, t0 = performance.now(), raf, done = false;
+    // 分頁被切到背景時 requestAnimationFrame 會停，保險絲：時間到就直接進結果
+    const fuse = setTimeout(() => { if (!done){ done = true; cancelAnimationFrame(raf); resolve(); } }, SCAN_DUR + 1500);
+    const frame = now => {
+      if (done) return;
+      const t = now - t0;
+      sc.draw(g, t);
+      const si = Math.min(SCAN_STAGES.length-1, Math.floor(t/(SCAN_DUR/SCAN_STAGES.length)));
+      if (si !== stageIdx){ stageIdx = si; $("scan-stage").textContent = SCAN_STAGES[si]; }
+      const pct = Math.min(100, Math.round(t/SCAN_DUR*100));
+      $("scan-pct").textContent = pct + "%"; $("scan-bar").style.width = pct + "%";
+      if (t >= SCAN_DUR + 350){ done = true; clearTimeout(fuse); cancelAnimationFrame(raf); resolve(); return; }
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+  });
+}
+// 本機除錯：把某一時刻的掃描畫面合成一張圖
+if (["localhost","127.0.0.1"].includes(location.hostname)) window.__scanFrame = t => { const W=900,H=1200; const c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d"); const sc=makeScan(lastSrcCanvas,lastLm,W,H); sc.drawPhoto(g); g.fillStyle="rgba(0,0,0,.25)"; g.fillRect(0,0,W,H); const f=document.createElement("canvas"); f.width=W; f.height=H; sc.draw(f.getContext("2d"), t); g.drawImage(f,0,0); return c; };
+
+// 結果 hero：照片＋細網格（每點連最近兩點）＋輪廓線微光
+function drawHero(){
+  if (!lastSrcCanvas || !lastLm || !lastRes) return;
+  const t = $("thumb"), g = t.getContext("2d"), S = t.width, src = lastSrcCanvas, A = lastRes.anchors;
+  let cx = (A.cheekR.x + A.cheekL.x)/2, cy = (A.top.y + A.chin.y)/2;
+  let half = Math.max(dist(A.cheekR,A.cheekL), A.chin.y-A.top.y) * 0.95;
+  half = Math.min(half, cx, cy, src.width-cx, src.height-cy);
+  const X = x => (x*src.width - (cx-half)) / (half*2) * S, Y = y => (y*src.height - (cy-half)) / (half*2) * S;
+  g.clearRect(0,0,S,S);
+  g.drawImage(src, cx-half, cy-half, half*2, half*2, 0, 0, S, S);
+  const pts = lastLm.map(p => ({ x:X(p.x), y:Y(p.y) }));
+  const seen = new Set(); g.strokeStyle = `rgba(${CY},.34)`; g.lineWidth = Math.max(0.8, S*0.0009); g.beginPath();
+  for (let i=0;i<pts.length;i++){
+    const near=[];
+    for (let j=0;j<pts.length;j++){ if (i===j) continue; const d=(pts[i].x-pts[j].x)**2+(pts[i].y-pts[j].y)**2; if (near.length<2){ near.push([d,j]); near.sort((a,b)=>a[0]-b[0]); } else if (d<near[1][0]){ near[1]=[d,j]; near.sort((a,b)=>a[0]-b[0]); } }
+    for (const [,j] of near){ const k=i<j?`${i}-${j}`:`${j}-${i}`; if (seen.has(k)) continue; seen.add(k); g.moveTo(pts[i].x,pts[i].y); g.lineTo(pts[j].x,pts[j].y); }
+  }
+  g.stroke();
+  g.fillStyle = `rgba(${CY},.6)`; for (const p of pts){ g.beginPath(); g.arc(p.x,p.y,S*0.0013,0,Math.PI*2); g.fill(); }
+  g.save(); g.shadowColor = `rgba(${CY},.8)`; g.shadowBlur = S*0.008; g.strokeStyle = `rgba(${CY},.45)`; g.lineWidth = S*0.0015; g.beginPath();
+  for (const c of FaceLandmarker.FACE_LANDMARKS_FACE_OVAL){ const a=pts[c.start], b=pts[c.end]; g.moveTo(a.x,a.y); g.lineTo(b.x,b.y); }
+  g.stroke(); g.restore();
+}
+function countUp(el, to, ms=1200){ const t0=performance.now(); const step=now=>{ const k=Math.min(1,(now-t0)/ms); const e=1-Math.pow(1-k,3); el.textContent=Math.round(to*e); if(k<1) requestAnimationFrame(step); }; requestAnimationFrame(step); }
 
 /* 比例判讀 → 造型建議（每項：觀察句、建議句） */
 const VERT = {
@@ -581,8 +682,18 @@ function classify(res){
 
 function renderResult(res){
   lastRes = res;
-  drawThumb($("pts-toggle").checked);
+  drawHero();
   const k = classify(res);
+  const T = k.c ? TYPES[k.c] : ["比例觀察", "從這張照片開始認識你的輪廓"];
+  $("hero-chip").textContent = k.c ? CHIP[k.c] : "";
+  $("hero-name").textContent = T[0]; $("hero-one").textContent = T[1];
+  countUp($("st-sym"), Math.round(res.sym || 0));
+  countUp($("st-bal"), res.seg ? Math.round(Math.max(0, 100 - (Math.max(...res.seg) - Math.min(...res.seg)) * 3)) : 0);
+  const rr = [];
+  if (res.wl) rr.push(["臉長 / 顴骨寬", res.wl.toFixed(2), res.wl < 1.09 ? ["偏圓","適合拉長縱向線條"] : res.wl > 1.25 ? ["偏長","適合橫向留量、壓低髮頂"] : ["均衡","縱橫線條都撐得住"]]);
+  if (res.q) rr.push(["下顎寬 / 顴骨寬", res.q.toFixed(2), res.q >= 0.86 ? ["直線感","下顎線條完整，俐落耐看"] : ["收窄","曲線感明顯，柔和上鏡"]]);
+  if (res.eyeRatio) rr.push(["眼距 / 眼寬", res.eyeRatio.toFixed(2), res.eyeRatio < 0.95 ? ["偏近","眼妝重點放外眼角"] : res.eyeRatio > 1.1 ? ["偏開","眼妝重點放內眼角"] : ["均衡","內外側重點都可以"]]);
+  $("ratios").innerHTML = rr.map(([k2,v,[tag,d]])=>`<div class="ratio"><span class="k">${k2}</span><span class="v">${v}</span><span class="t"><b>${tag}</b> — ${d}</span></div>`).join("");
   const rows = [];
   if (k.c) rows.push(["輪廓", ...CONTOUR[k.c]]);
   if (k.v) rows.push(["比例", ...VERT[k.v]]);
@@ -608,7 +719,10 @@ async function analyzeImage(src, method){
   show("v-busy"); $("busy-title").textContent = "正在準備分析工具"; $("busy-sub").textContent = "首次使用需要載入必要檔案。";
   let img;
   try {
-    img = new Image(); img.src = src; await img.decode();
+    // createImageBitmap 不依賴畫面繪製（分頁在背景也能解碼），並依 EXIF 轉正；不支援時退回 <img>
+    const blob = await fetch(src).then(r => r.blob());
+    if (window.createImageBitmap) img = await createImageBitmap(blob, { imageOrientation: "from-image" });
+    else { img = new Image(); img.src = src; await img.decode(); }
   } catch(e){ return fail("decode_failed", "照片沒有成功讀取，請重新選擇，或換一張照片。"); }
   try {
     const c = document.createElement("canvas");
@@ -625,8 +739,8 @@ async function analyzeImage(src, method){
     const res = measure(lm, c.width, c.height);
     if (res.yaw > 0.6) return fail("pose", "這張照片的角度偏側面，可能影響觀察。請選擇臉部自然朝向鏡頭的照片再試一次。");
     if (!res.seg && !res.wl && !res.eyeRatio) return fail("unavailable", "這張照片目前不足以提供穩定的比例觀察，請換一張正面照片。");
-    lastSrcCanvas = c; lastLm = lm;
-    $("busy-title").textContent = "正在整理這次的比例觀察";
+    lastSrcCanvas = c; lastLm = lm; lastRes = res;
+    await runScan(c, lm);
     renderResult(res);
   } catch(e){
     console.error(e);
@@ -875,7 +989,6 @@ $("err-retry").onclick = () => show("v-intro");
 $("btn-palette-from-result").onclick = () => showPalette("v-result");
 $("btn-palette-from-need").onclick = () => showPalette("v-result");
 $("btn-pal-back").onclick = () => show(prevView === "v-result" && hasResult ? "v-result" : "v-intro");
-$("pts-toggle").onchange = e => drawThumb(e.target.checked);
 renderSeasons();
 </script>
 </body>
