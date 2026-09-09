@@ -74,6 +74,11 @@
   .center{text-align:center}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
   .card p+p{margin-top:8px}
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:12px;background:rgba(255,255,255,.7)}
+  .seg button{font-family:var(--sans);font-size:14px;padding:10px 0;border:none;background:none;color:var(--muted);cursor:pointer}
+  .seg button.sel{background:var(--accent);color:#fff;font-weight:500}
+  .seg.small{margin:0 auto 14px;max-width:260px}
+  .seg.small button{font-size:13px;padding:8px 0}
   .devrow{display:flex;gap:10px;margin-top:10px}
   .devrow .btn{font-size:12.5px;min-height:40px;padding:8px;color:var(--faint)}
   input[type=file]{display:none}
@@ -256,6 +261,9 @@
         <p class="muted">也可以瀏覽四季配色，看看眼妝、腮紅與唇彩的搭配靈感。</p>
       </div>
       <div class="spacer"></div>
+      <div class="seg" role="group" aria-label="造型方向">
+        <button data-gender="f">女性造型</button><button data-gender="m">男性造型</button>
+      </div>
       <button class="btn primary" id="btn-cam">使用相機拍攝</button>
       <button class="btn ghost" id="btn-upload">選擇照片分析</button>
       <input type="file" id="file" accept="image/*">
@@ -324,6 +332,7 @@
         <div class="stat"><div class="n"><span id="st-sym">0</span><small>%</small></div><div class="k">左右對稱度</div></div>
         <div class="stat"><div class="n"><span id="st-bal">0</span><small>%</small></div><div class="k">三段均衡度</div></div>
       </div>
+      <div class="seg small" role="group" aria-label="造型方向"><button data-gender="f">女性造型</button><button data-gender="m">男性造型</button></div>
       <div class="card">
         <h2>你的臉部比例</h2>
         <p class="xs" style="margin-bottom:6px">三個實測比值，以及它們落在哪個區間</p>
@@ -364,25 +373,25 @@
         <div class="svc" data-need="makeup_lesson">
           <p class="small"><b style="font-weight:500">想學會日常化妝，或調整一直不順手的眉型、眼妝？</b></p>
           <p class="small muted">一對一從你的五官與化妝習慣出發，練習選色、上妝與細節調整，把適合自己的妝，變成日常能力。</p>
-          <button class="btn primary" data-line="makeup_lesson">詢問彩妝教學</button>
+          <a class="btn primary" href="https://lin.ee/7DXWsNcz" target="_blank" rel="noopener" data-linego="makeup_lesson">詢問彩妝教學</a>
           <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom">查看 B.room 服務介紹</a>
         </div>
         <div class="svc" data-need="makeup_hair">
           <p class="small"><b style="font-weight:500">有重要活動、聚會或拍攝，想安排專業妝髮？</b></p>
           <p class="small muted">依照你的臉部輪廓、髮況與出席場合，規劃妝容與髮型，讓當天的造型更精緻，也與整體穿著協調。</p>
-          <button class="btn primary" data-line="makeup_hair">詢問妝髮服務</button>
+          <a class="btn primary" href="https://lin.ee/7DXWsNcz" target="_blank" rel="noopener" data-linego="makeup_hair">詢問妝髮服務</a>
           <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom">查看妝髮服務介紹</a>
         </div>
         <div class="svc" data-need="wardrobe_style">
           <p class="small"><b style="font-weight:500">衣服不少，卻總是搭不出想要的樣子？</b></p>
           <p class="small muted">從身形、工作場合與現有衣櫥出發，整理服裝選擇與搭配方式，讓穿搭更貼近你的角色，也保留自己的風格。</p>
-          <button class="btn primary" data-line="wardrobe_style">詢問穿搭服務</button>
+          <a class="btn primary" href="https://lin.ee/7DXWsNcz" target="_blank" rel="noopener" data-linego="wardrobe_style">詢問穿搭服務</a>
           <a class="ln" href="https://chunen.tw/a-voir.html" data-svc="avoir">查看穿搭與形象服務</a>
         </div>
         <div class="svc" data-need="image_portrait">
           <p class="small"><b style="font-weight:500">準備更新工作形象，或需要一組形象照？</b></p>
           <p class="small muted">先確認你的專業角色、面對的對象與照片用途，再規劃服裝、妝髮與拍攝方向，讓官網、社群與工作簡報中的你，呈現一致的專業感。</p>
-          <button class="btn primary" data-line="image_portrait">詢問形象與拍攝</button>
+          <a class="btn primary" href="https://lin.ee/7DXWsNcz" target="_blank" rel="noopener" data-linego="image_portrait">詢問形象與拍攝</a>
           <div class="lnrow"><a class="ln" href="https://chunen.tw/c-photos.html" data-svc="cphotos" style="margin:10px 0 0">查看形象拍攝服務</a><a class="ln" href="https://chunen.tw/signature.html" data-svc="signature" style="margin:10px 0 0">查看整合形象企劃</a></div>
         </div>
         <p class="xs center" style="margin-top:16px">還想先看看？<button class="link" id="btn-palette-from-need" style="font-size:12px;margin-left:4px">先看四季配色參考</button></p>
@@ -405,7 +414,7 @@
           <p class="eyebrow">一對一彩妝教學</p>
           <h2 style="color:var(--ink);font-size:18px">喜歡這組配色，卻不知道怎麼用在自己的妝容？</h2>
           <p class="small muted">從眼影、腮紅到唇色，練習配色與上妝方式，也學會依照自己的五官調整畫法，把配色靈感變成日常用得上的妝容。</p>
-          <button class="btn primary" data-line="makeup_lesson_palette" style="margin-top:12px">詢問彩妝教學</button>
+          <a class="btn primary" href="https://lin.ee/7DXWsNcz" target="_blank" rel="noopener" data-linego="makeup_lesson_palette" style="margin-top:12px">詢問彩妝教學</a>
           <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom-teach">查看 B.room 服務介紹</a>
           <p class="xs" style="margin-top:12px">四季配色供瀏覽與搭配參考，不代表這次照片已判定你的個人季型。這些色票是配色示意，不是指定商品色號。</p>
         </div>
@@ -427,23 +436,6 @@
       </div>
     </details>
   </footer>
-</div>
-
-<div class="sheet" id="linebox" hidden>
-  <div class="box">
-    <div class="sheet-head"><span style="font-weight:500">透過 LINE 詢問服務</span><button class="close" id="lb-close" aria-label="關閉">✕</button></div>
-    <p class="small muted">你選擇的服務：<span id="lb-need"></span></p>
-    <p class="xs">確認下方訊息，複製後到 LINE 貼上並送出。</p>
-    <label class="small muted" id="lb-label" style="display:block;margin-top:10px">補充（選填）</label>
-    <textarea id="lb-note" placeholder=""></textarea>
-    <div class="msgbox" id="lb-preview"></div>
-    <div class="row2">
-      <button class="btn ghost" id="lb-copy">複製訊息</button>
-      <a class="btn primary" style="margin-top:10px" id="lb-go" href="https://lin.ee/7DXWsNcz" target="_blank" rel="noopener">開啟 LINE</a>
-    </div>
-    <p class="xs" id="lb-status" style="margin-top:8px;min-height:1.2em"></p>
-    <p class="xs">下方訊息只包含你選擇的服務、進入頁面的來源與填寫的補充，不含照片或臉部分析數據。完成貼上並送出後，我們才會收到你的詢問。</p>
-  </div>
 </div>
 
 <div class="consent" id="consent" hidden>
@@ -575,6 +567,43 @@ const TYPES = {
   long_taper: ["修長秀氣型", "輪廓細緻，最適合用層次柔化線條"]
 };
 const CHIP = { wide_full:"橫向・直線下顎", wide_taper:"橫向・收窄下顎", mid_full:"均衡・直線下顎", mid_taper:"均衡・收窄下顎", long_full:"縱向・直線下顎", long_taper:"縱向・收窄下顎" };
+/* 男性版：短髮為主，講頂部高度、兩側推剪、瀏海上梳／下放、鬢角、眉型與鬍型 */
+const TYPES_M = {
+  wide_full:  ["沉穩厚實型", "線條穩重，有份量也有親和力"],
+  wide_taper: ["圓潤俐落型", "下顎收窄，短髮剪起來特別乾淨"],
+  mid_full:   ["均衡端正型", "比例端正，大多數髮型都撐得住"],
+  mid_taper:  ["均衡立體型", "可塑性最高，造型空間最大"],
+  long_full:  ["修長剛毅型", "縱向線條帶專業感與存在感"],
+  long_taper: ["修長清爽型", "輪廓細緻，最適合有層次的短髮"]
+};
+const CONTOUR_M = {
+  wide_full:  ["橫向比例明顯，下顎與顴骨寬度接近。", "頂部留高、兩側推短，縱向線條就出來；瀏海上梳露額，兩側別蓬起來把寬度框大。"],
+  wide_taper: ["橫向比例明顯，下顎比顴骨窄。", "兩側漸層從顴骨以下開始收，頂部保留長度往後梳；留鬍的話在下顎補一點份量。"],
+  mid_full:   ["寬長比例均衡，下顎線條完整。", "最好剪的比例，油頭、中分、紋理短髮都撐得住；想俐落就把兩側推乾淨。"],
+  mid_taper:  ["寬長比例均衡，下顎自然收窄。", "頂部有層次的紋理短髮最合適；側分或微捲都能試，兩側別推太高。"],
+  long_full:  ["縱向比例明顯，下顎線條完整。", "頂部壓低、兩側保留厚度，把視覺往橫向帶；瀏海可以下放蓋一部分額頭。"],
+  long_taper: ["縱向比例明顯，下顎收窄。", "頂部不要堆高，兩側留厚度、瀏海下放；鬍型沿著下顎線走可以補寬。"]
+};
+const VERT_M = {
+  similar: ["上中下三段長度接近。", "比例平均，上梳露額或瀏海下放都合適，依場合決定；重點放在頂部造型。"],
+  upper:   ["額頭到眉心這一段偏長。", "瀏海下放或斜分收掉額高；眉型修平一點，重心往下。"],
+  middle:  ["眉心到鼻底這一段偏長。", "眉毛修清楚、鬢角留長一些，中段就有份量；頂部別再堆高。"],
+  lower:   ["鼻底到下巴這一段偏長。", "把重心往上帶：上梳露額、頂部留量；鬍子留短或剃乾淨，下半臉才不顯長。"],
+  tie:     ["三段差異不大，沒有特別突出的一段。", "先決定要俐落還是柔和，再選頂部長度；比例不是限制。"]
+};
+const EYES_M = {
+  near: ["兩眼間距偏近。", "眉頭別修得太近，兩眉之間留寬一點，眼神會更開。"],
+  mid:  ["兩眼間距均衡。", "眉型順著眼型修就好，不用刻意改。"],
+  wide: ["兩眼間距偏開。", "眉頭往中間補一點，視線會更集中。"]
+};
+let gender = "f";
+try { gender = localStorage.getItem("face_gender") === "m" ? "m" : "f"; } catch(e){}
+function setGender(g, rerender){
+  gender = g; try { localStorage.setItem("face_gender", g); } catch(e){}
+  document.querySelectorAll("[data-gender]").forEach(b => b.classList.toggle("sel", b.dataset.gender === g));
+  if (rerender && lastRes) renderText(lastRes);
+}
+const LIB = () => gender === "m" ? { T: TYPES_M, C: CONTOUR_M, V: VERT_M, E: EYES_M, eyeLabel: "眉眼" } : { T: TYPES, C: CONTOUR, V: VERT, E: EYES, eyeLabel: "眼距" };
 
 function glowSprite(size){ const c=document.createElement("canvas"); c.width=c.height=size; const g=c.getContext("2d"); const r=size/2; const grd=g.createRadialGradient(r,r,0,r,r,r); grd.addColorStop(0,"rgba(255,255,255,1)"); grd.addColorStop(.35,`rgba(${CY},.9)`); grd.addColorStop(1,`rgba(${CY},0)`); g.fillStyle=grd; g.fillRect(0,0,size,size); return c; }
 function fitCover(canvas, src){ const W=canvas.width,H=canvas.height; const s=Math.max(W/src.width,H/src.height); const ox=(W-src.width*s)/2, oy=(H-src.height*s)/2; return { s, ox, oy, X:x=>x*src.width*s+ox, Y:y=>y*src.height*s+oy }; }
@@ -707,32 +736,39 @@ function classify(res){
   return { v, c, e };
 }
 
-function renderResult(res){
-  lastRes = res;
-  drawHero();
-  const k = classify(res);
-  const T = k.c ? TYPES[k.c] : ["比例觀察", "從這張照片開始認識你的輪廓"];
+// 依目前選的造型方向（女／男）輸出型名、比值判讀、建議
+function renderText(res){
+  const k = classify(res), L = LIB();
+  const T = k.c ? L.T[k.c] : ["比例觀察", "從這張照片開始認識你的輪廓"];
   $("hero-chip").textContent = k.c ? CHIP[k.c] : "";
   $("hero-name").textContent = T[0]; $("hero-one").textContent = T[1];
-  countUp($("st-sym"), Math.round(res.sym || 0));
-  countUp($("st-bal"), res.seg ? Math.round(Math.max(0, 100 - (Math.max(...res.seg) - Math.min(...res.seg)) * 3)) : 0);
+  const eyeTip = gender === "m"
+    ? (res.eyeRatio < 0.95 ? ["偏近","眉頭之間留寬一點"] : res.eyeRatio > 1.1 ? ["偏開","眉頭往中間補一點"] : ["均衡","眉型順著眼型修"])
+    : (res.eyeRatio < 0.95 ? ["偏近","眼妝重點放外眼角"] : res.eyeRatio > 1.1 ? ["偏開","眼妝重點放內眼角"] : ["均衡","內外側重點都可以"]);
   const rr = [];
   if (res.wl) rr.push(["臉長 / 顴骨寬", res.wl.toFixed(2), res.wl < 1.09 ? ["偏圓","適合拉長縱向線條"] : res.wl > 1.25 ? ["偏長","適合橫向留量、壓低髮頂"] : ["均衡","縱橫線條都撐得住"]]);
   if (res.q) rr.push(["下顎寬 / 顴骨寬", res.q.toFixed(2), res.q >= 0.86 ? ["直線感","下顎線條完整，俐落耐看"] : ["收窄","曲線感明顯，柔和上鏡"]]);
-  if (res.eyeRatio) rr.push(["眼距 / 眼寬", res.eyeRatio.toFixed(2), res.eyeRatio < 0.95 ? ["偏近","眼妝重點放外眼角"] : res.eyeRatio > 1.1 ? ["偏開","眼妝重點放內眼角"] : ["均衡","內外側重點都可以"]]);
+  if (res.eyeRatio) rr.push(["眼距 / 眼寬", res.eyeRatio.toFixed(2), eyeTip]);
   $("ratios").innerHTML = rr.map(([k2,v,[tag,d]])=>`<div class="ratio"><span class="k">${k2}</span><span class="v">${v}</span><span class="t"><b>${tag}</b> — ${d}</span></div>`).join("");
   const rows = [];
-  if (k.c) rows.push(["輪廓", ...CONTOUR[k.c]]);
-  if (k.v) rows.push(["比例", ...VERT[k.v]]);
-  if (k.e) rows.push(["眼距", ...EYES[k.e]]);
+  if (k.c) rows.push(["輪廓", ...L.C[k.c]]);
+  if (k.v) rows.push(["比例", ...L.V[k.v]]);
+  if (k.e) rows.push([L.eyeLabel, ...L.E[k.e]]);
   $("reads").innerHTML = rows.map(([tag,o,d])=>`<div class="read"><span class="tag">${tag}</span><div><b>${o}</b><span>${d}</span></div></div>`).join("")
     || `<p class="small muted">這張照片目前不足以提供穩定的比例觀察，請換一張正面照片。</p>`;
+}
+
+function renderResult(res){
+  lastRes = res;
+  drawHero();
+  countUp($("st-sym"), Math.round(res.sym || 0));
+  countUp($("st-bal"), res.seg ? Math.round(Math.max(0, 100 - (Math.max(...res.seg) - Math.min(...res.seg)) * 3)) : 0);
+  renderText(res);
   // 每次重測清掉上一輪的需求選擇
   document.querySelectorAll('.opt').forEach(n => n.classList.remove('sel'));
   document.querySelectorAll('.svc').forEach(s => s.classList.remove('on'));
-  $("linebox").hidden = true;
   hasResult = true;
-  track("analysis_success"); track("result_view");
+  track("analysis_success", { gender }); track("result_view", { gender });
   show("v-result");
 }
 
@@ -984,28 +1020,13 @@ document.querySelectorAll('.opt').forEach(b => b.onclick = () => {
   document.querySelectorAll('.svc').forEach(s => s.classList.toggle('on', s.dataset.need === need));
   track("need_selected", { need });
 });
-function openLine(need){
-  const s = SERVICES[need];
-  $("lb-need").textContent = s.zh; $("lb-label").textContent = s.label; $("lb-note").placeholder = s.ph;
-  $("lb-note").value = ""; $("lb-status").textContent = "";
-  $("lb-preview").textContent = lineMessage(need, "");
-  $("linebox").dataset.need = need; $("linebox").hidden = false;
-  track("service_view", { need: need.replace("_palette", ""), from: need.endsWith("_palette") ? "palette" : "result" });
-}
-document.querySelectorAll('[data-line]').forEach(b => b.onclick = () => openLine(b.dataset.line));
-$("lb-close").onclick = () => { $("linebox").hidden = true; };
-$("linebox").addEventListener("click", e => { if (e.target === $("linebox")) $("linebox").hidden = true; });
-$("lb-note").addEventListener("input", () => { $("lb-preview").textContent = lineMessage($("linebox").dataset.need, $("lb-note").value); });
-$("lb-copy").onclick = async () => {
-  const text = lineMessage($("linebox").dataset.need, $("lb-note").value);
-  try { await navigator.clipboard.writeText(text); $("lb-status").textContent = "訊息已複製，請到 LINE 貼上並送出。"; }
-  catch(e){ $("lb-status").textContent = "無法自動複製，請選取上方訊息後手動複製。"; }
-};
-$("lb-go").addEventListener("click", () => track("line_click", { need: $("linebox").dataset.need }));
+document.querySelectorAll("[data-linego]").forEach(a => a.addEventListener("click", () => track("line_click", { need: a.dataset.linego, gender })));
 document.querySelectorAll('[data-svc]').forEach(a => a.addEventListener("click", () => track("service_view", { target: a.dataset.svc })));
 
 /* ---------- 綁定 ---------- */
-$("btn-cam").onclick = () => { track("analysis_start", { method: "camera" }); startCamera(); };
+document.querySelectorAll("[data-gender]").forEach(b => b.onclick = () => { setGender(b.dataset.gender, true); track("gender_select", { gender: b.dataset.gender }); });
+setGender(gender, false);
+$("btn-cam").onclick = () => { track("analysis_start", { method: "camera", gender }); startCamera(); };
 $("btn-cancel").onclick = () => { stopCamera(); show("v-intro"); };
 $("btn-upload").onclick = () => $("file").click();
 $("btn-upload2").onclick = () => { stopCamera(); $("file").click(); };
