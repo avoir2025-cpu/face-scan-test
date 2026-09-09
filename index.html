@@ -35,10 +35,15 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   [hidden]{display:none!important}
-  body{background:#e3ecf5;font-family:var(--sans);color:var(--ink);line-height:1.75;min-height:100vh;font-size:16px}
-  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(15,31,58,.08)}
-  header{padding:18px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between}
-  header .brand{font-family:var(--display);letter-spacing:.18em;font-size:15px;color:var(--accent-dim);font-weight:500}
+  body{background:#e3ecf5 url(bg-1600.jpg) center/cover no-repeat fixed;font-family:var(--sans);color:var(--ink);line-height:1.75;min-height:100vh;font-size:16px}
+  @media (max-width:520px){ body{background-image:url(bg-portrait.jpg);background-attachment:scroll} }
+  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:rgba(238,244,250,.42);backdrop-filter:blur(2px);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(15,31,58,.06)}
+  header{padding:18px 24px 14px;border-bottom:1px solid rgba(255,255,255,.6);display:flex;align-items:baseline;justify-content:space-between}
+  header .brand{font-family:var(--display);letter-spacing:.18em;font-size:15px;color:var(--accent-dim);font-weight:500;text-decoration:none}
+  .card,details,.pal{background:rgba(255,255,255,.78);backdrop-filter:blur(14px);border-color:rgba(255,255,255,.9)}
+  .card.hi{background:rgba(255,255,255,.9)}
+  .btn.ghost,.opt,.season{background:rgba(255,255,255,.7)}
+  .stage{box-shadow:0 10px 40px rgba(15,31,58,.18)}
   header .tool{font-size:12px;letter-spacing:.08em;color:var(--faint)}
   main{flex:1;display:flex;flex-direction:column;padding:0 22px 40px}
   .view{display:none;flex-direction:column;flex:1}
@@ -175,7 +180,7 @@
 </head>
 <body>
 <div class="frame">
-  <header><span class="brand">CHUN.EN</span><span class="tool">臉部比例分析</span></header>
+  <header><a class="brand" href="https://chunen.tw/" data-svc="home">CHUN.EN</a><span class="tool">臉部比例分析</span></header>
   <main>
 
     <!-- 入口 -->
@@ -189,10 +194,6 @@
       <button class="btn primary" id="btn-cam">使用相機拍攝</button>
       <button class="btn ghost" id="btn-upload">選擇照片分析</button>
       <p class="center" style="margin-top:14px"><button class="link" id="btn-browse">先瀏覽四季配色參考</button></p>
-      <div class="devrow" id="devrow" hidden>
-        <button class="btn ghost" data-sample="sample1.jpg">範例 A（本機測試）</button>
-        <button class="btn ghost" data-sample="sample2.jpg">範例 B（本機測試）</button>
-      </div>
       <input type="file" id="file" accept="image/*">
       <p class="eyebrow" style="margin-top:28px">拍攝前，留意這幾件事</p>
       <div class="tips">
@@ -254,21 +255,6 @@
         <p class="small muted">你可以從分線、露額程度、髮頂高度與臉側髮量開始比較，觀察自己喜歡哪些改變；需要更具體的建議時，再把髮況、風格與使用場合一起帶入。</p>
       </div>
 
-      <details id="metrics">
-        <summary>查看比例細節</summary>
-        <div class="body">
-          <p class="small muted" style="margin-bottom:12px">以下數值描述本次照片中的相對位置，不代表外貌好壞。</p>
-          <p class="eyebrow">照片中的縱向分段</p>
-          <p class="xs" style="margin-bottom:8px">以本次辨識到的位置，觀察臉部三個區段的相對長度。</p>
-          <div class="bars" id="ratio-bars"></div>
-          <p class="xs" style="margin-top:8px;margin-bottom:14px">可見額頂不等於髮際線；此分段不能直接當作完整三庭。額頭遮擋或拍攝角度改變時，數值也可能不同。</p>
-          <div class="metric"><span class="k">估計寬長比例</span><span class="v" id="wl">—</span></div>
-          <p class="xs" style="margin-bottom:6px">長度含模型估計，不等於直接量得的完整臉長。</p>
-          <div class="metric"><span class="k">眼距相對眼寬</span><span class="v" id="eyed">—</span></div>
-          <p class="xs">以兩眼內眼角距離與參考眼寬（兩眼寬度平均）比較；角度、表情或辨識位置改變時，數值也可能不同。</p>
-        </div>
-      </details>
-
       <div class="card">
         <h2>想知道彩妝可以怎麼配色？</h2>
         <p class="small">先從四季配色參考，看看眼妝、腮紅與唇彩之間的搭配方式。</p>
@@ -281,7 +267,6 @@
         <h2 style="color:var(--ink);font-size:20px">免費視覺定位快診</h2>
         <p class="small">比例只是起點。把你的職業、場合與想呈現的樣子一起放進來，我們幫你整理視覺定位的方向。</p>
         <a class="btn primary scan-link" href="https://chunen.tw/scan/?src=face_direct" data-svc="scan" style="margin-top:14px">開始免費快診</a>
-        <p class="xs center" style="margin-top:8px">免費，結果在 LINE 領取。</p>
       </div>
 
       <div class="card" id="need-card">
@@ -503,16 +488,10 @@ let lastRes = null;
 function renderResult(res){
   lastRes = res;
   drawThumb($("pts-toggle").checked);
-  const names = ["可見額頂至眉心","眉心至鼻底","鼻底至下巴"];
-  $("ratio-bars").innerHTML = res.seg
-    ? res.seg.map((v,i)=>`<div class="bar"><span>${names[i]}</span><span class="track"><span class="fill" style="width:${v}%"></span></span><span class="val">${v.toFixed(0)}%</span></div>`).join("")
-    : `<p class="xs">本次未取得可用數值。</p>`;
-  $("wl").textContent = res.wl ? `約 1：${res.wl.toFixed(2)}` : "本次未取得可用數值";
-  $("eyed").textContent = res.eyeRatio ? `約 ${res.eyeRatio.toFixed(2)} 倍` : "本次未取得可用數值";
   // 每次重測清掉上一輪的需求選擇
   document.querySelectorAll('.opt').forEach(n => n.classList.remove('sel'));
   document.querySelectorAll('.svc').forEach(s => s.classList.remove('on'));
-  $("linebox").hidden = true; $("metrics").open = false;
+  $("linebox").hidden = true;
   hasResult = true;
   track("analysis_success"); track("result_view");
   show("v-result");
@@ -777,8 +756,7 @@ $("file").onchange = e => {
   if (f) { track("analysis_start", { method: "photo" }); analyzeImage(URL.createObjectURL(f), "photo"); }
   e.target.value = "";
 };
-if (["localhost","127.0.0.1"].includes(location.hostname)) $("devrow").hidden = false;
-document.querySelectorAll("[data-sample]").forEach(b => b.onclick = () => analyzeImage(b.dataset.sample, "sample"));
+if (["localhost","127.0.0.1"].includes(location.hostname)) window.__analyzeSample = f => analyzeImage(f, "sample"); // 本機測試用，無介面
 $("btn-again").onclick = () => { hasResult = false; lastSrcCanvas = null; show("v-intro"); };
 $("err-retry").onclick = () => show("v-intro");
 $("err-browse").onclick = () => showPalette("v-intro");
