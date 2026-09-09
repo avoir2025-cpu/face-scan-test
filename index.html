@@ -337,6 +337,7 @@
         <div class="stat"><div class="n"><span id="st-sym">0</span><small>%</small></div><div class="k">左右對稱度</div></div>
         <div class="stat"><div class="n"><span id="st-bal">0</span><small>%</small></div><div class="k">三段均衡度</div></div>
       </div>
+      <p class="xs center" id="pose-note" style="margin:-2px 0 14px" hidden>這張照片略為側轉，對稱度與比例會受角度影響；想更準確可以換一張正面照片。</p>
       <div class="seg small" role="group" aria-label="造型方向"><button data-gender="f">女性造型</button><button data-gender="m">男性造型</button></div>
       <div class="card">
         <h2>你的臉部比例</h2>
@@ -788,6 +789,7 @@ function renderText(res){
 function renderResult(res){
   lastRes = res;
   drawHero();
+  $("pose-note").hidden = !(res.yaw > 0.28);
   countUp($("st-sym"), Math.round(res.sym || 0));
   countUp($("st-bal"), res.seg ? Math.round(Math.max(0, 100 - (Math.max(...res.seg) - Math.min(...res.seg)) * 3)) : 0);
   renderText(res);
@@ -1076,6 +1078,19 @@ $("file").onchange = e => {
   const f = e.target.files[0];
   if (f) { track("analysis_start", { method: "photo" }); analyzeImage(URL.createObjectURL(f), "photo"); }
   e.target.value = "";
+};
+if (["localhost","127.0.0.1"].includes(location.hostname)) window.__yaw = async src => {
+  const blob = await fetch(src).then(r=>r.blob());
+  const img = await createImageBitmap(blob, { imageOrientation: "from-image" });
+  const c = document.createElement("canvas");
+  const k = Math.min(1, 1200 / Math.max(img.width, img.height));
+  c.width = Math.round(img.width*k); c.height = Math.round(img.height*k);
+  c.getContext("2d",{willReadFrequently:true}).drawImage(img,0,0,c.width,c.height);
+  const lmk = await getLandmarker("IMAGE");
+  const f = (lmk.detect(c).faceLandmarks||[])[0];
+  if (!f) return { src, faces: 0 };
+  const m = measure(f, c.width, c.height);
+  return { src, yaw: +m.yaw.toFixed(3), wl: m.wl && +m.wl.toFixed(2), sym: m.sym && Math.round(m.sym) };
 };
 if (["localhost","127.0.0.1"].includes(location.hostname)) window.__analyzeSample = f => analyzeImage(f, "sample"); // 本機測試用，無介面
 $("btn-again").onclick = () => { hasResult = false; lastSrcCanvas = null; show("v-intro"); };
