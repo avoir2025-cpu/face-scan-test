@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#eef4fa">
 <meta name="robots" content="noindex, nofollow">
 <title>臉部比例分析｜CHUN.EN</title>
 <meta name="description" content="用一張正面照片，初步認識臉部比例與輪廓特徵，並瀏覽四季配色與彩妝靈感。結果作為造型參考，不替外貌打分數。">
@@ -26,6 +28,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
 <style>
   :root{
+    color-scheme: only light; /* 禁止瀏覽器自動反轉成深色 */
     --bg:#eef4fa; --panel:#ffffff; --panel2:#f3f7fb; --line:#d5e0ec;
     --ink:#0f1f3a; --muted:#5b6b85; --faint:#8a97ab;
     --accent:#2ea8ff; --accent-dim:#1b7fd1;
@@ -35,9 +38,10 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   [hidden]{display:none!important}
+  html{background:#e3ecf5}
   body{background:#e3ecf5 url(bg-1600.jpg) center/cover no-repeat fixed;font-family:var(--sans);color:var(--ink);line-height:1.75;min-height:100vh;font-size:16px}
   @media (max-width:520px){ body{background-image:url(bg-portrait.jpg);background-attachment:scroll} }
-  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:rgba(238,244,250,.42);backdrop-filter:blur(2px);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(15,31,58,.06)}
+  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:rgba(238,244,250,.5);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(15,31,58,.06)}
   header{padding:18px 24px 14px;border-bottom:1px solid rgba(255,255,255,.6);display:flex;align-items:baseline;justify-content:space-between}
   header .brand{font-family:var(--display);letter-spacing:.18em;font-size:15px;color:var(--accent-dim);font-weight:500;text-decoration:none}
   .card,details,.pal{background:rgba(255,255,255,.78);backdrop-filter:blur(14px);border-color:rgba(255,255,255,.9)}
