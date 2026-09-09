@@ -538,7 +538,7 @@ function measure(lm, w, h){
 
 /* ---------- 結果 ---------- */
 let lastRes = null;
-const CY = "0,229,255"; // 掃描與網格用的青色
+const CY = "120,210,255"; // 掃描與網格用的冰藍（同頁面主色系，不用 Attracta 的青綠）
 const TYPES = {
   wide_full:  ["圓潤親和型", "線條柔和連續，親和力是天生優勢"],
   wide_taper: ["圓潤柔美型", "顴骨到下顎自然收窄，鏡頭前很討喜"],
@@ -764,7 +764,11 @@ async function startCamera(){
   }
   const video = $("video");
   video.srcObject = stream;
-  await new Promise(r => video.onloadedmetadata = r);
+  await new Promise(r => { if (video.readyState >= 1) r(); else video.onloadedmetadata = r; });
+  // 第二次開相機或在 App 內建瀏覽器，autoplay 不一定會自己啟動，要明確 play()
+  try { await video.play(); } catch(e){}
+  // 畫面沒出來（黑框）就直接告訴使用者，不要乾等
+  setTimeout(() => { if (stream && (!video.videoWidth || video.paused)) { $("scanmsg").innerHTML = '<span class="err">相機畫面沒有出現。</span>請按「返回」再試一次，或改選照片。'; track("analysis_error", { reason: "camera_black" }); } }, 3000);
   let lmk;
   try { lmk = await getLandmarker("VIDEO"); }
   catch(e){ stopCamera(); return fail("engine", "這次分析沒有完成。你可以重新嘗試，或換一張照片。"); }
