@@ -91,8 +91,14 @@
 
   /* result */
   #v-result{padding-top:22px}
-  .photo-wrap{position:relative;width:150px;height:150px;border-radius:50%;overflow:hidden;margin:0 auto 10px;border:2px solid var(--line);background:#dfe8f2}
-  .photo-wrap canvas{width:100%;height:100%;object-fit:cover}
+  .annot{width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.9);background:#dfe8f2;box-shadow:0 10px 40px rgba(15,31,58,.18);margin-top:16px}
+  .annot canvas{width:100%;height:100%;display:block}
+  .obs{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .obs li{display:grid;grid-template-columns:24px 1fr;gap:10px;font-size:14.5px}
+  .obs li i{font-style:normal;font-family:var(--display);font-size:12px;color:#fff;background:var(--accent);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin-top:3px}
+  .dir p{font-size:14.5px}
+  .dir p+p{margin-top:8px}
+  .dir b{font-weight:500;color:var(--accent-dim)}
   .toggle{display:flex;justify-content:center;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:18px}
   .toggle input{accent-color:var(--accent)}
   .rt{font-family:var(--display);text-align:center;font-size:22px;font-weight:600}
@@ -193,7 +199,6 @@
       <div class="spacer"></div>
       <button class="btn primary" id="btn-cam">使用相機拍攝</button>
       <button class="btn ghost" id="btn-upload">選擇照片分析</button>
-      <p class="center" style="margin-top:14px"><button class="link" id="btn-browse">先瀏覽四季配色參考</button></p>
       <input type="file" id="file" accept="image/*">
       <p class="eyebrow" style="margin-top:28px">拍攝前，留意這幾件事</p>
       <div class="tips">
@@ -233,26 +238,26 @@
       <div class="spacer"></div>
       <div class="card"><p id="err-msg">這次分析沒有完成。你可以重新嘗試，或換一張照片。</p></div>
       <button class="btn primary" id="err-retry">換一張照片</button>
-      <button class="btn ghost" id="err-browse">先看配色參考</button>
       <div class="spacer"></div>
     </section>
 
     <!-- 結果 -->
     <section class="view" id="v-result">
-      <div class="photo-wrap"><canvas id="thumb" width="300" height="300"></canvas></div>
-      <label class="toggle"><input type="checkbox" id="pts-toggle" checked> 顯示量測點</label>
       <p class="rt">你的臉部比例觀察</p>
       <p class="rsub">從這張照片，初步認識比例與輪廓特徵。</p>
+      <div class="annot"><canvas id="thumb" width="900" height="900"></canvas></div>
+      <label class="toggle"><input type="checkbox" id="pts-toggle" checked> 顯示量測線</label>
 
       <div class="card">
-        <p class="small muted">這是照片中的比例觀察，不是外貌評分。實際造型還需要一起考慮髮況、風格與使用場合。</p>
+        <h2>這張照片的比例特徵</h2>
+        <ul class="obs" id="obs"></ul>
+        <p class="xs" style="margin-top:10px">量測的是這張照片中的相對位置，可見額頂不等於髮際線；角度與光線會影響結果。</p>
       </div>
 
       <div class="card">
         <h2>造型可以從這裡開始</h2>
-        <p><b style="font-weight:500">先看比例，再比較不同造型。</b></p>
-        <p class="small muted">這次先呈現照片中的相對比例，不替你指定單一臉型。</p>
-        <p class="small muted">你可以從分線、露額程度、髮頂高度與臉側髮量開始比較，觀察自己喜歡哪些改變；需要更具體的建議時，再把髮況、風格與使用場合一起帶入。</p>
+        <div class="dir" id="dir"></div>
+        <p class="xs" style="margin-top:10px">這些是可以比較的方向，不是唯一答案；實際造型還要看髮況、風格與使用場合。</p>
       </div>
 
       <div class="card">
@@ -317,7 +322,7 @@
           <p class="small muted">這些色票是配色示意，不是指定商品色號。是否適合自己，需要結合實際試色、妝感偏好與使用場合比較。</p>
           <p class="small" style="margin-top:8px"><b style="font-weight:500">想把喜歡的配色，變成自己會用的妝容？</b></p>
           <p class="small muted">從選色、上色範圍到濃淡層次，透過一對一彩妝教學，整理成日常用得上的方法。</p>
-          <button class="btn primary" data-line="teach" style="margin-top:12px">用 LINE 詢問一對一彩妝教學</button>
+          <button class="btn primary" data-line="teach" style="margin-top:12px">詢問一對一彩妝教學</button>
           <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom-teach">看 B.room 服務內容</a>
         </div>
         <p class="center" style="margin-top:6px"><button class="link" id="btn-pal-back">返回</button></p>
@@ -454,40 +459,106 @@ function measure(lm, w, h){
   const top = P(lm,10,w,h), brow = P(lm,9,w,h), nose = P(lm,2,w,h), chin = P(lm,152,w,h);
   const s1 = brow.y - top.y, s2 = nose.y - brow.y, s3 = chin.y - nose.y, tot = s1 + s2 + s3;
   const seg = (ok(s1) && ok(s2) && ok(s3)) ? [s1,s2,s3].map(v => v / tot * 100) : null;
-  const cheekR = P(lm,234,w,h), cheekL = P(lm,454,w,h);
+  const cheekR = P(lm,234,w,h), cheekL = P(lm,454,w,h), jawR = P(lm,172,w,h), jawL = P(lm,397,w,h);
   const faceW = dist(cheekR, cheekL), faceLvis = chin.y - top.y;
   const wl = (ok(faceW) && ok(faceLvis)) ? (faceLvis / 0.82) / faceW : null; // 長:寬，長度含髮際線估計
+  const q = ok(faceW) ? dist(jawR, jawL) / faceW : null; // 下顎寬 ÷ 顴部寬
   const eyeOutR = P(lm,33,w,h), eyeInR = P(lm,133,w,h), eyeInL = P(lm,362,w,h), eyeOutL = P(lm,263,w,h);
   const eyeWidth = (dist(eyeOutR,eyeInR) + dist(eyeInL,eyeOutL)) / 2, inter = dist(eyeInR, eyeInL);
   const eyeRatio = (ok(eyeWidth) && ok(inter)) ? inter / eyeWidth : null;
   // 側轉程度：鼻尖到兩側顴骨距離差
   const noseTip = P(lm,1,w,h);
   const yaw = ok(faceW) ? Math.abs(dist(noseTip,cheekR) - dist(noseTip,cheekL)) / faceW : 0;
-  return { seg, wl, eyeRatio, yaw, anchors: { top, chin, cheekR, cheekL } };
+  return { seg, wl, q, eyeRatio, yaw, anchors: { top, brow, nose, chin, cheekR, cheekL, jawR, jawL, eyeOutR, eyeOutL } };
 }
 
 /* ---------- 結果 ---------- */
-function drawThumb(withPoints){
-  if (!lastSrcCanvas) return;
+let lastRes = null;
+// 在客戶自己的照片上畫出量測線：三段分割、臉寬、中軸，並標百分比
+function drawThumb(withLines){
+  if (!lastSrcCanvas || !lastRes) return;
   const t = $("thumb"), tc = t.getContext("2d"), S = t.width;
-  const { cheekR, cheekL, top, chin } = lastRes.anchors;
-  const cx = (cheekR.x + cheekL.x)/2, cy = (top.y + chin.y)/2;
-  const half = Math.max(dist(cheekR,cheekL), chin.y-top.y) * 0.78;
+  const A = lastRes.anchors, res = lastRes;
+  const cx = (A.cheekR.x + A.cheekL.x)/2, cy = (A.top.y + A.chin.y)/2;
+  const half = Math.max(dist(A.cheekR,A.cheekL), A.chin.y-A.top.y) * 0.80;
+  const X = x => (x - (cx-half)) / (half*2) * S, Y = y => (y - (cy-half)) / (half*2) * S;
   tc.clearRect(0,0,S,S);
   tc.drawImage(lastSrcCanvas, cx-half, cy-half, half*2, half*2, 0, 0, S, S);
-  if (!withPoints) return;
-  tc.fillStyle = "rgba(46,168,255,.9)";
+  if (!withLines) return;
+  // 特徵點（淡）
+  tc.fillStyle = "rgba(255,255,255,.55)";
   for (const p of lastLm){
-    const px = (p.x*lastSrcCanvas.width - (cx-half)) / (half*2) * S;
-    const py = (p.y*lastSrcCanvas.height - (cy-half)) / (half*2) * S;
-    if (px>=0 && px<=S && py>=0 && py<=S) tc.fillRect(px, py, 1.6, 1.6);
+    const px = X(p.x*lastSrcCanvas.width), py = Y(p.y*lastSrcCanvas.height);
+    if (px>=0 && px<=S && py>=0 && py<=S) tc.fillRect(px, py, 2, 2);
   }
+  const line = (x1,y1,x2,y2,col="rgba(255,255,255,.9)",w=2,dash=[]) => { tc.save(); tc.setLineDash(dash); tc.strokeStyle=col; tc.lineWidth=w; tc.beginPath(); tc.moveTo(x1,y1); tc.lineTo(x2,y2); tc.stroke(); tc.restore(); };
+  const node = (x,y,r=6) => { tc.save(); tc.fillStyle="#fff"; tc.strokeStyle="rgba(46,168,255,1)"; tc.lineWidth=2.5; tc.beginPath(); tc.arc(x,y,r,0,Math.PI*2); tc.fill(); tc.stroke(); tc.restore(); };
+  const label = (x,y,text,align="left") => { tc.save(); tc.font = `500 ${Math.round(S*0.034)}px "Outfit","Noto Sans TC",sans-serif`; tc.textAlign=align; tc.textBaseline="middle"; const w = tc.measureText(text).width + S*0.03; const bx = align==="left" ? x : x - w; tc.fillStyle="rgba(15,31,58,.72)"; tc.beginPath(); tc.roundRect(bx, y - S*0.026, w, S*0.052, S*0.012); tc.fill(); tc.fillStyle="#fff"; tc.fillText(text, align==="left" ? x + S*0.015 : x - S*0.015, y); tc.restore(); };
+  const xl = X(A.cheekR.x) - S*0.10, xr = X(A.cheekL.x) + S*0.10;
+  const ys = [A.top.y, A.brow.y, A.nose.y, A.chin.y].map(Y);
+  // 中軸與眼線
+  line(X(A.top.x), ys[0], X(A.chin.x), ys[3], "rgba(255,255,255,.55)", 1.5, [6,6]);
+  line(X(A.eyeOutR.x), Y(A.eyeOutR.y), X(A.eyeOutL.x), Y(A.eyeOutL.y), "rgba(255,255,255,.55)", 1.5, [6,6]);
+  // 三段分割線＋百分比
+  ys.forEach((y,i) => { line(xl, y, xr, y, "rgba(255,255,255,.9)", i===0||i===3 ? 1.5 : 2); node((i%2? xr : xl), y, 5); });
+  if (res.seg) res.seg.forEach((v,i) => label(xr + S*0.012, (ys[i]+ys[i+1])/2, `${v.toFixed(0)}%`));
+  // 臉寬線
+  const yw = Y((A.cheekR.y + A.cheekL.y)/2);
+  line(X(A.cheekR.x), yw, X(A.cheekL.x), yw, "rgba(46,168,255,.95)", 2.5);
+  node(X(A.cheekR.x), yw); node(X(A.cheekL.x), yw);
+  if (res.wl) label(xl - S*0.012, ys[3] + S*0.055, `寬長 1 : ${res.wl.toFixed(2)}`, "left");
 }
-let lastRes = null;
+
+/* 觀察句與造型方向：文字庫來自 09/09 審稿定稿 5.2.2／5.3.3／5.4.3 */
+const VERT = {
+  similar: ["本次照片的三段長度相對接近。", "可以先依想呈現的風格，比較露額、瀏海與不同分線；不需要只為了接近某個固定比例而改變造型。"],
+  lower:   ["本次照片中，鼻底至下巴的區段較長。", "想調整視覺重心時，可以比較露出眉眼與增加下半臉附近髮量的差別，觀察哪一種更符合你想呈現的樣子。"],
+  upper:   ["本次照片中，可見額頂至眉心的區段較長。", "可以比較露額、側分與不同瀏海份量的差別。這是造型選擇，不代表一定要遮住額頭。"],
+  middle:  ["本次照片中，眉心至鼻底的區段較長。", "可以把眉眼附近的妝髮安排當作比較重點，例如分線、側邊層次與眼妝重心；不要只憑這一項數值決定瀏海或髮長。"],
+  tie:     ["本次照片的分段差異不適合再細分。", "先把分段當作觀察線索，搭配整體髮型與穿著一起比較，不需要勉強歸入某一種類型。"]
+};
+const CONTOUR = {
+  wide_full:  ["臉部寬度相對明顯，下顎與顴部的寬度差較小。", "造型可以先比較髮頂高度與兩側份量。想增加縱向延伸感時，可嘗試較有高度的髮頂或露額；喜歡較有份量的輪廓，也可以保留兩側髮量，不必一律以縮窄為目標。"],
+  wide_taper: ["臉部寬度相對明顯，下顎比顴部窄。", "可以把臉側層次與髮尾位置當作比較重點。試著觀察髮量集中在顴部附近，或延伸到下顎附近時，整體印象有什麼不同，再決定想保留哪一種線條。"],
+  mid_full:   ["寬長比落在中間區間，下顎與顴部的寬度差較小。", "可以比較露出與保留臉側髮量的差別，並搭配領口一起看。想保留輪廓份量或增加縱向線條，是兩種不同方向，不需要把其中一種當作唯一答案。"],
+  mid_taper:  ["寬長比落在中間區間，下顎比顴部窄。", "可以先比較分線、臉側層次與髮尾落點。這些選擇不必只跟著某個臉型名稱，而應一起考慮你喜歡的風格與平常整理頭髮的方式。"],
+  long_full:  ["縱向比例較明顯，下顎與顴部的寬度差較小。", "可以先比較髮頂與側邊的份量分配。想減少縱向強調時，可比較較低的髮頂與適度側邊層次；想保留修長線條，也可以露額，再從服裝領口調整整體節奏。"],
+  long_taper: ["縱向比例較明顯，下顎比顴部窄。", "可以比較下顎附近的髮量與髮尾長度。希望增加側邊份量，或保留向下延伸的線條，都是可嘗試的方向；實際長度仍需配合髮質、髮量與日常整理習慣。"]
+};
+const EYES = {
+  near: ["兩眼間距小於參考眼寬。", "眼妝可比較內外側重點不同時的呈現，再依自己喜歡的效果選擇。"],
+  mid:  ["兩眼間距接近參考眼寬。", "眼妝仍需搭配眼型、眼皮條件與妝感偏好。"],
+  wide: ["兩眼間距大於參考眼寬。", "可以比較眉頭、內眼角附近的強弱，但不需要為了某個比例刻意改變原有特色。"]
+};
+function classify(res){
+  let v = null;
+  if (res.seg){
+    const s = res.seg, spread = Math.max(...s) - Math.min(...s);
+    const order = [0,1,2].sort((a,b)=>s[b]-s[a]);
+    if (spread < 8) v = "similar";
+    else if (s[order[0]] - s[order[1]] < 2) v = "tie";
+    else v = ["upper","middle","lower"][order[0]];
+  }
+  let c = null;
+  if (res.wl && res.q){
+    const r = 1 / res.wl, full = res.q >= 0.86;
+    c = r >= 0.92 ? (full ? "wide_full" : "wide_taper") : r >= 0.80 ? (full ? "mid_full" : "mid_taper") : (full ? "long_full" : "long_taper");
+  }
+  let e = null;
+  if (res.eyeRatio) e = res.eyeRatio < 0.95 ? "near" : res.eyeRatio > 1.10 ? "wide" : "mid";
+  return { v, c, e };
+}
 
 function renderResult(res){
   lastRes = res;
   drawThumb($("pts-toggle").checked);
+  const k = classify(res);
+  const obs = [], dir = [];
+  if (k.c){ obs.push(CONTOUR[k.c][0]); dir.push(["輪廓", CONTOUR[k.c][1]]); }
+  if (k.v){ obs.push(VERT[k.v][0]); dir.push(["比例", VERT[k.v][1]]); }
+  if (k.e){ obs.push(EYES[k.e][0]); dir.push(["眼妝", EYES[k.e][1]]); }
+  $("obs").innerHTML = obs.map((t,i)=>`<li><i>${i+1}</i><span>${t}</span></li>`).join("") || `<li><span>這張照片目前不足以提供穩定的比例觀察，請換一張正面照片。</span></li>`;
+  $("dir").innerHTML = dir.map(([h,t])=>`<p><b>${h}</b>　${t}</p>`).join("");
   // 每次重測清掉上一輪的需求選擇
   document.querySelectorAll('.opt').forEach(n => n.classList.remove('sel'));
   document.querySelectorAll('.svc').forEach(s => s.classList.remove('on'));
@@ -522,7 +593,7 @@ async function analyzeImage(src, method){
     if (faces.length > 1) return fail("multiple_faces", "畫面中有不只一張臉，請改用單人正面照片。");
     const lm = faces[0];
     const res = measure(lm, c.width, c.height);
-    if (res.yaw > 0.35) return fail("pose", "這張照片的角度偏側面，可能影響觀察。請選擇臉部自然朝向鏡頭的照片再試一次。");
+    if (res.yaw > 0.6) return fail("pose", "這張照片的角度偏側面，可能影響觀察。請選擇臉部自然朝向鏡頭的照片再試一次。");
     if (!res.seg && !res.wl && !res.eyeRatio) return fail("unavailable", "這張照片目前不足以提供穩定的比例觀察，請換一張正面照片。");
     lastSrcCanvas = c; lastLm = lm;
     $("busy-title").textContent = "正在整理這次的比例觀察";
@@ -603,7 +674,7 @@ async function startCamera(){
       if (w < W * 0.30) msg = msg || "請稍微靠近，讓臉部輪廓更清楚。";
       else if (w > W * 0.80) msg = msg || "請稍微後退，讓整張臉都在框內。";
       if (!inside || !centered) msg = msg || "請把整張臉移到框內中央。";
-      if (m.yaw > 0.35) msg = msg || "請減少側轉或抬低頭，讓臉部自然朝向鏡頭。";
+      if (m.yaw > 0.45) msg = msg || "請減少側轉或抬低頭，讓臉部自然朝向鏡頭。";
       if (warming) { msg = "請正對鏡頭，讓額頭、臉側與下巴完整入鏡。"; goodSince = null; }
       else if (msg) goodSince = null;
       else if (moved) { goodSince = null; msg = "請保持不動。"; }
@@ -759,8 +830,6 @@ $("file").onchange = e => {
 if (["localhost","127.0.0.1"].includes(location.hostname)) window.__analyzeSample = f => analyzeImage(f, "sample"); // 本機測試用，無介面
 $("btn-again").onclick = () => { hasResult = false; lastSrcCanvas = null; show("v-intro"); };
 $("err-retry").onclick = () => show("v-intro");
-$("err-browse").onclick = () => showPalette("v-intro");
-$("btn-browse").onclick = () => showPalette("v-intro");
 $("btn-palette-from-result").onclick = () => showPalette("v-result");
 $("btn-palette-from-need").onclick = () => showPalette("v-result");
 $("btn-pal-back").onclick = () => show(prevView === "v-result" && hasResult ? "v-result" : "v-intro");
