@@ -2,3 +2,5 @@ sample*.jpg
 _activate_domain.ps1
 source.*
 S__*.jpg
+docs/
+_archive/

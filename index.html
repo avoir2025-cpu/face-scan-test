@@ -4,21 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Face Brief 臉部摘要｜CHUN.EN</title>
-<meta name="description" content="30 秒，用手機鏡頭看懂你的臉部比例與膚色傾向。CHUN.EN 形象美學。">
+<title>臉部比例分析｜CHUN.EN</title>
+<meta name="description" content="用一張正面照片，初步認識臉部比例與輪廓特徵，並瀏覽四季配色與彩妝靈感。結果作為造型參考，不替外貌打分數。">
 <link rel="canonical" href="https://face.chunen.tw/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CHUN.EN">
-<meta property="og:title" content="Face Brief 臉部摘要｜30 秒看懂你的臉部比例">
-<meta property="og:description" content="用手機鏡頭量出臉部比例、對稱度與膚色傾向。CHUN.EN 形象美學。">
+<meta property="og:title" content="先看懂你的臉，再決定怎麼做造型｜CHUN.EN">
+<meta property="og:description" content="一張正面照片，初步認識臉部比例與輪廓特徵。從觀察自己開始，找到妝髮與形象規劃的起點。">
 <meta property="og:url" content="https://face.chunen.tw/">
-<meta property="og:image" content="https://face.chunen.tw/og-v4.png">
+<meta property="og:image" content="https://face.chunen.tw/face-brief-og-v2.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CHUN.EN 臉部比例分析；淺色介面搭配人像輪廓線，主標為「先看懂你的臉，再決定怎麼做造型」。">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Face Brief 臉部摘要｜30 秒看懂你的臉部比例">
-<meta name="twitter:image" content="https://face.chunen.tw/og-v4.png">
+<meta name="twitter:title" content="先看懂你的臉，再決定怎麼做造型｜CHUN.EN">
+<meta name="twitter:image" content="https://face.chunen.tw/face-brief-og-v2.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23eef4fa'/%3E%3Cellipse cx='32' cy='33' rx='15' ry='20' fill='none' stroke='%232ea8ff' stroke-width='2.5' stroke-dasharray='3 4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
@@ -26,201 +28,341 @@
   :root{
     --bg:#eef4fa; --panel:#ffffff; --panel2:#f3f7fb; --line:#d5e0ec;
     --ink:#0f1f3a; --muted:#5b6b85; --faint:#8a97ab;
-    --gold:#2ea8ff; --gold-dim:#1b7fd1;
-    --good:#8fc79a; --warn:#d9a556;
-    --serif:"Outfit","Noto Sans TC",system-ui,sans-serif; --sans:"Noto Sans TC",system-ui,sans-serif;
+    --accent:#2ea8ff; --accent-dim:#1b7fd1;
+    --pal-surface:#f4f3f0; --pal-text:#26313b;
+    --warn:#b8791a;
+    --display:"Outfit","Noto Sans TC",system-ui,sans-serif; --sans:"Noto Sans TC",system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  [hidden]{display:none!important} /* 蓋過 .consent/.devrow 自己的 display，hidden 屬性才會真的藏 */
-  body{background:#e3ecf5;font-family:var(--sans);color:var(--ink);line-height:1.75;min-height:100vh}
-  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:var(--bg);box-shadow:0 0 40px rgba(15,31,58,.08);display:flex;flex-direction:column;position:relative;overflow:hidden}
+  [hidden]{display:none!important}
+  body{background:#e3ecf5;font-family:var(--sans);color:var(--ink);line-height:1.75;min-height:100vh;font-size:16px}
+  .frame{max-width:480px;min-height:100vh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(15,31,58,.08)}
   header{padding:18px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between}
-  header .brand{font-family:var(--serif);letter-spacing:.18em;font-size:15px;color:var(--gold)}
-  header .beta{font-size:10px;letter-spacing:.14em;color:var(--faint);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
-  main{flex:1;display:flex;flex-direction:column;padding:0 24px 40px}
+  header .brand{font-family:var(--display);letter-spacing:.18em;font-size:15px;color:var(--accent-dim);font-weight:500}
+  header .tool{font-size:12px;letter-spacing:.08em;color:var(--faint)}
+  main{flex:1;display:flex;flex-direction:column;padding:0 22px 40px}
   .view{display:none;flex-direction:column;flex:1}
   .view.on{display:flex}
+  h1{font-family:var(--display);font-weight:600;font-size:28px;line-height:1.4;margin-bottom:14px;text-wrap:balance}
+  h2{font-family:var(--display);font-size:16px;font-weight:600;color:var(--accent-dim);margin-bottom:10px;letter-spacing:.04em}
+  p{max-width:42em}
+  .muted{color:var(--muted)}
+  .small{font-size:13px}
+  .xs{font-size:12px;color:var(--faint);line-height:1.7}
+  .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.16em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:8px}
+  .spacer{flex:1}
+  .btn{display:block;width:100%;border:none;cursor:pointer;font-family:var(--sans);font-size:16px;font-weight:500;letter-spacing:.04em;min-height:50px;padding:13px 16px;border-radius:12px;text-align:center;transition:opacity .15s;text-decoration:none;color:inherit}
+  .btn:active{opacity:.8}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--line);margin-top:10px}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .link{background:none;border:none;color:var(--accent-dim);font-size:14px;cursor:pointer;text-decoration:underline;font-family:var(--sans);padding:0}
+  .center{text-align:center}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+  .card p+p{margin-top:8px}
+  .devrow{display:flex;gap:10px;margin-top:10px}
+  .devrow .btn{font-size:12.5px;min-height:40px;padding:8px;color:var(--faint)}
+  input[type=file]{display:none}
 
   /* intro */
-  #v-intro .hero{padding:44px 0 8px;text-align:left}
-  #v-intro h1{font-family:var(--serif);font-weight:600;font-size:29px;line-height:1.4;margin-bottom:14px}
-  #v-intro h1 em{font-style:normal;color:var(--gold)}
-  #v-intro .lede{color:var(--muted);font-size:14.5px;margin-bottom:8px}
-  .points{margin:26px 0 8px;display:flex;flex-direction:column;gap:12px}
-  .pt{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--muted)}
-  .pt .d{width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:9px;flex:none}
-  .pt b{color:var(--ink);font-weight:500}
-  .spacer{flex:1}
-  .btn{display:block;width:100%;border:none;cursor:pointer;font-family:var(--sans);font-size:16px;font-weight:500;letter-spacing:.06em;padding:15px 0;border-radius:8px;text-align:center;transition:opacity .15s}
-  .btn:active{opacity:.8}
-  .btn.gold{background:var(--gold);color:#fff}
-  .btn.ghost{background:none;color:var(--muted);border:1px solid var(--line);margin-top:10px}
-  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-  .devrow{display:flex;gap:10px;margin-top:10px}
-  .devrow .btn{font-size:12.5px;padding:10px 0;color:var(--faint)}
-  .privacy{margin-top:18px;font-size:11.5px;color:var(--faint);line-height:1.7}
+  #v-intro .hero{padding:40px 0 10px}
+  .tips{display:flex;flex-direction:column;gap:10px;margin:22px 0 6px}
+  .tip b{display:block;font-weight:500;color:var(--ink);font-size:14px}
+  .tip span{font-size:13px;color:var(--muted)}
 
   /* scan */
   #v-scan{padding-top:20px}
-  .stage{position:relative;width:100%;aspect-ratio:3/4;background:#0f1f3a;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .stage{position:relative;width:100%;aspect-ratio:3/4;background:#0f1f3a;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
   .stage video,.stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .stage video{transform:scaleX(-1)}
-  .stage canvas.mirror{transform:scaleX(-1)}
+  .stage video,.stage canvas.mirror{transform:scaleX(-1)}
   .guide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-  .guide .oval{width:62%;aspect-ratio:3/4;border:1.5px dashed color-mix(in srgb,var(--gold) 70%,transparent);border-radius:50%}
+  .guide .oval{width:62%;aspect-ratio:3/4;border:1.5px dashed rgba(255,255,255,.7);border-radius:50%}
   .scanmsg{margin-top:16px;text-align:center;font-size:14px;color:var(--muted);min-height:44px}
-  .scanmsg b{color:var(--gold);font-weight:500}
+  .scanmsg b{color:var(--accent-dim);font-weight:500}
   .prog{height:3px;background:var(--line);border-radius:2px;margin-top:14px;overflow:hidden}
-  .prog i{display:block;height:100%;width:0%;background:var(--gold);transition:width .2s}
+  .prog i{display:block;height:100%;width:0%;background:var(--accent);transition:width .2s}
+  .row2{display:flex;gap:10px}
+  .row2 .btn{margin-top:10px}
 
-  /* results */
-  #v-result{padding-top:24px}
-  .photo-wrap{position:relative;width:130px;height:130px;border-radius:50%;overflow:hidden;margin:0 auto 6px;border:2px solid var(--gold-dim)}
+  /* result */
+  #v-result{padding-top:22px}
+  .photo-wrap{position:relative;width:150px;height:150px;border-radius:50%;overflow:hidden;margin:0 auto 10px;border:2px solid var(--line);background:#dfe8f2}
   .photo-wrap canvas{width:100%;height:100%;object-fit:cover}
-  .rt{font-family:var(--serif);text-align:center;font-size:21px;font-weight:600;margin-top:14px}
-  .rsub{text-align:center;color:var(--faint);font-size:12px;margin-bottom:22px}
-  .sec{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:14px}
-  .sec h2{font-family:var(--serif);font-size:15.5px;font-weight:600;color:var(--gold);margin-bottom:12px;letter-spacing:.06em}
-  .sec .desc{font-size:13px;color:var(--muted);margin-top:10px}
+  .toggle{display:flex;justify-content:center;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:18px}
+  .toggle input{accent-color:var(--accent)}
+  .rt{font-family:var(--display);text-align:center;font-size:22px;font-weight:600}
+  .rsub{text-align:center;color:var(--muted);font-size:13.5px;margin:4px 0 18px}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:14px}
+  details summary{cursor:pointer;padding:16px 20px;font-family:var(--display);font-weight:600;color:var(--accent-dim);list-style:none;display:flex;justify-content:space-between;align-items:center}
+  details summary::after{content:"＋";color:var(--faint);font-weight:400}
+  details[open] summary::after{content:"－"}
+  details .body{padding:0 20px 18px}
   .bars{display:flex;flex-direction:column;gap:9px}
-  .bar{display:grid;grid-template-columns:76px 1fr 44px;gap:10px;align-items:center;font-size:12.5px;color:var(--muted)}
+  .bar{display:grid;grid-template-columns:104px 1fr 44px;gap:10px;align-items:center;font-size:12.5px;color:var(--muted)}
   .bar .track{height:8px;background:var(--panel2);border-radius:4px;overflow:hidden}
-  .bar .fill{display:block;height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:4px;width:0}
+  .bar .fill{display:block;height:100%;background:linear-gradient(90deg,var(--accent-dim),var(--accent));border-radius:4px;width:0}
   .bar .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
-  .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .cell{background:var(--panel2);border-radius:8px;padding:12px 14px}
-  .cell .k{font-size:11px;color:var(--faint);letter-spacing:.08em}
-  .cell .v{font-family:var(--serif);font-size:19px;color:var(--ink);margin-top:2px}
-  .cell .v small{font-size:12px;color:var(--muted)}
-  .swatch{display:flex;align-items:center;gap:14px}
-  .swatch .chip{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);flex:none}
-  .swatch .v{font-family:var(--serif);font-size:17px}
-  .locked{position:relative;overflow:hidden}
-  .locked .mask{position:absolute;inset:0;backdrop-filter:blur(7px);background:color-mix(in srgb,#fff 60%,transparent);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:10px}
-  .locked .mask .lk{color:var(--gold);font-size:13px;letter-spacing:.1em}
-  .locked .mask .hint{color:var(--muted);font-size:11.5px}
-  .cta{margin-top:10px}
-  .cta .note{text-align:center;font-size:12px;color:var(--muted);margin-bottom:10px}
-  .disclaim{margin-top:20px;font-size:11px;color:var(--faint);line-height:1.7;border-top:1px solid var(--line);padding-top:14px}
-  .again{margin-top:12px;text-align:center}
-  .again button{background:none;border:none;color:var(--faint);font-size:12.5px;cursor:pointer;text-decoration:underline;font-family:var(--sans)}
-
-  .err{color:var(--warn)}
-  input[type=file]{display:none}
-  a.btn{text-decoration:none}
-  /* Cookie 同意條：與官網 consent.js 同一把 key，同意後才載 GA4 */
+  .metric{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-top:1px solid var(--line)}
+  .metric .k{font-size:13px;color:var(--muted)}
+  .metric .v{font-family:var(--display);font-size:18px;font-variant-numeric:tabular-nums}
+  /* needs */
+  .needs{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .need{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);cursor:pointer}
+  .need input{margin-top:6px;accent-color:var(--accent)}
+  .need b{display:block;font-weight:500;font-size:15px}
+  .need span{font-size:12.5px;color:var(--muted)}
+  .need.sel{border-color:var(--accent);background:#fff}
+  .svc{display:none}
+  .svc.on{display:block}
+  .svc h3{font-family:var(--display);font-size:17px;font-weight:600;margin-bottom:8px}
+  .svc .sub{display:block;margin-top:10px;text-align:center}
+  .svc .btn{margin-top:14px}
+  .ln{display:block;text-align:center;font-size:13.5px;color:var(--accent-dim);margin-top:10px}
+  /* line box */
+  .linebox{border:1px solid var(--accent);background:#fff;border-radius:14px;padding:18px 20px;margin-top:12px}
+  .linebox textarea{width:100%;min-height:76px;margin-top:8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-family:var(--sans);font-size:14px;resize:vertical}
+  .linebox .row2 .btn{font-size:14.5px}
+  .msgbox{background:var(--panel2);border-radius:10px;padding:10px 12px;font-size:13px;white-space:pre-wrap;margin-top:8px;color:var(--muted)}
+  /* palette */
+  .seasons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+  .season{border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer;background:var(--panel);font-size:13px}
+  .season .en{display:block;font-family:var(--display);font-size:10px;letter-spacing:.14em;color:var(--faint)}
+  .season .dots{display:flex;justify-content:center;gap:3px;margin-top:6px}
+  .season .dots i{width:9px;height:9px;border-radius:50%;display:block}
+  .season.sel{border-color:var(--accent);box-shadow:0 0 0 2px rgba(46,168,255,.2)}
+  .pal{background:var(--pal-surface);color:var(--pal-text);border-radius:14px;padding:18px 20px;margin-top:6px}
+  .pal .eyebrow{color:#6b7480}
+  .pal h3{font-family:var(--display);font-size:18px;font-weight:600;margin-bottom:6px}
+  .pal .lead{font-size:14px;color:#4a5560;margin-bottom:12px}
+  .sw{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+  .sw div{width:44px}
+  .sw i{display:block;width:44px;height:44px;border-radius:50%;border:1px solid rgba(0,0,0,.08)}
+  .sw span{display:block;font-size:10px;color:#6b7480;text-align:center;margin-top:3px;line-height:1.3}
+  .pal h4{font-size:14px;font-weight:500;margin:10px 0 2px;color:#26313b}
+  .pal p{font-size:13.5px;color:#4a5560}
+  .pal .sw.mini i{width:30px;height:30px}
+  .pal .sw.mini div{width:auto;min-width:30px}
+  .pal .remind{border-top:1px solid rgba(0,0,0,.08);margin-top:12px;padding-top:10px;font-size:13px}
+  .pal .btn.primary{background:#26313b;margin-top:14px}
+  /* consent */
   .consent{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;padding:0 12px 12px}
-  .consent .box{width:100%;max-width:456px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 30px rgba(15,31,58,.18)}
+  .consent .box{width:100%;max-width:456px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 30px rgba(15,31,58,.18)}
   .consent p{font-size:12.5px;color:var(--muted);line-height:1.6}
   .consent .row{display:flex;gap:8px}
-  .consent button{flex:1;font-family:var(--sans);font-size:13px;padding:9px 0;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:none;color:var(--muted)}
-  .consent button.ok{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:500}
+  .consent button{flex:1;font-family:var(--sans);font-size:13px;padding:9px 0;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:none;color:var(--muted)}
+  .consent button.ok{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:500}
+  footer{padding:18px 22px 28px;border-top:1px solid var(--line)}
+  footer .brandline{font-family:var(--display);font-size:12px;letter-spacing:.06em;color:var(--faint);text-align:center;margin-bottom:10px}
+  footer details{background:none;border:none;margin:0}
+  footer details summary{padding:6px 0;font-size:13px;color:var(--muted);font-family:var(--sans);font-weight:400;justify-content:center;gap:6px}
+  footer details .body{padding:6px 0 0}
+  footer details .body p{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+  .err{color:var(--warn)}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <div class="frame">
-  <header><span class="brand">CHUN.EN</span><span class="beta">Face Brief 臉部摘要 · BETA</span></header>
+  <header><span class="brand">CHUN.EN</span><span class="tool">臉部比例分析</span></header>
   <main>
 
     <!-- 入口 -->
     <section class="view on" id="v-intro">
       <div class="hero">
-        <h1>30 秒，先看懂<br>你的<em>臉部比例</em>與<em>色彩方向</em></h1>
-        <p class="lede">用鏡頭或一張正面照片，量出臉部比例、對稱度與膚色傾向，作為造型判讀的起點。</p>
-      </div>
-      <div class="points">
-        <div class="pt"><span class="d"></span><span><b>照片不會離開你的裝置。</b>分析在瀏覽器本地完成，不上傳、不儲存。</span></div>
-        <div class="pt"><span class="d"></span><span><b>光線充足、正面對鏡頭</b>，結果會更準確。</span></div>
-        <div class="pt"><span class="d"></span><span>快掃是簡易參考，<b>完整判讀以顧問訪談為準</b>。</span></div>
+        <h1>先看懂你的臉，<br>再決定怎麼做造型。</h1>
+        <p class="muted">用一張正面照片，初步認識臉部比例與輪廓特徵。</p>
+        <p class="muted">也可以瀏覽四季配色，看看眼妝、腮紅與唇彩的搭配靈感。</p>
       </div>
       <div class="spacer"></div>
-      <button class="btn gold" id="btn-cam">開啟鏡頭掃描</button>
-      <button class="btn ghost" id="btn-upload">上傳照片分析</button>
+      <button class="btn primary" id="btn-upload">選擇照片分析</button>
+      <button class="btn ghost" id="btn-cam">使用相機拍攝</button>
+      <p class="center" style="margin-top:14px"><button class="link" id="btn-browse">先瀏覽四季配色參考</button></p>
       <div class="devrow" id="devrow" hidden>
-        <button class="btn ghost" data-sample="sample1.jpg">範例照片 A（測試用）</button>
-        <button class="btn ghost" data-sample="sample2.jpg">範例照片 B（測試用）</button>
+        <button class="btn ghost" data-sample="sample1.jpg">範例 A（本機測試）</button>
+        <button class="btn ghost" data-sample="sample2.jpg">範例 B（本機測試）</button>
       </div>
       <input type="file" id="file" accept="image/*">
+      <p class="eyebrow" style="margin-top:28px">拍攝前，留意這幾件事</p>
+      <div class="tips">
+        <div class="tip"><b>正面入鏡</b><span>讓額頭、臉側與下巴完整出現在畫面中。</span></div>
+        <div class="tip"><b>光線均勻</b><span>避免一側過暗或強光直射，表情保持自然。</span></div>
+        <div class="tip"><b>保留原始比例</b><span>請勿使用改變五官或輪廓的美顏濾鏡。</span></div>
+      </div>
+      <p class="xs" style="margin-top:18px">這個工具提供初步觀察，不替外貌打分數。照片在你的裝置上分析，不會上傳至 CHUN.EN。</p>
     </section>
 
-    <!-- 掃描 -->
+    <!-- 相機 -->
     <section class="view" id="v-scan">
       <div class="stage">
         <video id="video" autoplay playsinline muted></video>
         <canvas id="overlay" class="mirror"></canvas>
         <div class="guide"><div class="oval"></div></div>
       </div>
-      <p class="scanmsg" id="scanmsg">正在啟動相機⋯</p>
+      <p class="scanmsg" id="scanmsg">正在開啟相機。</p>
       <div class="prog"><i id="prog"></i></div>
       <div class="spacer"></div>
-      <button class="btn ghost" id="btn-cancel">返回</button>
+      <div class="row2">
+        <button class="btn ghost" id="btn-cancel">返回選擇方式</button>
+        <button class="btn ghost" id="btn-upload2">選擇照片</button>
+      </div>
     </section>
 
     <!-- 分析中 -->
     <section class="view" id="v-busy">
       <div class="spacer"></div>
-      <p style="text-align:center;font-family:var(--serif);font-size:19px">正在測量臉部比例與膚色<span id="dots">⋯</span></p>
-      <p style="text-align:center;color:var(--faint);font-size:12.5px;margin-top:8px">首次使用需要幾秒鐘下載分析引擎</p>
+      <p class="center" style="font-family:var(--display);font-size:19px;font-weight:500" id="busy-title">正在準備分析工具</p>
+      <p class="center small muted" id="busy-sub" style="margin-top:6px">首次使用需要載入必要檔案。</p>
+      <div class="spacer"></div>
+    </section>
+
+    <!-- 錯誤 -->
+    <section class="view" id="v-error">
+      <div class="spacer"></div>
+      <div class="card"><p id="err-msg">這次分析沒有完成。你可以重新嘗試，或換一張照片。</p></div>
+      <button class="btn primary" id="err-retry">換一張照片</button>
+      <button class="btn ghost" id="err-browse">先看配色參考</button>
       <div class="spacer"></div>
     </section>
 
     <!-- 結果 -->
     <section class="view" id="v-result">
-      <div class="photo-wrap"><canvas id="thumb" width="260" height="260"></canvas></div>
-      <p class="rt" id="headline">你的臉部基礎資料</p>
-      <p class="rsub">裝置端快掃結果 · 僅供參考</p>
+      <div class="photo-wrap"><canvas id="thumb" width="300" height="300"></canvas></div>
+      <label class="toggle"><input type="checkbox" id="pts-toggle" checked> 顯示量測點</label>
+      <p class="rt">你的臉部比例觀察</p>
+      <p class="rsub">從這張照片，初步認識比例與輪廓特徵。</p>
 
-      <div class="sec">
-        <h2>臉部縱向比例（可見三庭）</h2>
-        <div class="bars" id="ratio-bars"></div>
-        <p class="desc" id="ratio-desc"></p>
+      <div class="card">
+        <p class="small muted">這是照片中的比例觀察，不是外貌評分。實際造型還需要一起考慮髮況、風格與使用場合。</p>
       </div>
 
-      <div class="sec">
-        <h2>輪廓與五官間距</h2>
-        <div class="kv">
-          <div class="cell"><div class="k">臉型輪廓（近似）</div><div class="v" id="shape">—</div></div>
-          <div class="cell"><div class="k">左右對稱度</div><div class="v" id="sym">—</div></div>
-          <div class="cell"><div class="k">臉寬 : 臉長</div><div class="v" id="wl">—</div></div>
-          <div class="cell"><div class="k">眼距（相對眼寬）</div><div class="v" id="eyed">—</div></div>
+      <div class="card">
+        <h2>造型可以從這裡開始</h2>
+        <p><b style="font-weight:500">先看比例，再比較不同造型。</b></p>
+        <p class="small muted">這次先呈現照片中的相對比例，不替你指定單一臉型。</p>
+        <p class="small muted">你可以從分線、露額程度、髮頂高度與臉側髮量開始比較，觀察自己喜歡哪些改變；需要更具體的建議時，再把髮況、風格與使用場合一起帶入。</p>
+      </div>
+
+      <details id="metrics">
+        <summary>查看比例細節</summary>
+        <div class="body">
+          <p class="small muted" style="margin-bottom:12px">以下數值描述本次照片中的相對位置，不代表外貌好壞。</p>
+          <p class="eyebrow">照片中的縱向分段</p>
+          <p class="xs" style="margin-bottom:8px">以本次辨識到的位置，觀察臉部三個區段的相對長度。</p>
+          <div class="bars" id="ratio-bars"></div>
+          <p class="xs" style="margin-top:8px;margin-bottom:14px">可見額頂不等於髮際線；此分段不能直接當作完整三庭。額頭遮擋或拍攝角度改變時，數值也可能不同。</p>
+          <div class="metric"><span class="k">估計寬長比例</span><span class="v" id="wl">—</span></div>
+          <p class="xs" style="margin-bottom:6px">長度含模型估計，不等於直接量得的完整臉長。</p>
+          <div class="metric"><span class="k">眼距相對眼寬</span><span class="v" id="eyed">—</span></div>
+          <p class="xs">以兩眼內眼角距離與參考眼寬（兩眼寬度平均）比較；角度、表情或辨識位置改變時，數值也可能不同。</p>
         </div>
-        <p class="desc" id="shape-desc"></p>
+      </details>
+
+      <div class="card">
+        <h2>想知道彩妝可以怎麼配色？</h2>
+        <p class="small">先從四季配色參考，看看眼妝、腮紅與唇彩之間的搭配方式。</p>
+        <p class="small muted">這裡提供的是配色靈感，不會根據這張照片替你指定季型。</p>
+        <button class="btn ghost" id="btn-palette-from-result">查看四季配色參考</button>
       </div>
 
-      <div class="sec">
-        <h2>膚色傾向（參考）</h2>
-        <div class="swatch">
-          <div class="chip" id="chip"></div>
-          <div><div class="v" id="tone">—</div><div class="desc" id="tone-desc" style="margin-top:2px"></div></div>
+      <div class="card" id="need-card">
+        <p><b style="font-weight:500">輪廓是起點，造型還要回到你。</b></p>
+        <p class="small muted">你想用在哪個場合、喜歡什麼風格，以及平常怎麼整理自己，都是規劃造型的依據。</p>
+        <p style="margin-top:12px;font-weight:500">你現在最想了解哪一部分？</p>
+        <div class="needs" id="needs">
+          <label class="need"><input type="radio" name="need" value="makeup"><div><b>妝髮與髮型</b><span>想整理日常或重要場合的妝髮，或學會自己完成。</span></div></label>
+          <label class="need"><input type="radio" name="need" value="style"><div><b>穿搭與整體風格</b><span>想讓穿搭更貼近角色，也保留自己的風格。</span></div></label>
+          <label class="need"><input type="radio" name="need" value="brand"><div><b>工作形象與品牌拍攝</b><span>想釐清對外形象，或準備一組有明確用途的照片。</span></div></label>
+          <label class="need"><input type="radio" name="need" value="explore"><div><b>目前先了解自己</b><span>先看比例與配色參考，不急著預約服務。</span></div></label>
         </div>
-        <p class="desc">以相機取樣推算的暖冷方向，會受光源影響，建議在自然光下拍攝。我們用它來理解你的整體氣質走向，而不是做色號鑑定。</p>
+        <p class="xs" id="cta-initial" style="margin-top:12px">先選擇你想了解的方向，看看適合從哪項服務開始。</p>
+
+        <div class="svc" data-need="makeup">
+          <h3>把觀察，變成實際的妝髮選擇。</h3>
+          <p class="small muted">從輪廓、髮況與使用場合出發，討論適合的妝髮方向。需要當天的造型服務，或想學會日常自己完成，都可以先說明需求。</p>
+          <button class="btn primary" data-line="makeup">討論我的妝髮需求</button>
+          <p class="xs center" style="margin-top:8px">初步聯繫用於確認需求與服務範圍；個人化分析、規劃與實作依正式方案安排。</p>
+          <a class="ln" href="https://chunen.tw/b-room.html" data-svc="broom">查看 B.room 妝髮與教學服務</a>
+        </div>
+        <div class="svc" data-need="style">
+          <h3>讓穿搭更貼近你的角色，也保留自己的風格。</h3>
+          <p class="small muted">臉部比例只是其中一個觀察面向。穿搭還需要結合身形、使用場合與衣櫥現況，才能整理成真正穿得到的選擇。</p>
+          <button class="btn primary" data-line="style">討論我的穿搭需求</button>
+          <p class="xs center" style="margin-top:8px">初步聯繫用於確認需求與服務範圍；個人化分析、規劃與實作依正式方案安排。</p>
+          <a class="ln" href="https://chunen.tw/a-voir.html" data-svc="avoir">查看 À Voir 形象與服裝服務</a>
+        </div>
+        <div class="svc" data-need="brand">
+          <h3>先決定希望被怎麼理解，再規劃怎麼呈現。</h3>
+          <p class="small muted">從你的專業角色、面對的對象與影像用途，決定服裝、妝髮與拍攝方向。需要單次形象照，或完整的商業視覺規劃，都可以先釐清範圍。</p>
+          <button class="btn primary" data-line="brand">討論我的形象與拍攝需求</button>
+          <p class="xs center" style="margin-top:8px">初步聯繫用於確認需求與服務範圍；個人化分析、規劃與實作依正式方案安排。</p>
+          <a class="ln" id="scan-link" href="https://chunen.tw/scan/?src=face_direct" data-svc="scan">先做免費視覺定位快診</a>
+          <p class="xs center" style="margin-top:6px"><a href="https://chunen.tw/c-photos.html" data-svc="cphotos" style="color:var(--faint)">C.photos 單次拍攝</a>　·　<a href="https://chunen.tw/signature.html" data-svc="signature" style="color:var(--faint)">商業視覺整合企劃</a></p>
+        </div>
+        <div class="svc" data-need="explore">
+          <h3>先留下這次觀察。</h3>
+          <p class="small muted">可以繼續瀏覽配色參考，或在需要換造型時，再回來比較。</p>
+          <button class="btn primary" id="btn-palette-from-need">查看四季配色參考</button>
+        </div>
+
+        <div class="linebox" id="linebox" hidden>
+          <p style="font-weight:500">準備向 CHUN.EN 說明需求</p>
+          <p class="small muted">你想了解：<span id="lb-need"></span></p>
+          <label class="small muted" style="display:block;margin-top:10px">使用場合或預計時間（選填）</label>
+          <textarea id="lb-note" placeholder="例如：下個月有一場演講，想整理妝髮與穿搭。"></textarea>
+          <div class="msgbox" id="lb-preview"></div>
+          <div class="row2">
+            <button class="btn ghost" id="lb-copy">複製需求文字</button>
+            <a class="btn primary" style="margin-top:10px" id="lb-go" href="https://lin.ee/7DXWsNcz" target="_blank" rel="noopener">前往 LINE 諮詢</a>
+          </div>
+          <p class="xs" id="lb-status" style="margin-top:8px"></p>
+          <p class="xs" style="margin-top:6px">這一步只帶入你主動提供的需求，不會自動替你傳送照片或臉部數據。</p>
+        </div>
       </div>
 
-      <div class="sec locked">
-        <h2>你的角色定位方向</h2>
-        <p class="desc">把這組輪廓與比例，放進你的職業、階段與面對的對象來看，你的影像應該傳達的角色是⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</p>
-        <p class="desc">第一印象的落點：⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</p>
-        <div class="mask"><span class="lk">◆ 角色定位判讀</span><span class="hint">由 CHUN.EN 顧問為你解讀</span></div>
+      <p class="center" style="margin-top:6px"><button class="link" id="btn-again">換張照片再分析</button></p>
+      <p class="xs" style="margin-top:22px;border-top:1px solid var(--line);padding-top:14px">結果僅描述本次照片中的比例與位置，可能受角度、光線、表情與遮擋影響；不構成外貌評價，也不是個人色彩或職業角色判定。</p>
+    </section>
+
+    <!-- 四季配色參考 -->
+    <section class="view" id="v-palette">
+      <div style="padding-top:22px" id="color-guide">
+        <p class="eyebrow">Color Guide</p>
+        <p class="rt" style="text-align:left">四季配色參考</p>
+        <p class="muted small" style="margin:6px 0 4px">從色票到眼妝、腮紅與唇彩，看看同一組配色可以怎麼用。</p>
+        <div class="seasons" id="seasons"></div>
+        <p class="xs">以下為配色靈感，不代表系統已判定你的季型。</p>
+        <div id="pal-body" style="margin-top:12px"></div>
+        <div class="card" style="margin-top:14px">
+          <p class="small muted">這些色票是配色示意，不是指定商品色號。是否適合自己，需要結合實際試色、妝感偏好與使用場合比較。</p>
+          <p class="small" style="margin-top:8px"><b style="font-weight:500">想把喜歡的配色，變成自己會用的妝容？</b></p>
+          <p class="small muted">從選色、上色範圍到濃淡層次，透過一對一彩妝教學，整理成日常用得上的方法。</p>
+          <a class="btn ghost" href="https://chunen.tw/b-room.html" data-svc="broom-teach">了解一對一彩妝教學</a>
+        </div>
+        <p class="center" style="margin-top:6px"><button class="link" id="btn-pal-back">返回</button></p>
       </div>
-
-      <div class="cta">
-        <p class="note">臉部資料只是素材。你的職業、階段與要面對的人，才決定影像該長什麼樣。下一步，把這些放進視覺定位快診。</p>
-        <a class="btn gold" id="btn-cta" href="https://chunen.tw/scan/?src=face_direct">進入免費視覺定位快診</a>
-      </div>
-
-      <div class="again"><button id="btn-again">重新測一次</button></div>
-
-      <p class="disclaim">結果受拍攝角度與光線影響，僅供參考，不構成容貌評價；以顧問判讀為準。</p>
     </section>
 
   </main>
+  <footer>
+    <p class="brandline">CHUN.EN｜形象定位・妝髮造型・品牌影像</p>
+    <details id="privacy">
+      <summary>照片與分析資料如何使用</summary>
+      <div class="body">
+        <p>選擇的照片會在目前裝置上用於臉部比例分析，不會上傳至 CHUN.EN。</p>
+        <p>本工具不主動建立你的照片或臉部結果歷史紀錄。</p>
+        <p>使用統計與照片分析分開處理。是否允許非必要統計，不影響基本分析功能。</p>
+        <p>前往 LINE 諮詢時，我們只依你主動提供的內容確認服務需求；照片與臉部數據不會因為點擊連結而自動傳送。</p>
+        <p>分析引擎與字型檔案會在載入時自網路取得，這與照片上傳是不同的連線。</p>
+      </div>
+    </details>
+  </footer>
 </div>
 
 <div class="consent" id="consent" hidden>
   <div class="box">
-    <p>本頁使用 Cookie 統計流量。</p>
-    <div class="row"><button id="consent-min">僅必要</button><button class="ok" id="consent-ok">接受</button></div>
+    <p>你可以選擇是否允許使用統計。允許後，我們會透過 Cookie 或類似技術了解網站的使用情況，作為改善操作體驗的參考。選擇「僅必要」仍可使用基本功能。</p>
+    <div class="row"><button id="consent-min">僅必要</button><button class="ok" id="consent-ok">允許使用統計</button></div>
+    <p class="center"><a href="#privacy" id="consent-privacy" style="color:var(--faint);font-size:12px">隱私與資料使用說明</a></p>
   </div>
 </div>
 
@@ -230,16 +372,12 @@
   var GA_ID = 'G-SDGX47Z79R';
   var KEY = 'chunen-consent', INTERNAL_KEY = 'chunen-internal';
   var q = new URLSearchParams(location.search);
-
-  // ?src=threads_face 這類來源參數：記住整個工作階段，事件與下一步連結都帶著
-  var src = q.get('src');
+  var src = q.get('src') || q.get('utm_source');
   try {
     if (src) sessionStorage.setItem('face_src', src);
     else src = sessionStorage.getItem('face_src');
   } catch(e){}
-  window.FACE_SRC = src || 'direct';
-
-  // ?internal=1 自己人測試：事件標 traffic_type=internal，GA4 內部流量篩選器會認
+  window.FACE_SRC = (src || 'direct').replace(/[^a-z0-9_]/gi, '');
   try {
     if (q.has('internal')) {
       if (q.get('internal') === '0') localStorage.removeItem(INTERNAL_KEY);
@@ -247,14 +385,12 @@
     }
   } catch(e){}
   function isInternal(){ try { return localStorage.getItem(INTERNAL_KEY) === '1'; } catch(e){ return false; } }
-
   var queue = [];
   window.track = function(name, params){
     var p = Object.assign({ src: window.FACE_SRC }, params || {});
     if (typeof window.gtag === 'function') window.gtag('event', name, p);
     else queue.push([name, p]);
   };
-
   function loadGA(){
     if (window.__gaLoaded) return;
     window.__gaLoaded = true;
@@ -264,18 +400,16 @@
     window.dataLayer = window.dataLayer || [];
     window.gtag = function(){ window.dataLayer.push(arguments); };
     window.gtag('js', new Date());
-    var cfg = { anonymize_ip: true, cookie_domain: 'chunen.tw' }; // 與主站共用工作階段
+    var cfg = { anonymize_ip: true, cookie_domain: 'chunen.tw' };
     if (isInternal()) cfg.traffic_type = 'internal';
     window.gtag('config', GA_ID, cfg);
     queue.forEach(function(e){ window.gtag('event', e[0], e[1]); });
     queue = [];
   }
-
   var choice = null;
   try { choice = localStorage.getItem(KEY); } catch(e){}
   if (choice === 'accepted') loadGA();
   else if (choice !== 'necessary') document.getElementById('consent').hidden = false;
-
   document.getElementById('consent-ok').onclick = function(){
     try { localStorage.setItem(KEY, 'accepted'); } catch(e){}
     document.getElementById('consent').hidden = true; loadGA();
@@ -284,11 +418,9 @@
     try { localStorage.setItem(KEY, 'necessary'); } catch(e){}
     document.getElementById('consent').hidden = true;
   };
-
-  // 下一步連結：把來源接力帶進官網 /scan/ 既有的 src 歸因
-  var cta = document.getElementById('btn-cta');
-  cta.href = 'https://chunen.tw/scan/?src=face_' + window.FACE_SRC.replace(/[^a-z0-9_]/gi, '');
-  cta.addEventListener('click', function(){ window.track('face_cta_click', { target: 'scan' }); });
+  document.getElementById('consent-privacy').onclick = function(){ document.getElementById('privacy').open = true; };
+  document.getElementById('scan-link').href = 'https://chunen.tw/scan/?src=face_' + window.FACE_SRC;
+  window.track('landing_view');
 })();
 </script>
 
@@ -296,197 +428,149 @@
 import { FaceLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
 
 const $ = id => document.getElementById(id);
-const views = ["v-intro","v-scan","v-busy","v-result"];
-const show = v => views.forEach(x => $(x).classList.toggle("on", x===v));
+const views = ["v-intro","v-scan","v-busy","v-error","v-result","v-palette"];
+let prevView = "v-intro";
+const show = v => { views.forEach(x => $(x).classList.toggle("on", x===v)); window.scrollTo(0,0); };
 
-let landmarker = null, mode = null; // "IMAGE" | "VIDEO"
-let stream = null, rafId = null;
+let landmarker = null, mode = null, stream = null, rafId = null;
+let hasResult = false, lastSrcCanvas = null, lastLm = null;
 
 async function getLandmarker(runningMode){
   if (landmarker && mode === runningMode) return landmarker;
   if (landmarker) { landmarker.close(); landmarker = null; }
-  const fileset = await FilesetResolver.forVisionTasks(
-    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+  const fileset = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
   landmarker = await FaceLandmarker.createFromOptions(fileset, {
-    baseOptions: {
-      modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
-      delegate: "GPU"
-    },
-    runningMode, numFaces: 1
+    baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task", delegate: "GPU" },
+    runningMode, numFaces: 2
   });
   mode = runningMode;
   return landmarker;
 }
 
-/* ---------- 幾何計算 ---------- */
+/* ---------- 幾何量測（只輸出數值，不分類）---------- */
 const P = (lm, i, w, h) => ({ x: lm[i].x * w, y: lm[i].y * h });
 const dist = (a,b) => Math.hypot(a.x-b.x, a.y-b.y);
+const ok = v => Number.isFinite(v) && v > 0;
 
-function analyze(lm, w, h){
-  // 縱向：額頂(10) 眉心(9) 鼻底(2) 下巴(152)
+function measure(lm, w, h){
   const top = P(lm,10,w,h), brow = P(lm,9,w,h), nose = P(lm,2,w,h), chin = P(lm,152,w,h);
-  const s1 = brow.y - top.y, s2 = nose.y - brow.y, s3 = chin.y - nose.y;
-  const tot = s1 + s2 + s3;
-  const seg = [s1,s2,s3].map(v => v / tot * 100);
-
-  // 寬長比
+  const s1 = brow.y - top.y, s2 = nose.y - brow.y, s3 = chin.y - nose.y, tot = s1 + s2 + s3;
+  const seg = (ok(s1) && ok(s2) && ok(s3)) ? [s1,s2,s3].map(v => v / tot * 100) : null;
   const cheekR = P(lm,234,w,h), cheekL = P(lm,454,w,h);
-  const faceW = dist(cheekR, cheekL);
-  const faceL = dist(top, chin) / 0.82; // 補回髮際線以上的近似
-  const wl = faceW / faceL;
-
-  // 下顎寬 vs 顴骨寬
-  const jawR = P(lm,172,w,h), jawL = P(lm,397,w,h);
-  const jawRatio = dist(jawR, jawL) / faceW;
-
-  // 眼距
-  const eyeOutR = P(lm,33,w,h), eyeInR = P(lm,133,w,h);
-  const eyeInL = P(lm,362,w,h), eyeOutL = P(lm,263,w,h);
-  const eyeWidth = (dist(eyeOutR,eyeInR) + dist(eyeInL,eyeOutL)) / 2;
-  const interocular = dist(eyeInR, eyeInL);
-  const eyeRatio = interocular / eyeWidth;
-
-  // 對稱度：成對點到中軸距離差
-  const midX = (P(lm,168,w,h).x + nose.x + chin.x) / 3;
-  const pairs = [[33,263],[133,362],[61,291],[234,454],[172,397],[70,300]];
-  let devSum = 0;
-  for (const [r,l] of pairs){
-    const dr = Math.abs(P(lm,r,w,h).x - midX), dl = Math.abs(P(lm,l,w,h).x - midX);
-    devSum += Math.abs(dr - dl) / ((dr + dl) / 2);
-  }
-  const sym = Math.max(0, Math.min(100, 100 - (devSum / pairs.length) * 100));
-
-  // 臉型（粗判）
-  let shape, shapeDesc;
-  if (wl >= 0.92) {
-    shape = jawRatio >= 0.86 ? "圓潤方圓" : "圓潤";
-    shapeDesc = "輪廓線條柔和連續，給人親和、沒有距離感的第一印象，是很好發揮「信任感」的底子。";
-  } else if (wl >= 0.80) {
-    shape = jawRatio >= 0.86 ? "方圓" : "鵝蛋偏圓";
-    shapeDesc = "比例均衡、可塑性高，多數風格都能駕馭，造型的發揮空間比一般人更大。";
-  } else {
-    shape = jawRatio >= 0.86 ? "修長帶線條" : "修長";
-    shapeDesc = "縱向比例舒展，天生帶有俐落與專業感，適合把這份「線條感」翻譯成個人風格。";
-  }
-
-  return { seg, wl, jawRatio, eyeRatio, sym, shape, shapeDesc,
-           anchors: { top, brow, nose, chin, cheekR, cheekL } };
+  const faceW = dist(cheekR, cheekL), faceLvis = chin.y - top.y;
+  const wl = (ok(faceW) && ok(faceLvis)) ? (faceLvis / 0.82) / faceW : null; // 長:寬，長度含髮際線估計
+  const eyeOutR = P(lm,33,w,h), eyeInR = P(lm,133,w,h), eyeInL = P(lm,362,w,h), eyeOutL = P(lm,263,w,h);
+  const eyeWidth = (dist(eyeOutR,eyeInR) + dist(eyeInL,eyeOutL)) / 2, inter = dist(eyeInR, eyeInL);
+  const eyeRatio = (ok(eyeWidth) && ok(inter)) ? inter / eyeWidth : null;
+  // 側轉程度：鼻尖到兩側顴骨距離差
+  const noseTip = P(lm,1,w,h);
+  const yaw = ok(faceW) ? Math.abs(dist(noseTip,cheekR) - dist(noseTip,cheekL)) / faceW : 0;
+  return { seg, wl, eyeRatio, yaw, anchors: { top, chin, cheekR, cheekL } };
 }
 
-function sampleCheekColor(lm, canvas){
-  const ctx = canvas.getContext("2d");
-  const w = canvas.width, h = canvas.height;
-  let r=0,g=0,b=0,n=0;
-  for (const i of [205, 425]) {
-    const cx = lm[i].x * w, cy = lm[i].y * h;
-    const d = ctx.getImageData(Math.max(0,cx-6), Math.max(0,cy-6), 12, 12).data;
-    for (let k=0;k<d.length;k+=4){ r+=d[k]; g+=d[k+1]; b+=d[k+2]; n++; }
-  }
-  r/=n; g/=n; b/=n;
-  // 簡化 Lab：以 (r-b) 與亮度粗略分暖冷
-  const warmth = (r - b) / Math.max(1,(r + g + b) / 3);
-  let tone, desc;
-  if (warmth > 0.42)      { tone = "偏暖";     desc = "適合先從暖調的金棕、奶茶、珊瑚系開始嘗試。"; }
-  else if (warmth > 0.30) { tone = "中性偏暖"; desc = "暖冷兩邊都能走，暖調略佔優勢。"; }
-  else if (warmth > 0.18) { tone = "中性偏冷"; desc = "暖冷兩邊都能走，冷調略佔優勢。"; }
-  else                    { tone = "偏冷";     desc = "適合先從冷調的霧灰、玫瑰、莓果系開始嘗試。"; }
-  return { tone, desc, rgb: `rgb(${r|0},${g|0},${b|0})` };
-}
-
-/* ---------- 結果渲染 ---------- */
-function renderResult(res, color, srcCanvas, lm){
-  // 縮圖＋特徵點
-  const t = $("thumb"), tc = t.getContext("2d");
-  const { cheekR, cheekL, top, chin } = res.anchors;
+/* ---------- 結果 ---------- */
+function drawThumb(withPoints){
+  if (!lastSrcCanvas) return;
+  const t = $("thumb"), tc = t.getContext("2d"), S = t.width;
+  const { cheekR, cheekL, top, chin } = lastRes.anchors;
   const cx = (cheekR.x + cheekL.x)/2, cy = (top.y + chin.y)/2;
-  const half = Math.max(dist(cheekR,cheekL), chin.y-top.y) * 0.75;
-  tc.drawImage(srcCanvas, cx-half, cy-half, half*2, half*2, 0, 0, 260, 260);
+  const half = Math.max(dist(cheekR,cheekL), chin.y-top.y) * 0.78;
+  tc.clearRect(0,0,S,S);
+  tc.drawImage(lastSrcCanvas, cx-half, cy-half, half*2, half*2, 0, 0, S, S);
+  if (!withPoints) return;
   tc.fillStyle = "rgba(46,168,255,.9)";
-  for (const p of lm){
-    const px = (p.x*srcCanvas.width - (cx-half)) / (half*2) * 260;
-    const py = (p.y*srcCanvas.height - (cy-half)) / (half*2) * 260;
-    if (px>=0 && px<=260 && py>=0 && py<=260) tc.fillRect(px, py, 1.4, 1.4);
+  for (const p of lastLm){
+    const px = (p.x*lastSrcCanvas.width - (cx-half)) / (half*2) * S;
+    const py = (p.y*lastSrcCanvas.height - (cy-half)) / (half*2) * S;
+    if (px>=0 && px<=S && py>=0 && py<=S) tc.fillRect(px, py, 1.6, 1.6);
   }
+}
+let lastRes = null;
 
-  // 三庭
-  const names = ["額頂-眉心","眉心-鼻底","鼻底-下巴"];
-  $("ratio-bars").innerHTML = res.seg.map((v,i)=>`
-    <div class="bar"><span>${names[i]}</span>
-      <span class="track"><span class="fill" style="width:${v}%"></span></span>
-      <span class="val">${v.toFixed(0)}%</span></div>`).join("");
-  const spread = Math.max(...res.seg) - Math.min(...res.seg);
-  $("ratio-desc").textContent = spread < 8
-    ? "三段比例相當均衡，這代表視覺焦點好安排，瀏海與髮長的選擇彈性都很大。"
-    : res.seg[2] > Math.max(res.seg[0], res.seg[1])
-      ? "下半臉比例較舒展，重心安排得當會很顯氣場，髮型可以把視覺重點往中上段帶。"
-      : "中上段比例較明顯，適合用瀏海與髮際線的安排來調整視覺重心。";
-
-  $("shape").textContent = res.shape;
-  $("shape-desc").textContent = res.shapeDesc;
-  $("sym").innerHTML = `${res.sym.toFixed(0)}<small> / 100</small>`;
-  $("wl").textContent = `1 : ${(1/res.wl).toFixed(2)}`;
-  $("eyed").textContent = res.eyeRatio < 0.95 ? "偏近" : res.eyeRatio > 1.1 ? "偏開" : "標準";
-  $("chip").style.background = color.rgb;
-  $("tone").textContent = color.tone;
-  $("tone-desc").textContent = color.desc;
-  $("headline").textContent = `${res.shape}輪廓 · ${color.tone}膚色`;
-  track("face_scan_result", { shape: res.shape, tone: color.tone, symmetry: Math.round(res.sym) });
+function renderResult(res){
+  lastRes = res;
+  drawThumb($("pts-toggle").checked);
+  const names = ["可見額頂至眉心","眉心至鼻底","鼻底至下巴"];
+  $("ratio-bars").innerHTML = res.seg
+    ? res.seg.map((v,i)=>`<div class="bar"><span>${names[i]}</span><span class="track"><span class="fill" style="width:${v}%"></span></span><span class="val">${v.toFixed(0)}%</span></div>`).join("")
+    : `<p class="xs">本次未取得可用數值。</p>`;
+  $("wl").textContent = res.wl ? `約 1：${res.wl.toFixed(2)}` : "本次未取得可用數值";
+  $("eyed").textContent = res.eyeRatio ? `約 ${res.eyeRatio.toFixed(2)} 倍` : "本次未取得可用數值";
+  // 每次重測清掉上一輪的需求選擇
+  document.querySelectorAll('input[name=need]').forEach(r => r.checked = false);
+  document.querySelectorAll('.need').forEach(n => n.classList.remove('sel'));
+  document.querySelectorAll('.svc').forEach(s => s.classList.remove('on'));
+  $("cta-initial").hidden = false; $("linebox").hidden = true; $("metrics").open = false;
+  hasResult = true;
+  track("analysis_success"); track("result_view");
   show("v-result");
 }
 
-/* ---------- 靜態照片流程 ---------- */
-async function analyzeImage(src){
-  show("v-busy");
-  try{
-    const img = new Image();
-    img.src = src;
-    await img.decode();
+function fail(kind, text){
+  track("analysis_error", { reason: kind });
+  $("err-msg").textContent = text;
+  show("v-error");
+}
+
+async function analyzeImage(src, method){
+  show("v-busy"); $("busy-title").textContent = "正在準備分析工具"; $("busy-sub").textContent = "首次使用需要載入必要檔案。";
+  let img;
+  try {
+    img = new Image(); img.src = src; await img.decode();
+  } catch(e){ return fail("decode_failed", "照片沒有成功讀取，請重新選擇，或換一張照片。"); }
+  try {
     const c = document.createElement("canvas");
-    const scale = Math.min(1, 1200 / img.width);
-    c.width = img.width * scale; c.height = img.height * scale;
+    const scale = Math.min(1, 1200 / Math.max(img.width, img.height));
+    c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
     c.getContext("2d", { willReadFrequently: true }).drawImage(img, 0, 0, c.width, c.height);
     const lmk = await getLandmarker("IMAGE");
+    $("busy-title").textContent = "正在辨識臉部位置與相對比例"; $("busy-sub").textContent = "";
     const out = lmk.detect(c);
-    if (!out.faceLandmarks || !out.faceLandmarks.length){
-      track("face_scan_fail", { reason: "no_face" });
-      alert("沒有偵測到清晰的臉部，請換一張正面照片再試一次。");
-      show("v-intro"); return;
-    }
-    const lm = out.faceLandmarks[0];
-    const res = analyze(lm, c.width, c.height);
-    const color = sampleCheekColor(lm, c);
-    renderResult(res, color, c, lm);
-  }catch(e){
+    const faces = out.faceLandmarks || [];
+    if (!faces.length) return fail("no_face", "這張照片目前無法清楚辨識臉部，請換一張單人正面照片。");
+    if (faces.length > 1) return fail("multiple_faces", "畫面中有不只一張臉，請改用單人正面照片。");
+    const lm = faces[0];
+    const res = measure(lm, c.width, c.height);
+    if (res.yaw > 0.35) return fail("pose", "這張照片的角度偏側面，可能影響觀察。請選擇臉部自然朝向鏡頭的照片再試一次。");
+    if (!res.seg && !res.wl && !res.eyeRatio) return fail("unavailable", "這張照片目前不足以提供穩定的比例觀察，請換一張正面照片。");
+    lastSrcCanvas = c; lastLm = lm;
+    $("busy-title").textContent = "正在整理這次的比例觀察";
+    renderResult(res);
+  } catch(e){
     console.error(e);
-    alert("分析時發生問題：" + e.message);
-    show("v-intro");
+    fail("engine", "這次分析沒有完成。你可以重新嘗試，或換一張照片。");
   }
 }
 
-/* ---------- 相機流程 ---------- */
+/* ---------- 相機 ---------- */
 async function startCamera(){
   show("v-scan");
-  $("scanmsg").textContent = "正在啟動相機⋯";
+  $("scanmsg").textContent = "正在開啟相機。"; $("prog").style.width = "0%";
   try{
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 960 } } });
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 960 } }, audio: false });
   }catch(e){
-    $("scanmsg").innerHTML = '<span class="err">無法啟動相機。</span>請在瀏覽器允許相機權限，或改用「上傳照片」。';
+    const n = e && e.name;
+    $("scanmsg").innerHTML = n === "NotAllowedError" ? '<span class="err">尚未取得相機權限。</span>你可以在瀏覽器設定中允許，或改選照片。'
+      : n === "NotFoundError" ? '<span class="err">目前找不到可用的相機</span>，請改選照片分析。'
+      : '<span class="err">目前無法開啟相機。</span>請改選照片，或使用手機瀏覽器開啟。';
+    track("analysis_error", { reason: "camera_" + (n || "unavailable") });
     return;
   }
   const video = $("video");
   video.srcObject = stream;
   await new Promise(r => video.onloadedmetadata = r);
-  const lmk = await getLandmarker("VIDEO");
+  let lmk;
+  try { lmk = await getLandmarker("VIDEO"); }
+  catch(e){ stopCamera(); return fail("engine", "這次分析沒有完成。你可以重新嘗試，或換一張照片。"); }
+  if (!stream) return;
 
   const overlay = $("overlay");
   overlay.width = video.videoWidth; overlay.height = video.videoHeight;
   const octx = overlay.getContext("2d");
-  const probe = document.createElement("canvas");
-  probe.width = 160; probe.height = 120;
+  const probe = document.createElement("canvas"); probe.width = 160; probe.height = 120;
   const pctx = probe.getContext("2d", { willReadFrequently: true });
 
-  const HOLD_MS = 3000;   // 臉對好後要穩定維持 3 秒才拍
-  const WARMUP_MS = 1500; // 相機剛開的前 1.5 秒不計時，讓人先把臉放進框
+  const HOLD_MS = 3000, WARMUP_MS = 1500;
   const startedAt = performance.now();
   let goodSince = null;
 
@@ -497,7 +581,6 @@ async function startCamera(){
     octx.clearRect(0,0,overlay.width,overlay.height);
     const warming = now - startedAt < WARMUP_MS;
 
-    // 亮度
     pctx.drawImage(video, 0, 0, 160, 120);
     const d = pctx.getImageData(0,0,160,120).data;
     let luma = 0;
@@ -505,30 +588,34 @@ async function startCamera(){
     luma /= d.length/16;
 
     let msg = "";
-    if (luma < 55) msg = "光線不足，請面向光源或調亮環境";
-    else if (luma > 225) msg = "光線過強，請避開直射光";
+    if (luma < 55) msg = "畫面較暗，請移到光線均勻的位置。";
+    else if (luma > 225) msg = "畫面過亮，請避開強光直射後再試。";
 
-    if (out.faceLandmarks && out.faceLandmarks.length){
-      const lm = out.faceLandmarks[0];
+    const faces = out.faceLandmarks || [];
+    if (faces.length > 1){
+      goodSince = null; msg = "畫面中有不只一張臉，請改用單人正面照片。";
+    } else if (faces.length === 1){
+      const lm = faces[0];
       const w = dist(P(lm,234,overlay.width,overlay.height), P(lm,454,overlay.width,overlay.height));
       octx.fillStyle = "rgba(255,255,255,.85)";
       for (const p of lm) octx.fillRect(p.x*overlay.width, p.y*overlay.height, 1.5, 1.5);
-      if (w < overlay.width * 0.30) msg = msg || "請再靠近一點，把整張臉放進虛線框";
-      if (warming) { msg = "請把整張臉放進虛線框"; goodSince = null; }
+      const m = measure(lm, overlay.width, overlay.height);
+      if (w < overlay.width * 0.30) msg = msg || "請稍微靠近，讓臉部輪廓更清楚。";
+      if (m.yaw > 0.35) msg = msg || "請減少側轉或抬低頭，讓臉部自然朝向鏡頭。";
+      if (warming) { msg = "請正對鏡頭，讓額頭、臉側與下巴完整入鏡。"; goodSince = null; }
       else if (!msg){ if (goodSince === null) goodSince = now; }
       else goodSince = null;
     } else {
       goodSince = null;
-      msg = msg || "請正對鏡頭，把整張臉放進虛線框";
+      msg = msg || (warming ? "請正對鏡頭，讓額頭、臉側與下巴完整入鏡。" : "目前還沒有辨識到完整臉部，請面向鏡頭再試。");
     }
 
     const held = goodSince === null ? 0 : now - goodSince;
     if (goodSince !== null){
       const left = Math.ceil((HOLD_MS - held) / 1000);
-      msg = `保持不動，${left} 秒後自動拍攝`;
-      // 畫面中央倒數數字
+      msg = `保持自然表情，${left} 秒後拍攝。`;
       octx.save();
-      octx.translate(overlay.width, 0); octx.scale(-1, 1); // 抵銷鏡像，數字才不會反
+      octx.translate(overlay.width, 0); octx.scale(-1, 1);
       octx.font = `600 ${Math.round(overlay.width * 0.22)}px "Outfit", "Noto Sans TC", sans-serif`;
       octx.textAlign = "center"; octx.textBaseline = "middle";
       octx.fillStyle = "rgba(255,255,255,.95)";
@@ -536,44 +623,148 @@ async function startCamera(){
       octx.fillText(String(left), overlay.width / 2, overlay.height * 0.5);
       octx.restore();
     }
-
     $("scanmsg").innerHTML = goodSince !== null ? `<b>${msg}</b>` : msg;
     $("prog").style.width = Math.min(100, held / HOLD_MS * 100) + "%";
 
     if (held >= HOLD_MS){
       const c = document.createElement("canvas");
       c.width = video.videoWidth; c.height = video.videoHeight;
-      c.getContext("2d", { willReadFrequently: true }).drawImage(video, 0, 0);
+      c.getContext("2d").drawImage(video, 0, 0);
       stopCamera();
-      analyzeImage(c.toDataURL("image/jpeg", 0.92));
+      let url = null;
+      try { url = c.toDataURL("image/jpeg", 0.92); } catch(e){}
+      if (!url) return fail("capture_failed", "這次沒有取得可分析的照片，請再試一次。");
+      analyzeImage(url, "camera");
       return;
     }
     rafId = requestAnimationFrame(loop);
   };
   rafId = requestAnimationFrame(loop);
 }
-
 function stopCamera(){
   if (rafId) cancelAnimationFrame(rafId), rafId = null;
   if (stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
+  const v = $("video"); if (v) v.srcObject = null;
 }
 
+/* ---------- 四季配色參考（編輯示意色，不是季型判定）---------- */
+const SEASONS = {
+  spring: { en:"SPRING", zh:"春季配色參考", lead:"暖亮色彩，保留輕盈層次。",
+    intro:"以杏桃、珊瑚與淺金棕作為這組彩妝靈感，再用少量柔和綠、藍或紫，延伸服裝與配件的搭配。",
+    core:[["奶油米","#F3E7CE"],["杏桃","#F6B59B"],["柔珊瑚","#E77E70"],["嫩黃綠","#D9D780"],["淺水藍","#9CC9CA"],["淡蘭紫","#CAB0CE"]],
+    eye:{ t:"先用淺金棕或杏桃棕建立層次，亮片與金屬光可以少量放在想強調的位置。", c:[["淺香檳","#E6D1B3"],["杏桃棕","#C59A7C"],["柔暖棕","#936D56"]] },
+    cheek:{ t:"從蜜桃或柔珊瑚開始比較，先少量上色，再決定要保留多少存在感。", c:[["蜜桃","#EAAF9B"],["柔珊瑚粉","#E58E84"]] },
+    lip:{ t:"杏桃、珊瑚與玫瑰珊瑚可以作為三個嘗試方向。想呈現輕盈感，可先比較薄擦與完整上色的差別。", c:[["杏桃裸色","#E7A27E"],["珊瑚","#E57A70"],["玫瑰珊瑚","#CD6D75"]] },
+    remind:"先選一個妝容重點，不必把所有暖色一次放上臉。",
+    more:"喜歡更明亮的配色，也可以比較珊瑚紅、亮黃與藍綠的點綴；先從小面積開始。" },
+  summer: { en:"SUMMER", zh:"夏季配色參考", lead:"柔霧玫瑰，讓色彩彼此呼應。",
+    intro:"這組彩妝靈感以玫瑰、灰粉與柔紫為主，搭配霧藍與灰調色彩，整理出較含蓄的日常層次。",
+    core:[["柔灰白","#E9E5E7"],["灰粉","#D4ACBA"],["霧紫","#B6ABC9"],["霧藍","#97B6C8"],["柔藍綠","#8FB9B9"],["柔莓色","#A56787"]],
+    eye:{ t:"可以比較灰粉、玫瑰棕與柔紫，用深淺安排重點，不一定需要把眼妝畫得很濃。", c:[["灰粉","#C8A8B4"],["玫瑰棕","#977B82"],["柔紫","#A394B4"]] },
+    cheek:{ t:"以玫瑰粉或灰粉作為起點，與唇彩保留相近的色調，再調整份量。", c:[["玫瑰粉","#CD95A8"],["灰粉玫瑰","#B98494"]] },
+    lip:{ t:"裸玫瑰、柔莓粉與玫瑰豆沙，可以分別比較低調、清楚與較有深度的呈現。", c:[["裸玫瑰","#BD8A99"],["柔莓粉","#B86186"],["玫瑰豆沙","#A76678"]] },
+    remind:"柔和不等於沒有重點。可以保留一處較清楚的色彩，其他部位降低份量。",
+    more:"原參考也包含較明亮的玫瑰紅、藍與紫。這裡以柔霧日常組合作為第一組示範，不代表只能使用低彩度顏色。" },
+  autumn: { en:"AUTUMN", zh:"秋季配色參考", lead:"以棕調與陶土色，堆疊沈穩層次。",
+    intro:"這組彩妝靈感從奶茶棕、焦糖與陶土色出發，再用橄欖綠、深藍綠或茄紫，延伸服裝與配件的選擇。",
+    core:[["燕麥米","#E3D3B6"],["焦糖","#B68A54"],["橄欖綠","#72784F"],["陶土","#A9563A"],["深藍綠","#295867"],["茄紫","#4A344F"]],
+    eye:{ t:"可以比較奶茶棕、古銅與可可棕，先決定深淺，再選擇霧面或帶光澤的表現。", c:[["奶茶棕","#C4A78B"],["古銅","#9D7850"],["可可棕","#65483A"]] },
+    cheek:{ t:"杏棕與柔陶土可以作為起點，少量疊加，觀察與唇彩放在一起時的整體份量。", c:[["杏棕","#C28C72"],["柔陶土","#B97864"]] },
+    lip:{ t:"暖玫瑰棕、磚紅與肉桂棕，可以從日常到較有存在感的妝容逐步比較。", c:[["暖玫瑰棕","#B97563"],["磚紅","#A94937"],["肉桂棕","#85443B"]] },
+    remind:"不必讓眼妝、腮紅與唇彩同時加深。保留一個主要重點，其他部位作襯托。",
+    more:"原參考包含 STRONG、MUTE、DEEP 三組，可比較較鮮明、較柔霧與較深的配色；不把秋季限制為只有棕色。" },
+  winter: { en:"WINTER", zh:"冬季配色參考", lead:"用冷調與明暗對比，安排妝容重點。",
+    intro:"這組彩妝靈感以莓紅、冷玫瑰與紫調色彩為主，搭配灰黑或淺亮色，呈現較清楚的深淺關係。",
+    core:[["冰白","#F1F1F3"],["深寶藍","#273C72"],["寶石綠","#19716A"],["莓紅","#C32C68"],["濃紫","#573561"],["炭黑","#25262C"]],
+    eye:{ t:"可以比較冷灰棕、灰紫與深梅紫，先選擇一個主要色調，再決定眼妝的濃淡。", c:[["冷灰棕","#A79BA0"],["灰紫","#686675"],["深梅紫","#614456"]] },
+    cheek:{ t:"冷玫瑰或莓粉可以少量使用，讓它與眼妝、唇彩互相呼應，而不是各自搶重點。", c:[["冷玫瑰","#C17C9A"],["莓粉","#AE5B85"]] },
+    lip:{ t:"冷玫瑰、莓紅與深酒莓，可以透過薄擦、暈染或完整上色，比較不同的存在感。", c:[["冷玫瑰","#B47684"],["莓紅","#CB2854"],["深酒莓","#75263F"]] },
+    remind:"明確的對比，不等於每個部位都要深。保留較輕的區域，讓重點更清楚。",
+    more:"原參考亦有 PALE 淺亮色組，可與深色或鮮明色搭配；冬季配色不是只剩黑色與深紅。" }
+};
+const ZH = { spring:"春季", summer:"夏季", autumn:"秋季", winter:"冬季" };
+const sw = (arr, mini) => `<div class="sw${mini?" mini":""}">${arr.map(([n,h])=>`<div><i style="background:${h}"></i><span>${n}</span></div>`).join("")}</div>`;
+function renderSeasons(){
+  $("seasons").innerHTML = Object.keys(SEASONS).map(k => {
+    const s = SEASONS[k];
+    return `<button class="season" data-season="${k}"><span class="en">${s.en}</span>${ZH[k]}<span class="dots">${s.core.slice(1,5).map(([,h])=>`<i style="background:${h}"></i>`).join("")}</span></button>`;
+  }).join("");
+  document.querySelectorAll(".season").forEach(b => b.onclick = () => openSeason(b.dataset.season));
+}
+function openSeason(k){
+  const s = SEASONS[k];
+  document.querySelectorAll(".season").forEach(b => b.classList.toggle("sel", b.dataset.season === k));
+  $("pal-body").innerHTML = `<div class="pal">
+    <p class="eyebrow">${s.en}</p><h3>${s.zh}</h3><p class="lead">${s.lead}</p><p>${s.intro}</p>
+    ${sw(s.core)}
+    <h4>眼妝</h4><p>${s.eye.t}</p>${sw(s.eye.c, true)}
+    <h4>腮紅</h4><p>${s.cheek.t}</p>${sw(s.cheek.c, true)}
+    <h4>唇彩</h4><p>${s.lip.t}</p>${sw(s.lip.c, true)}
+    <p class="remind"><b style="font-weight:500">搭配提醒</b><br>${s.remind}</p>
+    <p class="remind" style="border:none;padding-top:4px;color:#6b7480;font-size:12.5px">${s.more}</p>
+  </div>`;
+  track("palette_open", { season: k });
+}
+function showPalette(from){
+  prevView = from;
+  $("btn-pal-back").textContent = from === "v-result" ? "返回我的比例觀察" : "返回";
+  show("v-palette");
+}
+
+/* ---------- 需求選擇與 LINE ---------- */
+const NEED_ZH = { makeup:"妝髮與髮型", style:"穿搭與整體風格", brand:"工作形象與品牌拍攝" };
+function lineMessage(need, note){
+  const n = (note || "").trim();
+  if (need === "makeup") return "你好，我從 CHUN.EN 臉部比例分析過來，想了解妝髮或髮型相關服務。" + (n ? `\n\n使用場合或預計時間：${n}` : "");
+  if (need === "style")  return "你好，我從 CHUN.EN 臉部比例分析過來，想了解穿搭與整體形象規劃。" + (n ? `\n\n我目前想調整的部分：${n}` : "");
+  return "你好，我從 CHUN.EN 臉部比例分析過來，想了解工作形象或品牌拍攝。" + (n ? `\n\n主要用途或目前需求：${n}` : "");
+}
+let curNeed = null;
+document.querySelectorAll('input[name=need]').forEach(r => r.addEventListener("change", () => {
+  curNeed = r.value;
+  document.querySelectorAll('.need').forEach(n => n.classList.toggle('sel', n.contains(r)));
+  document.querySelectorAll('.svc').forEach(s => s.classList.toggle('on', s.dataset.need === curNeed));
+  $("cta-initial").hidden = true; $("linebox").hidden = true;
+  track("need_selected", { need: curNeed });
+}));
+document.querySelectorAll('[data-line]').forEach(b => b.onclick = () => {
+  const need = b.dataset.line;
+  $("lb-need").textContent = NEED_ZH[need]; $("lb-note").value = ""; $("lb-status").textContent = "";
+  $("lb-preview").textContent = lineMessage(need, "");
+  $("linebox").hidden = false; $("linebox").dataset.need = need;
+  $("linebox").scrollIntoView({ behavior: "smooth", block: "start" });
+  track("service_view", { need });
+});
+$("lb-note").addEventListener("input", () => { $("lb-preview").textContent = lineMessage($("linebox").dataset.need, $("lb-note").value); });
+$("lb-copy").onclick = async () => {
+  const text = lineMessage($("linebox").dataset.need, $("lb-note").value);
+  try { await navigator.clipboard.writeText(text); $("lb-status").textContent = "需求文字已複製。"; }
+  catch(e){ $("lb-status").textContent = "暫時無法自動複製，請長按上方文字複製。"; }
+};
+$("lb-go").addEventListener("click", () => track("line_click", { need: $("linebox").dataset.need }));
+document.querySelectorAll('[data-svc]').forEach(a => a.addEventListener("click", () => track("service_view", { target: a.dataset.svc })));
+
 /* ---------- 綁定 ---------- */
-$("btn-cam").onclick = () => { track("face_scan_start", { method: "camera" }); startCamera(); };
+$("btn-cam").onclick = () => { track("analysis_start", { method: "camera" }); startCamera(); };
 $("btn-cancel").onclick = () => { stopCamera(); show("v-intro"); };
 $("btn-upload").onclick = () => $("file").click();
+$("btn-upload2").onclick = () => { stopCamera(); $("file").click(); };
 $("file").onchange = e => {
   const f = e.target.files[0];
-  if (f) { track("face_scan_start", { method: "upload" }); analyzeImage(URL.createObjectURL(f)); }
+  if (f) { track("analysis_start", { method: "photo" }); analyzeImage(URL.createObjectURL(f), "photo"); }
   e.target.value = "";
 };
-// 範例照片按鈕只在本機開發時顯示（照片不隨公開版部署）
 if (["localhost","127.0.0.1"].includes(location.hostname)) $("devrow").hidden = false;
-document.querySelectorAll("[data-sample]").forEach(b =>
-  b.onclick = () => analyzeImage(b.dataset.sample));
-$("btn-again").onclick = () => { track("face_scan_retry"); show("v-intro"); };
-
-setInterval(() => { const d=$("dots"); if(d) d.textContent = "⋯".repeat(1 + Math.floor(Date.now()/500) % 3); }, 500);
+document.querySelectorAll("[data-sample]").forEach(b => b.onclick = () => analyzeImage(b.dataset.sample, "sample"));
+$("btn-again").onclick = () => { hasResult = false; lastSrcCanvas = null; show("v-intro"); };
+$("err-retry").onclick = () => show("v-intro");
+$("err-browse").onclick = () => showPalette("v-intro");
+$("btn-browse").onclick = () => showPalette("v-intro");
+$("btn-palette-from-result").onclick = () => showPalette("v-result");
+$("btn-palette-from-need").onclick = () => showPalette("v-result");
+$("btn-pal-back").onclick = () => show(prevView === "v-result" && hasResult ? "v-result" : "v-intro");
+$("pts-toggle").onchange = e => drawThumb(e.target.checked);
+renderSeasons();
 </script>
 </body>
 </html>
