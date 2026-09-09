@@ -25,7 +25,7 @@
 <meta name="twitter:image" content="https://face.chunen.tw/face-brief-og-v2.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23eef4fa'/%3E%3Cellipse cx='32' cy='33' rx='15' ry='20' fill='none' stroke='%232ea8ff' stroke-width='2.5' stroke-dasharray='3 4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@600&display=swap">
 <style>
   :root{
     color-scheme: only light; /* 禁止瀏覽器自動反轉成深色 */
@@ -227,7 +227,12 @@
   .consent button{flex:1;font-family:var(--sans);font-size:13px;padding:9px 0;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:none;color:var(--muted)}
   .consent button.ok{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:500}
   /* 主 CTA 卡與需求選項 */
-  .card.hi{border-color:var(--accent);box-shadow:0 6px 24px rgba(46,168,255,.16)}
+  /* 免費快診卡：用官網深色金，預告接下來會進入 CHUN.EN 官網 */
+  .card.hi{background:#14100B;border-color:#3a3226;box-shadow:0 12px 32px rgba(20,16,11,.28)}
+  .card.hi .eyebrow{color:#C9A96E}
+  .card.hi h2{color:#F5F1E8!important;font-family:"Noto Serif TC",var(--display);font-weight:600;letter-spacing:.02em}
+  .card.hi p{color:rgba(245,241,232,.78)}
+  .card.hi .btn.primary{background:#C9A96E;color:#14100B}
   .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
   .opt{font-family:var(--sans);font-size:14.5px;padding:12px 8px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--ink);cursor:pointer}
   .opt.sel{border-color:var(--accent);background:#fff;color:var(--accent-dim);font-weight:500}
