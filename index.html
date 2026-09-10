@@ -335,7 +335,7 @@
       </div>
       <div class="stats">
         <div class="stat"><div class="n"><span id="st-sym">0</span><small>%</small></div><div class="k">左右對稱度</div></div>
-        <div class="stat"><div class="n"><span id="st-bal">0</span><small>%</small></div><div class="k">三段均衡度</div></div>
+        <div class="stat"><div class="n"><span id="st-bal">0</span><small>%</small></div><div class="k">中下段均衡度</div></div>
       </div>
       <p class="xs center" id="pose-note" style="margin:-2px 0 14px" hidden>這張照片略為側轉，對稱度與比例會受角度影響；想更準確可以換一張正面照片。</p>
       <div class="seg small" role="group" aria-label="造型方向"><button data-gender="f">女性造型</button><button data-gender="m">男性造型</button></div>
@@ -544,7 +544,8 @@ function measure(lm, w, h){
   const seg = (ok(s1) && ok(s2) && ok(s3)) ? [s1,s2,s3].map(v => v / tot * 100) : null;
   const cheekR = P(lm,234,w,h), cheekL = P(lm,454,w,h), jawR = P(lm,172,w,h), jawL = P(lm,397,w,h);
   const faceW = dist(cheekR, cheekL), faceLvis = chin.y - top.y;
-  const wl = (ok(faceW) && ok(faceLvis)) ? (faceLvis / 0.82) / faceW : null; // 長:寬，長度含髮際線估計
+  const wl = (ok(faceW) && ok(faceLvis)) ? (faceLvis / 0.82) / faceW : null; // 含髮際線估計，只給裁切用，不拿來分類
+  const lw = (ok(faceW) && ok(faceLvis)) ? faceLvis / faceW : null;            // 實測：可見額頂到下巴 ÷ 顴骨寬
   const q = ok(faceW) ? dist(jawR, jawL) / faceW : null; // 下顎寬 ÷ 顴部寬
   const eyeOutR = P(lm,33,w,h), eyeInR = P(lm,133,w,h), eyeInL = P(lm,362,w,h), eyeOutL = P(lm,263,w,h);
   const eyeWidth = (dist(eyeOutR,eyeInR) + dist(eyeInL,eyeOutL)) / 2, inter = dist(eyeInR, eyeInL);
@@ -558,7 +559,7 @@ function measure(lm, w, h){
   let dev = 0;
   for (const [r,l] of pairs){ const dr = Math.abs(P(lm,r,w,h).x - midX), dl = Math.abs(P(lm,l,w,h).x - midX); dev += Math.abs(dr-dl) / (((dr+dl)/2) || 1); }
   const sym = Math.max(0, Math.min(100, 100 - (dev / pairs.length) * 100));
-  return { seg, wl, q, eyeRatio, yaw, sym, anchors: { top, brow, nose, chin, cheekR, cheekL, jawR, jawL, eyeOutR, eyeOutL } };
+  return { seg, wl, lw, q, eyeRatio, yaw, sym, anchors: { top, brow, nose, chin, cheekR, cheekL, jawR, jawL, eyeOutR, eyeOutL } };
 }
 
 /* ---------- 結果 ---------- */
@@ -591,7 +592,7 @@ const CONTOUR_M = {
   long_taper: ["縱向比例明顯，下顎收窄。", "頂部不要堆高，兩側留厚度、瀏海下放；鬍型沿著下顎線走可以補寬。"]
 };
 const VERT_M = {
-  similar: ["上中下三段長度接近。", "比例平均，上梳露額或瀏海下放都合適，依場合決定；重點放在頂部造型。"],
+  similar: ["中段與下段長度接近。", "比例平均，上梳露額或瀏海下放都合適，依場合決定；重點放在頂部造型。"],
   upper:   ["額頭到眉心這一段偏長。", "瀏海下放或斜分收掉額高；眉型修平一點，重心往下。"],
   middle:  ["眉心到鼻底這一段偏長。", "眉毛修清楚、鬢角留長一些，中段就有份量；頂部別再堆高。"],
   lower:   ["鼻底到下巴這一段偏長。", "把重心往上帶：上梳露額、頂部留量；鬍子留短或剃乾淨，下半臉才不顯長。"],
@@ -726,7 +727,7 @@ function countUp(el, to, ms=1200){ const t0=performance.now(); const step=now=>{
 
 /* 比例判讀 → 造型建議（每項：觀察句、建議句） */
 const VERT = {
-  similar: ["上中下三段長度接近。", "比例平均，瀏海與露額都撐得住；重點放在你想強調的部位，不用修正比例。"],
+  similar: ["中段與下段長度接近。", "比例平均，瀏海與露額都撐得住；重點放在你想強調的部位，不用修正比例。"],
   upper:   ["額頭到眉心這一段偏長。", "瀏海或側分能收掉一部分額高；眉型畫平一點，視覺重心會往下移。"],
   middle:  ["眉心到鼻底這一段偏長。", "眉眼周圍是重點：眼妝與側邊層次能拉開節奏，髮型別把重量壓在中段。"],
   lower:   ["鼻底到下巴這一段偏長。", "把重心往上帶：露出眉眼、髮量集中在顴骨以上；唇色稍飽和，下半臉就不顯空。"],
@@ -745,22 +746,23 @@ const EYES = {
   mid:  ["兩眼間距均衡。", "眼妝沒有限制，依想要的妝感決定內外側重點。"],
   wide: ["兩眼間距偏開。", "眼妝重點放內眼角與眉頭，把視線往中間收。"]
 };
+// 切點依實測分佈設定（正面照中位數：臉長/臉寬 1.15、下顎/顴骨 0.79、眼距/眼寬 1.38）。
+// 要調之前先用 window.__measureMany 跑一批照片看分佈，憑感覺調會讓所有人落在同一型。
+const CUT = { lwWide: 1.105, lwLong: 1.20, qFull: 0.80, eyeNear: 1.28, eyeWide: 1.45, midLow: 3 };
 function classify(res){
   let v = null;
   if (res.seg){
-    const s = res.seg, spread = Math.max(...s) - Math.min(...s);
-    const order = [0,1,2].sort((a,b)=>s[b]-s[a]);
-    if (spread < 8) v = "similar";
-    else if (s[order[0]] - s[order[1]] < 2) v = "tie";
-    else v = ["upper","middle","lower"][order[0]];
+    // 可見額頂不是髮際線，上段幾乎一定最短，所以只比中段與下段
+    const d = res.seg[1] - res.seg[2];
+    v = Math.abs(d) < CUT.midLow ? "similar" : d > 0 ? "middle" : "lower";
   }
   let c = null;
-  if (res.wl && res.q){
-    const r = 1 / res.wl, full = res.q >= 0.86;
-    c = r >= 0.92 ? (full ? "wide_full" : "wide_taper") : r >= 0.80 ? (full ? "mid_full" : "mid_taper") : (full ? "long_full" : "long_taper");
+  if (res.lw && res.q){
+    const full = res.q >= CUT.qFull;
+    c = res.lw < CUT.lwWide ? (full ? "wide_full" : "wide_taper") : res.lw <= CUT.lwLong ? (full ? "mid_full" : "mid_taper") : (full ? "long_full" : "long_taper");
   }
   let e = null;
-  if (res.eyeRatio) e = res.eyeRatio < 0.95 ? "near" : res.eyeRatio > 1.10 ? "wide" : "mid";
+  if (res.eyeRatio) e = res.eyeRatio < CUT.eyeNear ? "near" : res.eyeRatio > CUT.eyeWide ? "wide" : "mid";
   return { v, c, e };
 }
 
@@ -771,11 +773,11 @@ function renderText(res){
   $("hero-chip").textContent = k.c ? CHIP[k.c] : "";
   $("hero-name").textContent = T[0]; $("hero-one").textContent = T[1];
   const eyeTip = gender === "m"
-    ? (res.eyeRatio < 0.95 ? ["偏近","眉頭之間留寬一點"] : res.eyeRatio > 1.1 ? ["偏開","眉頭往中間補一點"] : ["均衡","眉型順著眼型修"])
-    : (res.eyeRatio < 0.95 ? ["偏近","眼妝重點放外眼角"] : res.eyeRatio > 1.1 ? ["偏開","眼妝重點放內眼角"] : ["均衡","內外側重點都可以"]);
+    ? (res.eyeRatio < CUT.eyeNear ? ["偏近","眉頭之間留寬一點"] : res.eyeRatio > CUT.eyeWide ? ["偏開","眉頭往中間補一點"] : ["均衡","眉型順著眼型修"])
+    : (res.eyeRatio < CUT.eyeNear ? ["偏近","眼妝重點放外眼角"] : res.eyeRatio > CUT.eyeWide ? ["偏開","眼妝重點放內眼角"] : ["均衡","內外側重點都可以"]);
   const rr = [];
-  if (res.wl) rr.push(["臉長 / 顴骨寬", res.wl.toFixed(2), res.wl < 1.09 ? ["偏圓","適合拉長縱向線條"] : res.wl > 1.25 ? ["偏長","適合橫向留量、壓低髮頂"] : ["均衡","縱橫線條都撐得住"]]);
-  if (res.q) rr.push(["下顎寬 / 顴骨寬", res.q.toFixed(2), res.q >= 0.86 ? ["直線感","下顎線條完整，俐落耐看"] : ["收窄","曲線感明顯，柔和上鏡"]]);
+  if (res.lw) rr.push(["臉長 / 顴骨寬", res.lw.toFixed(2), res.lw < CUT.lwWide ? ["偏圓","適合拉長縱向線條"] : res.lw > CUT.lwLong ? ["偏長","適合橫向留量、壓低髮頂"] : ["均衡","縱橫線條都撐得住"]]);
+  if (res.q) rr.push(["下顎寬 / 顴骨寬", res.q.toFixed(2), res.q >= CUT.qFull ? ["直線感","下顎線條完整，俐落耐看"] : ["收窄","曲線感明顯，柔和上鏡"]]);
   if (res.eyeRatio) rr.push(["眼距 / 眼寬", res.eyeRatio.toFixed(2), eyeTip]);
   $("ratios").innerHTML = rr.map(([k2,v,[tag,d]])=>`<div class="ratio"><span class="k">${k2}</span><span class="v">${v}</span><span class="t"><b>${tag}</b> — ${d}</span></div>`).join("");
   const rows = [];
@@ -791,7 +793,7 @@ function renderResult(res){
   drawHero();
   $("pose-note").hidden = !(res.yaw > 0.28);
   countUp($("st-sym"), Math.round(res.sym || 0));
-  countUp($("st-bal"), res.seg ? Math.round(Math.max(0, 100 - (Math.max(...res.seg) - Math.min(...res.seg)) * 3)) : 0);
+  countUp($("st-bal"), res.seg ? Math.round(Math.max(0, 100 - Math.abs(res.seg[1] - res.seg[2]) * 5)) : 0);
   renderText(res);
   // 每次重測清掉上一輪的需求選擇
   document.querySelectorAll('.opt').forEach(n => n.classList.remove('sel'));
@@ -1092,7 +1094,27 @@ if (["localhost","127.0.0.1"].includes(location.hostname)) window.__yaw = async 
   const m = measure(f, c.width, c.height);
   return { src, yaw: +m.yaw.toFixed(3), wl: m.wl && +m.wl.toFixed(2), sym: m.sym && Math.round(m.sym) };
 };
-if (["localhost","127.0.0.1"].includes(location.hostname)) window.__analyzeSample = f => analyzeImage(f, "sample"); // 本機測試用，無介面
+if (["localhost","127.0.0.1"].includes(location.hostname)) {
+  window.__analyzeSample = f => analyzeImage(f, "sample"); // 本機測試用，無介面
+  // 本機校準用：批次量測多張照片，只回傳比值，不進畫面
+  window.__measureMany = async files => {
+    const lmk = await getLandmarker("IMAGE"), out = [];
+    for (const f of files){
+      try {
+        const bmp = await createImageBitmap(await fetch(f).then(r => r.blob()), { imageOrientation: "from-image" });
+        const c = document.createElement("canvas"), sc = Math.min(1, 1200 / Math.max(bmp.width, bmp.height));
+        c.width = Math.round(bmp.width*sc); c.height = Math.round(bmp.height*sc);
+        c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+        const faces = lmk.detect(c).faceLandmarks || [];
+        if (faces.length !== 1){ out.push({ f, faces: faces.length }); continue; }
+        const m = measure(faces[0], c.width, c.height), A = m.anchors;
+        const rawLW = (A.chin.y - A.top.y) / dist(A.cheekR, A.cheekL);
+        out.push({ f, wl: +m.wl.toFixed(3), rawLW: +rawLW.toFixed(3), q: +m.q.toFixed(3), eye: +m.eyeRatio.toFixed(3), yaw: +m.yaw.toFixed(3), seg: m.seg && m.seg.map(v => +v.toFixed(1)), type: classify(m).c });
+      } catch(e){ out.push({ f, err: String(e) }); }
+    }
+    return out;
+  };
+}
 $("btn-again").onclick = () => { hasResult = false; lastSrcCanvas = null; show("v-intro"); };
 $("err-retry").onclick = () => show("v-intro");
 $("btn-palette-from-result").onclick = () => showPalette("v-result");
